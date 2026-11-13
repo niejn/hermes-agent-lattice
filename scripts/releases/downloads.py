@@ -61,7 +61,7 @@ def _package_card(package: dict, base_url: str) -> str:
     # Encode '+' in object names and escape the resulting HTML attribute.
     href = escape(f'{base_url}/{quote(artifact["key"], safe="/")}', quote=True)
     size = artifact["size"] / (1024 * 1024)
-    signing = package.get("teamId") or package["publisher"]
+    signing = package["teamId" if package["platform"] == "darwin" else "publisher"]
     return f'''<article class="package">
   <h2>{platform} <span>{arch}</span></h2>
   <p class="filename">{escape(filename)}</p>

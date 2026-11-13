@@ -45,6 +45,7 @@ flowchart LR
 | P1 | `hermes_cli/model_setup_flows_custom.py:233` 有模型发现；`agent/command_token_source.py:48` 有 key_cmd；未核实企业目录事件协议 | 复用 provider，增加角色过滤目录、稳定 alias、版本同步与事件失效通知 |
 | P1 | `electron/updater/feed-config.ts:30` 与测试明确支持配置缺失/错误时 fallback | 企业受管发布源需新增严格策略，不能把已有兼容行为当 bug 全局改坏 |
 | P1 | 已有 updater/lifecycle/marker，不代表企业签名/升级已验收 | 复用框架，补企业 feed、灰度、签名绑定、活跃任务保护、跨平台恢复实证 |
+| P0 | cloud-image `helm/lumi-platform/values.yaml:133` 配置的是 HTTP LM；`environments/values-staging.yaml:40` 的 SkillHub 地址为集群内 `.svc` 服务 | 桌面使用经授权的 HTTPS ingress/企业 API gateway，不能把明文带密钥地址或不可路由的集群服务名下发员工；需核实桌面可达的测试入口 |
 
 ## SSO 与离线
 
@@ -193,3 +194,13 @@ LDSP/IDSP 应用入口与 Lumi AI「下载桌面版」链接同一下载中心�
 - 审计 actor/tenant/device/版本/结果/request ID，默认不收集 prompt/文件/token；诊断先预览脱敏，本地日志有保留上限。
 - 演练设备/能力撤销、暂停发布、公钥轮换、迁移恢复；生产域名/CA、签名身份、制品权限与支持 owner 就位。
 - 产品、安全、IT 运维验收通过后才能上线；当前切片不满足上述条件，不能推送全员生产。
+
+## 当前切片验证记录
+
+- 下载生成器与既有 channel reader/publisher：`scripts/run_tests.sh tests/scripts/test_desktop_downloads.py tests/hermes_cli/test_release_channels.py tests/scripts/test_release_channels.py -q`，79 项通过。
+- `python scripts/check`，17 项检查通过。没有修改依赖锁、core tools 或 prompt snapshot。
+- 新功能 happy path 在基线独立 worktree 上证明失败（CLI 尚不存在）；未把这种新增功能缺失描述为上游 bug。
+- 后续主审发现 Windows 行若有额外 teamId，会遮盖已验证的 publisher。先补行为测试证明失败，再按平台只读对应签名身份，回归通过后提交。
+- 浏览器人工走查 1440/1280/390 宽度，含展开校验信息：无横向溢出，无脚本或外部资源；使用测试清单，不代表真实包已下载/安装。
+- 测试环境由 PM 隔离构建。初次镜像源缺上传时间导致 release-age 解析失败，切到带上传时间的 PyPI 源后通过，没有关闭依赖年龄检查。
+- 尚未完成：独立团队 QA/安全审查、真实 Keycloak/SkillHub/LM 契约联调、企业签名构建与各原生平台安装/更新验收；整个产品仍为 no-go。

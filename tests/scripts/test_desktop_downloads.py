@@ -66,6 +66,8 @@ def release():
             "artifact": {"key": f"{prefix}{platform}/Lattice+{arch}.{extension}", "sha256": "d" * 64, "size": 1000},
             "feed": {"key": f"{prefix}{platform}/stable.yml", "channel": "stable"},
         })
+        if not mac:
+            packages[-1]["teamId"] = "Unrelated metadata must not replace the Windows publisher"
     manifest = {"schema": 1, "request": request, "packages": packages}
     digest = hashlib.sha256(canonical_json(manifest)).hexdigest()
     record = {
@@ -105,6 +107,7 @@ def test_cli_builds_downloads_from_native_release_and_embeds_only_qualified_pack
         for row in manifest["packages"]
     }
     assert "CN=Example &amp; &quot;Company&quot;" in page
+    assert "Unrelated metadata" not in page
     assert "Linux" not in page
     assert "default-src 'none'" in parsed.csp
     style_hash = base64.b64encode(hashlib.sha256("".join(parsed.styles).encode()).digest()).decode()
