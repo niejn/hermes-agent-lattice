@@ -197,10 +197,11 @@ LDSP/IDSP 应用入口与 Lumi AI「下载桌面版」链接同一下载中心�
 
 ## 当前切片验证记录
 
-- 下载生成器与既有 channel reader/publisher：`scripts/run_tests.sh tests/scripts/test_desktop_downloads.py tests/hermes_cli/test_release_channels.py tests/scripts/test_release_channels.py -q`，79 项通过。
+- 下载生成器与既有 channel reader/publisher：`scripts/run_tests.sh tests/scripts/test_desktop_downloads.py tests/hermes_cli/test_release_channels.py tests/scripts/test_release_channels.py -q`，80 项通过。
 - `python scripts/check`，17 项检查通过。没有修改依赖锁、core tools 或 prompt snapshot。
 - 新功能 happy path 在基线独立 worktree 上证明失败（CLI 尚不存在）；未把这种新增功能缺失描述为上游 bug。
 - 后续主审发现 Windows 行若有额外 teamId，会遮盖已验证的 publisher。先补行为测试证明失败，再按平台只读对应签名身份，回归通过后提交。
+- 发布路径复审发现覆盖生成会收紧页面权限，可能令 Web server 失去读取权限；新增 Linux/macOS 行为测试证明失败，改为原子写入时保留原文件权限。当前仅在 Linux 执行，macOS 标记交原生 CI 验证。
 - 浏览器人工走查 1440/1280/390 宽度，含展开校验信息：无横向溢出，无脚本或外部资源；使用测试清单，不代表真实包已下载/安装。
 - 测试环境由 PM 隔离构建。初次镜像源缺上传时间导致 release-age 解析失败，切到带上传时间的 PyPI 源后通过，没有关闭依赖年龄检查。
 - 尚未完成：独立团队 QA/安全审查、真实 Keycloak/SkillHub/LM 契约联调、企业签名构建与各原生平台安装/更新验收；整个产品仍为 no-go。

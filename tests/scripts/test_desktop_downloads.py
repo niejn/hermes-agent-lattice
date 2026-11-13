@@ -158,3 +158,14 @@ def test_metadata_read_is_bounded_and_duplicate_json_keys_are_rejected(tmp_path,
         qualified_manifest(canonical_json(record), body, expected_sha256=digest,
                            repository="example/lattice", app_id="com.example.lattice",
                            channel="enterprise-preview", base_url=manifest["request"]["publicBase"])
+
+
+@pytest.mark.platforms("linux", "macos")
+def test_regeneration_preserves_page_permissions_for_the_web_server(tmp_path, release):
+    record, manifest = release
+    page = tmp_path / "index.html"
+    page.write_text("previous page")
+    page.chmod(0o640)
+    result = build_page(tmp_path, record, manifest)
+    assert result.returncode == 0, result.stderr
+    assert page.stat().st_mode & 0o777 == 0o640

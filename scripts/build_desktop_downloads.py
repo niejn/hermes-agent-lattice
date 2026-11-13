@@ -26,7 +26,7 @@ def main(argv: list[str] | None = None) -> int:
             channel=args.channel, base_url=args.public_base,
         )
         page = render_download_page(manifest, expected_sha256=args.manifest_sha256)
-        atomic_write_text(Path(args.output), page)
+        atomic_write_text(Path(args.output), page, preserve_mode=True)
     except (ChannelError, OSError) as exc:
         print(f"Download page build failed: {exc}", file=sys.stderr)
         return 1
