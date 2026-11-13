@@ -188,7 +188,7 @@ def is_available_safe(
 
 
 def configured_provider_name(section: str, logger: logging.Logger) -> Optional[str]:
-    """Read ``<section>.provider`` from config.yaml, mapping the managed Nous
+    """Read ``<section>.provider`` from config.yaml, mapping the managed Langton
     selection to ``fal`` (the FAL plugin services it via the managed gateway)."""
     configured: Optional[str] = None
     try:

@@ -42,7 +42,7 @@ const emptySessionsResponse = {
   total: 0
 }
 
-describe('Hermes REST helpers', () => {
+describe('Lattice REST helpers', () => {
   let api: ReturnType<typeof vi.fn>
 
   beforeEach(() => {

@@ -650,7 +650,7 @@ def qr_scan_for_bot_info(*, timeout_seconds: int = _QR_POLL_TIMEOUT) -> Optional
     import urllib.parse
 
     def _get_json(url: str, timeout: int) -> dict[str, Any]:
-        req = urllib.request.Request(url, headers={"User-Agent": "HermesAgent/1.0"})
+        req = urllib.request.Request(url, headers={"User-Agent": "LatticeAgent/1.0"})
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return json.loads(resp.read().decode("utf-8"))
 
@@ -677,7 +677,7 @@ def qr_scan_for_bot_info(*, timeout_seconds: int = _QR_POLL_TIMEOUT) -> Optional
         print(f"\n  Scan the QR code above, or open this URL directly:\n  {page_url}")
     except Exception:
         print(f"  Open this URL in WeCom on your phone:\n\n  {page_url}\n")
-        print("  Tip: from the Hermes environment, run: "
+        print("  Tip: from the Lattice environment, run: "
               f"{install_hint('messaging')} "
               "to display a scannable QR code here next time")
     print("\n  Fetching configuration results...", end="", flush=True)

@@ -204,14 +204,14 @@ def catalog_install_record(plugin_dir) -> Optional[dict]:
 
 
 LOGIN_BACKEND_TIERS = frozenset({"official", "verified"})
-LOGIN_BACKEND_RULE = ("password-manager login backends are accepted only from plugins bundled with Hermes or "
-                      "installed from the Hermes plugin catalog at tier verified or official (published by the "
-                      "password-manager vendor itself or by Nous)")
+LOGIN_BACKEND_RULE = ("password-manager login backends are accepted only from plugins bundled with Lattice or "
+                      "installed from the Lattice plugin catalog at tier verified or official (published by the "
+                      "password-manager vendor itself or by Langton)")
 _NON_CATALOG_SOURCES = {"project": "a project .hermes/plugins directory", "entrypoint": "a pip entry point"}
 
 
 BROWSER_PAGE_BACKEND_RULE = ("browser page backends (which carry browser_vault fill scripts) are accepted only from "
-                             "plugins bundled with Hermes or installed from the Hermes plugin catalog at tier "
+                             "plugins bundled with Lattice or installed from the Lattice plugin catalog at tier "
                              "verified or official")
 
 
@@ -226,7 +226,7 @@ def login_backend_provenance_error(manifest, rule: str = LOGIN_BACKEND_RULE) -> 
 
     Read from the installer-owned ``.install-metadata.json`` record of the CURRENT home's plugins dir, never
     from the tree (a repo can commit a ``.hermes-catalog.json``). No config key relaxes it. This decides
-    which plugins Hermes offers the seam to; code already running in-process is not sandboxed by it."""
+    which plugins Lattice offers the seam to; code already running in-process is not sandboxed by it."""
     if manifest.source == "bundled":
         return ""
     if manifest.source in _NON_CATALOG_SOURCES:
@@ -294,8 +294,8 @@ def _refuse_unsupported_catalog_platform(entry: PluginCatalogEntry) -> None:
 
 
 def catalog_hermes_error(entry: PluginCatalogEntry) -> Optional[str]:
-    """``<name> needs Hermes <spec>; this is <version>.`` when the entry's ``requires_hermes`` rejects the
-    running Hermes, else ``None``. The verdict IS the plugin.yaml gate's
+    """``<name> needs Lattice <spec>; this is <version>.`` when the entry's ``requires_hermes`` rejects the
+    running Lattice, else ``None``. The verdict IS the plugin.yaml gate's
     (:func:`~hermes_cli.plugins_manifest.requires_hermes_error`): same version source, same comparison, so
     a dev checkout or canary build is judged the same by both, and an unknown version never blocks."""
     from hermes_cli.plugins_manifest import requires_hermes_error, running_hermes_version
@@ -807,7 +807,7 @@ def pin_label(entry: PluginCatalogEntry) -> str:
 def _render_entries(entries: list[PluginCatalogEntry], console) -> None:
     from hermes_cli.plugins_cmd import _table
     table = _table(((("Name", "bold")), ("Category", None), ("Tier", None), ("Description", None),
-                    ("Pinned", "dim"), ("Capabilities", "dim")), title="Hermes Plugin Catalog (curated)")
+                    ("Pinned", "dim"), ("Capabilities", "dim")), title="Lattice Plugin Catalog (curated)")
     rank = {name: i for i, name in enumerate(CATALOG_TIERS)}
     style = {"official": "cyan", "verified": "green", "community": "magenta"}
     for e in sorted(entries, key=lambda e: (e.category, rank.get(e.tier, len(rank)), e.name)):

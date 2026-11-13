@@ -537,7 +537,7 @@ _GIT_FILE_PERMISSION = re.compile(r"Permission denied(?! *\()|\bEACCES\b")
 def git_error_stop_class(exc: BaseException) -> Optional[str]:
     """The closed stop token for a git ``CalledProcessError`` that is about to end the run, or None.
 
-    Reads only the failed argv and fixed git/Hermes phrases in its output, never stores either.
+    Reads only the failed argv and fixed git/Lattice phrases in its output, never stores either.
     """
     if not isinstance(exc, subprocess.CalledProcessError):
         return None
@@ -816,7 +816,7 @@ def _bare_collection_enabled() -> Optional[bool]:
 
 
 def _park_metric_receipt(data: dict[str, Any], enabled: Optional[bool]) -> None:
-    """Keep the bounded fields for the next Hermes start (stdlib only): ``report_pending_updates``
+    """Keep the bounded fields for the next Lattice start (stdlib only): ``report_pending_updates``
     records them when collection is on, ``begin_process`` purges them when it is off. Collection
     known off: park nothing and purge what an earlier run parked."""
     from hermes_constants import get_hermes_home
@@ -1052,7 +1052,7 @@ _CODE_ROOT_MAX_DEPTH = 8
 
 
 def _code_root_for_path(raw: Any) -> Optional[Path]:
-    """Return the Hermes checkout containing an absolute process path."""
+    """Return the Lattice checkout containing an absolute process path."""
     if not isinstance(raw, str) or not raw:
         return None
     with suppress(Exception):

@@ -106,8 +106,8 @@ def _open(url: str) -> bool:
 # else, so the referrer and any script stay out of it.
 _LAUNCH_PAGE = ('<!doctype html><meta charset="utf-8"><meta name="referrer" content="no-referrer">'
                 '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'">'
-                '<meta http-equiv="refresh" content="0;url={url}"><title>Opening Hermes</title>'
-                '<p><a href="{url}">Open Hermes Webapp</a></p>\n')
+                '<meta http-equiv="refresh" content="0;url={url}"><title>Opening Lattice</title>'
+                '<p><a href="{url}">Open Lattice Webapp</a></p>\n')
 
 
 def _open_privately(target: Path, url: str) -> bool:
@@ -207,7 +207,7 @@ def _plain_http_note(url: str) -> str | None:
 def _browser_address(target: Path, settings, served_url: str) -> str:
     """Where a browser opens the Webapp the gateway serves at *served_url* (its loopback dial origin), as
     ``webapp-launch`` works it out: ``webapp.public_url`` when set, else behind sign-in the LAN address
-    Web Access registered Nous sign-in for, else *served_url* (a private Webapp's launch link). Read from
+    Web Access registered Langton sign-in for, else *served_url* (a private Webapp's launch link). Read from
     *target*'s config now, not from when the gateway started."""
     from hermes_cli.web_server_boundary import public_hosts_engage_gate, public_url_hosts, should_require_auth
     from hermes_cli.webapp_access import registered_lan_origin

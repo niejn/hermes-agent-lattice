@@ -498,7 +498,7 @@ class RaftAdapter(BasePlatformAdapter):
         return web.json_response(self._activity_queue.drain(max_events))
 
     async def handle_message(self, event: MessageEvent) -> None:
-        """Accept Raft wake hints without interrupting an active Hermes turn."""
+        """Accept Raft wake hints without interrupting an active Lattice turn."""
         if event.internal:
             # Durable gateway wakes need the base session fence and admission receipt.
             await super().handle_message(event)
@@ -536,7 +536,7 @@ def _env_enablement() -> Optional[dict]:
 
 
 def interactive_setup() -> None:
-    """``hermes gateway setup`` flow: persists ``RAFT_PROFILE`` to the Hermes env file.
+    """``hermes gateway setup`` flow: persists ``RAFT_PROFILE`` to the Lattice env file.
     CLI helpers are lazy-imported so the plugin stays importable in gateway runtime and tests."""
     from hermes_cli.cli_output import print_header, print_info, print_success, print_warning, prompt
     from hermes_cli.config import get_env_value, save_env_value
@@ -546,7 +546,7 @@ def interactive_setup() -> None:
     if declines_reconfigure("Raft", "Reconfigure Raft?", "RAFT_PROFILE"):
         print_info(f"Keeping RAFT_PROFILE={existing_profile}.")
         return
-    for line in ("Connect Hermes to Raft as an external agent.", "Create the External Agent in Raft first, then run:",
+    for line in ("Connect Lattice to Raft as an external agent.", "Create the External Agent in Raft first, then run:",
                  "  raft agent login --server <server-url> --agent <agent-id> --profile-slug <slug>"):
         print_info(line)
     print()
@@ -561,11 +561,11 @@ def interactive_setup() -> None:
 
 
 def register(ctx) -> None:
-    """Plugin entry point — called by the Hermes plugin system."""
+    """Plugin entry point — called by the Lattice plugin system."""
     ctx.register_platform(
         name="raft",
         dashboard_description="Join a Raft workspace as an external agent.",
-        docs_url="https://hermes-agent.nousresearch.com/docs/user-guide/messaging/raft",
+        docs_url="https://docs.langtonphotonics.com/docs/user-guide/messaging/raft",
         label="Raft",
         adapter_factory=RaftAdapter,
         check_fn=check_raft_requirements,

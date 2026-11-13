@@ -420,7 +420,7 @@ describe('ToolsetConfigPanel', () => {
           {
             name: 'Lightpanda',
             badge: 'local',
-            tag: 'Zig headless browser spawned by Hermes, text-only (no screenshots)',
+            tag: 'Zig headless browser spawned by Lattice, text-only (no screenshots)',
             env_vars: [],
             post_setup: 'lightpanda',
             requires_nous_auth: false,
@@ -468,7 +468,7 @@ describe('ToolsetConfigPanel', () => {
           {
             name: 'Lightpanda',
             badge: 'local',
-            tag: 'Zig headless browser spawned by Hermes, text-only (no screenshots)',
+            tag: 'Zig headless browser spawned by Lattice, text-only (no screenshots)',
             env_vars: [],
             post_setup: 'lightpanda',
             requires_nous_auth: false,
@@ -504,7 +504,7 @@ describe('ToolsetConfigPanel', () => {
 
   describe('readiness pills', () => {
     it('renders the server status instead of assuming keyless rows are Ready', async () => {
-      // The false-Ready bug: a logged-out Nous Subscription row and a
+      // The false-Ready bug: a logged-out Langton Subscription row and a
       // never-installed local TTS both have zero env vars — the old client
       // heuristic pilled every such row "Ready". The server now sends an
       // honest per-provider status; the pill must follow it.
@@ -522,7 +522,7 @@ describe('ToolsetConfigPanel', () => {
               status: 'ready'
             },
             {
-              name: 'Nous Subscription',
+              name: 'Langton Subscription',
               badge: 'subscription',
               tag: 'Managed OpenAI TTS',
               env_vars: [],
@@ -627,7 +627,7 @@ describe('ToolsetConfigPanel', () => {
             {
               name: 'Lightpanda',
               badge: 'free',
-              tag: 'Zig headless browser spawned by Hermes, text-only (no screenshots)',
+              tag: 'Zig headless browser spawned by Lattice, text-only (no screenshots)',
               env_vars: [],
               post_setup: 'lightpanda',
               requires_nous_auth: false,
@@ -655,7 +655,7 @@ describe('ToolsetConfigPanel', () => {
             {
               name: 'Lightpanda',
               badge: 'free',
-              tag: 'Zig headless browser spawned by Hermes, text-only (no screenshots)',
+              tag: 'Zig headless browser spawned by Lattice, text-only (no screenshots)',
               env_vars: [],
               post_setup: 'lightpanda',
               requires_nous_auth: false,
@@ -682,14 +682,14 @@ describe('ToolsetConfigPanel', () => {
     })
   })
 
-  describe('managed Nous provider activation', () => {
+  describe('managed Langton provider activation', () => {
     const nousBrowserConfig = () =>
       config({
         name: 'browser',
         active_provider: null,
         providers: [
           {
-            name: 'Nous Subscription (Browser Use cloud)',
+            name: 'Langton Subscription (Browser Use cloud)',
             badge: 'subscription',
             tag: 'Managed Browser Use billed to your subscription',
             env_vars: [],
@@ -713,19 +713,19 @@ describe('ToolsetConfigPanel', () => {
       selectToolsetProvider.mockResolvedValue({
         ok: true,
         name: 'browser',
-        provider: 'Nous Subscription (Browser Use cloud)',
+        provider: 'Langton Subscription (Browser Use cloud)',
         needs_nous_auth: true,
         feature: 'browser'
       })
 
       render(<ToolsetConfigPanel onConfiguredChange={vi.fn()} toolset="browser" />)
 
-      // The single Nous row auto-expands; activate via the explicit button.
-      await screen.findByRole('button', { name: /Nous Subscription/ })
+      // The single Langton row auto-expands; activate via the explicit button.
+      await screen.findByRole('button', { name: /Langton Subscription/ })
       fireEvent.click(await screen.findByRole('button', { name: /Use this backend/ }))
 
       await waitFor(() =>
-        expect(selectToolsetProvider).toHaveBeenCalledWith('browser', 'Nous Subscription (Browser Use cloud)')
+        expect(selectToolsetProvider).toHaveBeenCalledWith('browser', 'Langton Subscription (Browser Use cloud)')
       )
       await waitFor(() =>
         expect(notify).toHaveBeenCalledWith(
@@ -739,14 +739,14 @@ describe('ToolsetConfigPanel', () => {
       expect(notify).not.toHaveBeenCalledWith(expect.objectContaining({ kind: 'success' }))
     })
 
-    it('drives the existing Nous OAuth device-code flow from the sign-in action and refetches', async () => {
+    it('drives the existing Langton OAuth device-code flow from the sign-in action and refetches', async () => {
       const { notify } = await import('@/store/notifications')
 
       getToolsetConfig.mockResolvedValue(nousBrowserConfig())
       selectToolsetProvider.mockResolvedValue({
         ok: true,
         name: 'browser',
-        provider: 'Nous Subscription (Browser Use cloud)',
+        provider: 'Langton Subscription (Browser Use cloud)',
         needs_nous_auth: true,
         feature: 'browser'
       })
@@ -764,7 +764,7 @@ describe('ToolsetConfigPanel', () => {
       try {
         render(<ToolsetConfigPanel onConfiguredChange={vi.fn()} toolset="browser" />)
 
-        await screen.findByRole('button', { name: /Nous Subscription/ })
+        await screen.findByRole('button', { name: /Langton Subscription/ })
         fireEvent.click(await screen.findByRole('button', { name: /Use this backend/ }))
 
         // Grab the sign-in action off the warning notification and invoke it —
@@ -780,14 +780,14 @@ describe('ToolsetConfigPanel', () => {
         getToolsetConfig.mockClear()
         warning!.action!.onClick()
 
-        await waitFor(() => expect(startOAuthLogin).toHaveBeenCalledWith('nous'))
+        await waitFor(() => expect(startOAuthLogin).toHaveBeenCalledWith('langton'))
         expect(openSpy).toHaveBeenCalledWith(
           'https://portal.nousresearch.com/device?user_code=NOUS-1234',
           '_blank',
           'noopener,noreferrer'
         )
         // Approved poll → the panel refetches the config so status flips.
-        await waitFor(() => expect(pollOAuthSession).toHaveBeenCalledWith('nous', 'sess-1'), { timeout: 8000 })
+        await waitFor(() => expect(pollOAuthSession).toHaveBeenCalledWith('langton', 'sess-1'), { timeout: 8000 })
         await waitFor(() => expect(getToolsetConfig).toHaveBeenCalled(), { timeout: 8000 })
       } finally {
         openSpy.mockRestore()
@@ -801,12 +801,12 @@ describe('ToolsetConfigPanel', () => {
       selectToolsetProvider.mockResolvedValue({
         ok: true,
         name: 'browser',
-        provider: 'Nous Subscription (Browser Use cloud)'
+        provider: 'Langton Subscription (Browser Use cloud)'
       })
 
       render(<ToolsetConfigPanel onConfiguredChange={vi.fn()} toolset="browser" />)
 
-      await screen.findByRole('button', { name: /Nous Subscription/ })
+      await screen.findByRole('button', { name: /Langton Subscription/ })
       fireEvent.click(await screen.findByRole('button', { name: /Use this backend/ }))
 
       await waitFor(() => expect(notify).toHaveBeenCalledWith(expect.objectContaining({ kind: 'success' })))
@@ -932,9 +932,9 @@ describe('ToolsetConfigPanel', () => {
       await waitFor(() => expect(screen.getByText('Search: firecrawl')).toBeTruthy())
     })
 
-    it('lights the Nous row for a gateway-served capability and the BYOK row for the own-key one', async () => {
-      const nous = {
-        name: 'Nous Subscription',
+    it('lights the Langton row for a gateway-served capability and the BYOK row for the own-key one', async () => {
+      const langton = {
+        name: 'Langton Subscription',
         badge: 'subscription',
         tag: 'Managed web search and extract billed to your subscription',
         env_vars: [],
@@ -955,15 +955,15 @@ describe('ToolsetConfigPanel', () => {
           active_extract_backend: 'firecrawl',
           search_via_nous: true,
           extract_via_nous: false,
-          providers: [...webConfig().providers, nous]
+          providers: [...webConfig().providers, langton]
         })
       )
 
       render(<ToolsetConfigPanel onConfiguredChange={vi.fn()} toolset="web" />)
 
-      expect(await screen.findByText('Search: Nous Subscription')).toBeTruthy()
+      expect(await screen.findByText('Search: Langton Subscription')).toBeTruthy()
       expect(screen.getByText('Extract: firecrawl')).toBeTruthy()
-      const nousRow = screen.getByRole('button', { name: /Nous Subscription/ })
+      const nousRow = screen.getByRole('button', { name: /Langton Subscription/ })
       const byokRow = screen.getByRole('button', { name: /^Firecrawl/ })
       expect(within(nousRow).getByText('Search backend')).toBeTruthy()
       expect(within(nousRow).queryByText('Extract backend')).toBeNull()

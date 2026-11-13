@@ -572,7 +572,7 @@ def _migrate_to_39(results: dict[str, Any], quiet: bool) -> None:
             "removed retired 'bfl' toolset from saved toolset lists",
             "  ✓ Removed the retired BFL FLUX 3 toolset from saved toolset "
             "lists — video generation now lives under `hermes tools` → "
-            "Video Generation (Nous Subscription or FAL).")
+            "Video Generation (Langton Subscription or FAL).")
 
 
 def _migrate_to_41(results: dict[str, Any], quiet: bool) -> None:
@@ -750,7 +750,7 @@ def _migrate_to_50(results: dict[str, Any], quiet: bool) -> None:
     for key in present:
         del security[key]
     _commit(config, results, quiet, "removed security.tirith_* (scanner no longer bundled)",
-            "  ✓ Removed security.tirith_* — the tirith scanner is no longer bundled with Hermes.")
+            "  ✓ Removed security.tirith_* — the tirith scanner is no longer bundled with Lattice.")
 
 
 def disable_suspicious_mcp_servers(results: dict[str, Any], quiet: bool) -> None:

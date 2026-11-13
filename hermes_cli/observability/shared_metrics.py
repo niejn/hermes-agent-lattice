@@ -1,4 +1,4 @@
-"""Durable aggregation and local export for Hermes shared metrics."""
+"""Durable aggregation and local export for Lattice shared metrics."""
 
 from __future__ import annotations
 
@@ -250,7 +250,7 @@ class SharedMetricsStore:
         self, state_key: str, metric_name: str, dimensions: dict[str, str],
         resource: dict[str, str],
     ) -> bool:
-        """Transactional compare-and-set latch shared by concurrent Hermes processes."""
+        """Transactional compare-and-set latch shared by concurrent Lattice processes."""
         self._validate_counter(metric_name, dimensions, resource)
         now = _utc_now()
         with self._write() as connection:

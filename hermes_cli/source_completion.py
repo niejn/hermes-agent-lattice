@@ -67,7 +67,7 @@ def complete_source_checkout(
     if not lock.acquire():
         raise RuntimeError(
             f"an update is still running ({describe_holder(lock.holder)}); "
-            "wait for it to exit, then relaunch Hermes"
+            "wait for it to exit, then relaunch Lattice"
         )
     try:
         return _complete_locked(

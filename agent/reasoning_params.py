@@ -91,7 +91,7 @@ class ReasoningParamsMixin:
 
     def _supports_reasoning_extra_body(self) -> bool:
         """True when reasoning extra_body is safe to send: OpenRouter forwards unknown extra_body upstream and
-        some routes 400 on ``reasoning``, so gate to known reasoning-capable families and direct Nous Portal."""
+        some routes 400 on ``reasoning``, so gate to known reasoning-capable families and direct Langton Portal."""
         url = self._base_url_lower
         if base_url_host_matches(url, "nousresearch.com") or base_url_host_matches(url, "ai-gateway.vercel.sh"):
             return True
@@ -140,7 +140,7 @@ class ReasoningParamsMixin:
 
     def _reasoning_endpoint_profile(self):
         """The profile claiming this endpoint (``providers.profile_for_host``) that gates its reasoning, or None.
-        Endpoints core gates itself (Nous Portal, Vercel AI Gateway, LM Studio, Ollama Cloud, OpenRouter) keep
+        Endpoints core gates itself (Langton Portal, Vercel AI Gateway, LM Studio, Ollama Cloud, OpenRouter) keep
         core's gate even when a plugin claims their host for metadata or auxiliary routing."""
         url = self._base_url_lower
         if ((self.provider or "").strip().lower() == "lmstudio" or self._is_openrouter_url()
@@ -215,7 +215,7 @@ class ReasoningParamsMixin:
             # Log the class, never the config value or exception traceback.
             logging.getLogger("run_agent").warning(
                 "Agent configuration for model.reasoning_echo could not be loaded (%s); "
-                "using the default reasoning echo setting. Check the active Hermes Python "
+                "using the default reasoning echo setting. Check the active Lattice Python "
                 "environment and dependencies; run 'hermes config check' after "
                 "configuration imports work again.",
                 type(exc).__name__,

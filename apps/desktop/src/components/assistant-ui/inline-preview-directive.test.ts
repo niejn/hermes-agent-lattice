@@ -207,7 +207,7 @@ describe('intentScript', () => {
     const posted: Array<Record<string, unknown>> = []
     const listeners: Record<string, Array<(e: unknown) => void>> = {}
     const parent = { postMessage: (data: Record<string, unknown>) => posted.push(data) }
-    const win: { hermes?: { maxLength: number; send: (p: unknown) => Promise<unknown> } } = {}
+    const win: { lattice?: { maxLength: number; send: (p: unknown) => Promise<unknown> } } = {}
 
     const addEventListener = (type: string, fn: (e: unknown) => void) => {
       ;(listeners[type] ??= []).push(fn)
@@ -221,7 +221,7 @@ describe('intentScript', () => {
 
     const reply = (data: unknown, source: unknown = parent) => listeners.message?.forEach(fn => fn({ data, source }))
 
-    return { posted, reply, send: win.hermes!.send, win }
+    return { posted, reply, send: win.lattice!.send, win }
   }
 
   it('posts the full prompt, never a truncated one', () => {
@@ -267,6 +267,6 @@ describe('intentScript', () => {
 
     await expect(send('   ')).resolves.toEqual({ error: 'invalid', ok: false })
     expect(posted).toHaveLength(0)
-    expect(win.hermes?.maxLength).toBe(MAX_INTENT_LENGTH)
+    expect(win.lattice?.maxLength).toBe(MAX_INTENT_LENGTH)
   })
 })

@@ -143,7 +143,7 @@ def build_gateway_parser(
     attach_mode = gateway_attach.add_mutually_exclusive_group()
     _flag(attach_mode, "--start", help="Start the gateway when none serves this profile")
     _flag(attach_mode, "--recover",
-        help="Discover first; start (or replace an older Hermes's) gateway only when it is not ready")
+        help="Discover first; start (or replace an older Lattice's) gateway only when it is not ready")
     gateway_attach.add_argument("--timeout", default="60",
                                 help="Start deadline in seconds for --start/--recover (default: 60)")
     gateway_attach.set_defaults(func=cmd_gateway_attach)
@@ -211,7 +211,7 @@ def build_gateway_parser(
 
     gateway_migrate_legacy = gateway_subparsers.add_parser(
         "migrate-legacy", help="Remove legacy hermes.service units from pre-rename installs",
-        description="Stop, disable, and remove legacy Hermes gateway unit files "
+        description="Stop, disable, and remove legacy Lattice gateway unit files "
             "(e.g. hermes.service) left over from older installs. Profile "
             "units (hermes-gateway-<profile>.service) and unrelated "
             "third-party services are never touched.")
@@ -233,7 +233,7 @@ def build_gateway_parser(
     _flag(gateway_migrate, "-y", "--yes", dest="yes", help="Apply without confirmation")
     _flag(gateway_migrate, "--backends", dest="backends",
         help="Report serve/dashboard background services and their ownership; "
-        "changes no service (normal Hermes startup bookkeeping still runs)")
+        "changes no service (normal Lattice startup bookkeeping still runs)")
     _flag(gateway_migrate, "--json", dest="json", help="With --backends: print the report as JSON")
 
     # enroll: redeem a single-use connector token for the per-gateway secret + per-tenant
@@ -241,7 +241,7 @@ def build_gateway_parser(
     gateway_enroll = gateway_subparsers.add_parser("enroll",
         help="Enroll this gateway with a relay connector (writes relay auth creds to .env)",
         description="Redeem a single-use enrollment token with a relay connector. "
-            "Authenticates as your Nous Portal account (the connector derives the "
+            "Authenticates as your Langton Portal account (the connector derives the "
             "authoritative tenant from it), mints this gateway's per-gateway secret "
             "and per-tenant delivery key, and writes GATEWAY_RELAY_ID / "
             "GATEWAY_RELAY_SECRET / GATEWAY_RELAY_DELIVERY_KEY into ~/.hermes/.env. "
@@ -270,7 +270,7 @@ def build_gateway_parser(
     proxy_parser = subparsers.add_parser(
         "proxy", help="Local OpenAI-compatible proxy to OAuth providers",
         description="Run a local HTTP server that forwards OpenAI-compatible requests "
-            "to an OAuth-authenticated provider (e.g. Nous Portal). External "
+            "to an OAuth-authenticated provider (e.g. Langton Portal). External "
             "apps can point at the proxy with any bearer token; the proxy "
             "attaches your real credentials.")
     proxy_subparsers = proxy_parser.add_subparsers(dest="proxy_command")

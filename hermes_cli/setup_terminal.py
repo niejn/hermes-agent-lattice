@@ -175,10 +175,10 @@ def _setup_backend_modal(config: dict) -> None:
         default_idx = {"managed": 0, "direct": 1}.get(modal_mode, 1 if _setup.get_env_value("MODAL_TOKEN_ID") else 0)
         use_managed_modal = _setup.prompt_choice(
             "Select how Modal execution should be billed:",
-            ["Use my Nous subscription", "Use my own Modal account"], default_idx) == 0
+            ["Use my Langton subscription", "Use my own Modal account"], default_idx) == 0
     if use_managed_modal:
         config["terminal"]["modal_mode"] = "managed"
-        _setup.print_info("Modal execution will use the managed Nous gateway and bill to your subscription.")
+        _setup.print_info("Modal execution will use the managed Langton gateway and bill to your subscription.")
         if _setup.get_env_value("MODAL_TOKEN_ID") or _setup.get_env_value("MODAL_TOKEN_SECRET"):
             _setup.print_info(
                 "Direct Modal credentials are still configured, but this backend is pinned to managed mode.")
@@ -210,7 +210,7 @@ def _setup_backend_daytona(config: dict) -> None:
 def _setup_backend_vercel(config: dict) -> None:
     _setup.print_success("Terminal backend: Vercel Sandbox")
     _setup._info("Cloud microVM sandboxes with snapshot-backed filesystem persistence.",
-                 "Requires the optional Vercel SDK (installed through Hermes PM).")
+                 "Requires the optional Vercel SDK (installed through Lattice PM).")
     _ensure_sdk("vercel")
     _prompt_vercel_sandbox_settings(config)
 
@@ -278,7 +278,7 @@ _BACKEND_ENV_MIRROR = {"modal": ("TERMINAL_MODAL_MODE", "modal_mode", "auto"),
 def setup_terminal_backend(config: dict):
     """Configure the terminal execution backend."""
     _setup.print_header("Terminal Backend")
-    _setup._info("Choose where Hermes runs shell commands and code.",
+    _setup._info("Choose where Lattice runs shell commands and code.",
                  "This affects tool execution, file access, and isolation.",
                  f"   Guide: {_setup._DOCS_BASE}/user-guide/configuration#terminal-backend-configuration", None)
     current_backend = _setup.cfg_get(config, "terminal", "backend", default="local")

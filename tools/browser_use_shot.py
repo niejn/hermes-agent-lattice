@@ -5,7 +5,7 @@ Chrome draws no compositor frame for a hidden tab, and some remotes (Browser Use
 for its full 60 s IPC timeout. Its ``new_tab()`` and its daemon both create tabs with ``background=True``,
 so the tab the agent drives is often hidden. browser_harness is a pinned third-party dependency; this
 module is loaded by file path inside the harness process (``harness_command()``), so it imports nothing
-from Hermes and touches the harness only through the helpers module it is given.
+from Lattice and touches the harness only through the helpers module it is given.
 """
 
 from __future__ import annotations
@@ -161,7 +161,7 @@ runpy.run_module('browser_harness.run', run_name='__main__', alter_sys=True)
 def harness_command(cmd: list[str], activate: str) -> list[str]:
     """``python -m browser_harness.run`` as a launcher that installs these helpers first. The model's code
     still arrives untouched on stdin (no preamble shifting its traceback line numbers). This file is loaded
-    by path: the harness interpreter has no Hermes checkout on sys.path."""
+    by path: the harness interpreter has no Lattice checkout on sys.path."""
     if cmd[1:] != _HARNESS_MODULE_ARGS:
         return cmd
     return [cmd[0], "-c", _LAUNCHER.format(path=os.path.abspath(__file__), activate=activate)]

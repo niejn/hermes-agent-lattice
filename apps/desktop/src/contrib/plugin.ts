@@ -51,7 +51,7 @@ export type { PetMessageTone, PetSayOptions } from '@/store/pet-plugin-messages'
 export type PluginContribution = Omit<Contribution, 'source' | 'id'> & { id: string }
 
 /** Namespaced JSON persistence (the VS Code `globalState` analog). Keys live
- *  under `hermes.plugin.<id>.` — plugins can't read or clobber each other. */
+ *  under `lattice.plugin.<id>.` — plugins can't read or clobber each other. */
 export interface PluginStorage {
   get<T>(key: string, fallback: T): T
   set(key: string, value: unknown): void
@@ -66,7 +66,7 @@ export interface PluginStorage {
 export interface PluginOs {
   /** Native OS notification (Electron), attributed to this plugin. Gated by
    *  Settings ▸ Notifications ▸ "Plugin notifications" and fires only while
-   *  the user is away from Hermes — use `host.notify` for the in-app toast.
+   *  the user is away from Lattice — use `host.notify` for the in-app toast.
    *  Throttled per plugin; reserve it for genuinely notable events.
    *  Supports `icon`, `activate` (e.g. `hermes://index-network/intent/1`),
    *  action buttons, and renderer `onActivate` / `onAction` callbacks. */
@@ -184,7 +184,7 @@ export interface PluginContext {
   storage: PluginStorage
   /** Folder-scoped file access: this plugin's own data folder plus folders
    *  the user grants it through the app's picker, by relative path. The app
-   *  checks every call; nothing outside those folders (or inside Hermes'
+   *  checks every call; nothing outside those folders (or inside Lattice'
    *  own data) is reachable. Feature-detect on older hosts: `ctx.files?.…`. */
   files: PluginFiles
   /** Plugin-scoped i18n: ship + register locale bundles under this plugin,
@@ -212,7 +212,7 @@ export interface HermesPlugin {
 }
 
 function createPluginStorage(pluginId: string): PluginStorage {
-  const scoped = (key: string) => `hermes.plugin.${pluginId}.${key}`
+  const scoped = (key: string) => `lattice.plugin.${pluginId}.${key}`
 
   return {
     get(key, fallback) {

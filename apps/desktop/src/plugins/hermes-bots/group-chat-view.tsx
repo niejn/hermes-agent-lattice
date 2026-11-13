@@ -903,7 +903,7 @@ function LegacyGroupChatWorkspace({ group, members, onBack, visible = true }: Gr
 
     const channel =
       !desktopBridge && typeof BroadcastChannel !== 'undefined'
-        ? new BroadcastChannel('hermes.desktop.preview-annotate-handoff.v1')
+        ? new BroadcastChannel('lattice.desktop.preview-annotate-handoff.v1')
         : null
 
     if (!desktopBridge && !channel) {
@@ -933,7 +933,7 @@ function LegacyGroupChatWorkspace({ group, members, onBack, visible = true }: Gr
       }
 
       const destination = request.destination
-      const sourceWindowId = window.sessionStorage.getItem('hermes.desktop.previewAnnotate.windowId')?.trim()
+      const sourceWindowId = window.sessionStorage.getItem('lattice.desktop.previewAnnotate.windowId')?.trim()
 
       if (
         !sourceWindowId ||
@@ -1471,7 +1471,7 @@ function LegacyGroupChatWorkspace({ group, members, onBack, visible = true }: Gr
 
     // Match this speaker back to its member descriptor so display
     // names and disambiguating handles come from the roster (the
-    // primary "default" profile renders as Hermes, remote dupes
+    // primary "default" profile renders as Lattice, remote dupes
     // carry their @name-device handle); a former member as its own machine names it.
     const speaker = groupTranscriptSpeaker(entry, members, liveRoster)
     const member = members.find(bot => bot === speaker) ?? null

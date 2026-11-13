@@ -132,7 +132,7 @@ def _format_live_refine_output(sid: str, session: Optional[dict], arg: str) -> s
 
 
 def _usage_account_blocks(session: dict) -> list[str]:
-    """Provider limits then Nous credits, as CLI/messaging /usage show them; neither needs an agent.
+    """Provider limits then Langton credits, as CLI/messaging /usage show them; neither needs an agent.
     Both read the session profile's credentials, unreadable outside its scope when multiplexed (#132422).
     Before the first turn the route is the session's composer pick, else the profile's provider."""
     from agent.account_usage import fetch_account_usage, nous_credits_lines, render_account_usage_lines
@@ -210,7 +210,7 @@ def _format_live_history_output(sid: str, session: dict, arg: str) -> str:
     lines = ["Conversation History", "────────────────────────────────────────"]
     for idx, message in enumerate(messages, start=1):
         role = str(message.get("role") or "unknown")
-        label = {"user": "You", "assistant": "Hermes"}.get(role, role.title())
+        label = {"user": "You", "assistant": "Lattice"}.get(role, role.title())
         text = str(message.get("text") or message.get("context") or "").strip()
         text = f"{text[:400]}..." if len(text) > 400 else text
         lines.append(f"[{label} #{idx}] {text or '(no text)'}")

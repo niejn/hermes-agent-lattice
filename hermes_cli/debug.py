@@ -1,4 +1,4 @@
-"""``hermes debug`` debug tools for Hermes Agent."""
+"""``hermes debug`` debug tools for Lattice Agent."""
 
 import contextlib
 import datetime
@@ -256,7 +256,7 @@ def _primary_log_path(log_name: str) -> Optional[Path]:
 # share`; a bare "(file not found)" would read as "the app logged nothing" and misdirect triage.
 _CLIENT_SIDE_LOGS = {
     "desktop": (
-        "written by Hermes Desktop on the machine running the app, not by this "
+        "written by Lattice Desktop on the machine running the app, not by this "
         "backend. If the desktop connects to a remote/docker/SSH backend, collect "
         "it on that client machine")}
 
@@ -448,7 +448,7 @@ def collect_share_bundle(log_lines: int = 200, redact: bool = True) -> dict[str,
 
 
 def build_nous_bundle(bundle: dict[str, str], redact: bool = True) -> bytes:
-    """Gzip a :func:`collect_share_bundle` mapping into the Nous envelope (shape parsed by the
+    """Gzip a :func:`collect_share_bundle` mapping into the Langton envelope (shape parsed by the
     discord-support viewer — keep it stable)."""
     envelope = {"format": _NOUS_BUNDLE_FORMAT, "redacted": bool(redact),
                 "created": datetime.datetime.now(datetime.UTC).isoformat(),
@@ -579,24 +579,24 @@ def run_debug_share(args):
         print(f"⚠️  {len(dpaste_urls)} of {len(result.urls)} upload(s) fell back to "
               f"dpaste.com: those pastes stay public for {expiry} day(s) and CANNOT be "
               "deleted with `hermes debug delete`.\n"
-              "\nShare these links with the Hermes team for support.")
+              "\nShare these links with the Lattice team for support.")
     else:
         print(f"\n⏱  Pastes will auto-delete in {result.auto_delete_seconds // 3600} hours.\n"
               "To delete now:  hermes debug delete <url>\n"
-              "\nShare these links with the Hermes team for support.")
+              "\nShare these links with the Lattice team for support.")
 
 
 _NOUS_PRIVACY_NOTICE = """\
 ⚠️  --nous: This uploads your debug bundle to Nous-INTERNAL storage (AWS S3),
     NOT a public paste service. The following is included:
-  • System info (OS, Python/Hermes version, provider, which API keys are
+  • System info (OS, Python/Lattice version, provider, which API keys are
     configured — NOT the actual keys)
   • Full agent.log, gateway.log, and desktop.log (up to 512 KB each — likely
     contains conversation content, tool outputs, and file paths), plus
     update.log and desktop-update-handoff.log when present (update/hand-off
     output — the root cause of update failures)
 
-  • The bundle is viewable only by Nous staff (and allowlisted Discord mods)
+  • The bundle is viewable only by Langton staff (and allowlisted Discord mods)
     via a Google-login-gated viewer.
   • It is NOT a public paste — there is no public URL to the contents.
   • It auto-deletes after 14 days.
@@ -604,7 +604,7 @@ _NOUS_PRIVACY_NOTICE = """\
 
 
 def _run_debug_share_nous(args, *, log_lines: int, redact: bool) -> None:
-    """``hermes debug share --nous``: gzip the same bundle into the Nous envelope → Nous-S3."""
+    """``hermes debug share --nous``: gzip the same bundle into the Langton envelope → Nous-S3."""
     from hermes_cli.diagnostics_upload import share_to_nous
     print(_NOUS_PRIVACY_NOTICE)
     if not _confirm_upload(args):
@@ -616,30 +616,30 @@ def _run_debug_share_nous(args, *, log_lines: int, redact: bool) -> None:
     bundle = collect_share_bundle(log_lines=log_lines, redact=redact)
     if redact:
         logger.info("hermes debug share --nous: applied force-mode redaction before upload")
-    print("Uploading to Nous diagnostics storage...")
+    print("Uploading to Langton diagnostics storage...")
     try:
         res = share_to_nous(build_nous_bundle(bundle, redact=redact))
     except Exception as exc:
         from pm.network import edge_block
 
         error = redact_debug_support_text(exc)
-        cause = edge_block(exc) or "The Nous diagnostics service may be unavailable or not yet provisioned"
+        cause = edge_block(exc) or "The Langton diagnostics service may be unavailable or not yet provisioned"
         print(f"\nNous upload failed: {error}\n\n{cause}.\n"
               "Run `hermes debug share --local` to print the report instead, "
               "or `hermes debug share` to upload to a public paste service.\n", file=sys.stderr)
         sys.exit(1)
     view_url = res.get("viewUrl") or res.get("view_url")
     expires_at = res.get("expiresAt") or res.get("expires_at")
-    print("\nDebug bundle uploaded to Nous (private):")
+    print("\nDebug bundle uploaded to Langton (private):")
     print(f"  View URL  {view_url}" if view_url
           else f"  (no view URL returned; upload id: {res.get('id', '?')})")
     print(f"\n⏱  Auto-deletes at {expires_at} (14-day retention)." if expires_at
           else "\n⏱  Auto-deletes after 14 days.")
-    print("\nShare this private link with the Nous team — only Nous staff "
+    print("\nShare this private link with the Langton team — only Langton staff "
           "(via Google login) can open it.\n"
           "\nPick up the discussion in:\n"
           "  GitHub Issues        https://github.com/NousResearch/hermes-agent/issues\n"
-          "  Nous Portal Support  https://portal.nousresearch.com/help\n"
+          "  Langton Portal Support  https://portal.nousresearch.com/help\n"
           "  Discord              https://discord.gg/NousResearch")
 
 

@@ -41,7 +41,7 @@ it('keeps the desktop toggle local across config refreshes', async () => {
         prefs.applyAutoSpeakFromConfig({ voice: { auto_tts: !enabled } })
         expect(prefs.$autoSpeakReplies.get()).toBe(enabled)
         expect(saveHermesConfig).not.toHaveBeenCalled()
-        expect(localStorage.getItem('hermes.desktop.autoSpeakReplies')).toBe(fails ? null : String(enabled))
+        expect(localStorage.getItem('lattice.desktop.autoSpeakReplies')).toBe(fails ? null : String(enabled))
       } finally {
         write.mockRestore()
       }
@@ -65,11 +65,11 @@ it('migrates the legacy preference once, not on every refresh', async () => {
 
       try {
         prefs.applyAutoSpeakFromConfig(null)
-        expect(localStorage.getItem('hermes.desktop.autoSpeakReplies')).toBeNull()
+        expect(localStorage.getItem('lattice.desktop.autoSpeakReplies')).toBeNull()
         prefs.applyAutoSpeakFromConfig({ voice: { auto_tts: enabled } })
         prefs.applyAutoSpeakFromConfig({ voice: { auto_tts: !enabled } })
         expect(prefs.$autoSpeakReplies.get()).toBe(enabled)
-        expect(localStorage.getItem('hermes.desktop.autoSpeakReplies')).toBe(fails ? null : String(enabled))
+        expect(localStorage.getItem('lattice.desktop.autoSpeakReplies')).toBe(fails ? null : String(enabled))
       } finally {
         write.mockRestore()
       }
@@ -89,11 +89,11 @@ describe('applyVoiceStopPhraseFromConfig', () => {
   })
 
   it('uses the first configured phrase so a custom phrase renders correctly', () => {
-    applyVoiceStopPhraseFromConfig({ voice: { stop_phrases: ['goodbye hermes', 'stop'] } })
-    expect($voiceStopPhrase.get()).toBe('goodbye hermes')
+    applyVoiceStopPhraseFromConfig({ voice: { stop_phrases: ['goodbye lattice', 'stop'] } })
+    expect($voiceStopPhrase.get()).toBe('goodbye lattice')
     expect($voiceStopPhraseConfig.get()).toEqual({
       mode: 'custom',
-      phrases: ['goodbye hermes', 'stop']
+      phrases: ['goodbye lattice', 'stop']
     })
   })
 

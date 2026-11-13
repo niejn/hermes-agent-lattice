@@ -1,6 +1,6 @@
 """OpenAI Codex OAuth: token store, refresh, quota probe, device-code login.
 
-Tokens live in ~/.hermes/auth.json, NOT ~/.codex/: Hermes keeps its own Codex OAuth session
+Tokens live in ~/.hermes/auth.json, NOT ~/.codex/: Lattice keeps its own Codex OAuth session
 separate from the Codex CLI / VS Code extension so one app's refresh-token rotation cannot
 invalidate the other's session.
 
@@ -129,7 +129,7 @@ def _load_auth_store_maybe_locked(lock: bool) -> dict[str, Any]:
 
 
 def _read_codex_tokens(*, _lock: bool = True) -> dict[str, Any]:
-    """Read Codex OAuth tokens from Hermes auth store (~/.hermes/auth.json)."""
+    """Read Codex OAuth tokens from Lattice auth store (~/.hermes/auth.json)."""
     from hermes_cli.auth import _load_provider_state, _nonempty_str
     auth_store = _load_auth_store_maybe_locked(_lock)
     state = _load_provider_state(auth_store, "openai-codex")
@@ -236,7 +236,7 @@ def _save_codex_tokens(
 
 def _recover_codex_tokens_from_cli(
         reason: str, observed_access_token: Optional[str] = None) -> Optional[dict[str, str]]:
-    """Adopt a valid Codex CLI token pair into Hermes auth, if available.
+    """Adopt a valid Codex CLI token pair into Lattice auth, if available.
 
     Automatic adoption only; the interactive import offer in ``_login_openai_codex`` asks first and is
     not subject to ``auth.adopt_external_logins``.
@@ -268,7 +268,7 @@ def _recover_codex_tokens_from_cli(
         if known and _codex_principal_identity(imported["access_token"]) not in (None, known):
             logger.warning(
                 "Codex CLI recovery refused (%s): the Codex CLI login belongs to a different ChatGPT "
-                "workspace than the Hermes credential. Run `%s` to re-authenticate it.",
+                "workspace than the Lattice credential. Run `%s` to re-authenticate it.",
                 reason, _codex_relogin_command())
             return None
         logger.info("Codex auth recovered from Codex CLI auth.json (%s).", reason)
@@ -334,7 +334,7 @@ def _ssl_interop_hint(exc: BaseException) -> str:
         " the larger TLS 1.3 ClientHello that OpenSSL 3.5+ sends by default (post-quantum hybrid"
         " groups). Workaround: point OPENSSL_CONF at a config restricting Groups to classic curves"
         " (x25519:secp256r1:secp384r1:x448), or test with TLS 1.2 — see the Codex note in"
-        " https://hermes-agent.nousresearch.com/docs/integrations/providers"
+        " https://docs.langtonphotonics.com/docs/integrations/providers"
     )
 
 
@@ -501,7 +501,7 @@ def _codex_refresh_failure_error(response: httpx.Response) -> AuthError:
 
 def refresh_codex_oauth_pure(
     access_token: str, refresh_token: str, *, timeout_seconds: float = 20.0) -> dict[str, Any]:
-    """Refresh Codex OAuth tokens without mutating Hermes auth state."""
+    """Refresh Codex OAuth tokens without mutating Lattice auth state."""
     from hermes_cli.auth import _nonempty_str, _utc_now_z
     del access_token  # Access token is only used by callers to decide whether to refresh.
     if not _nonempty_str(refresh_token):
@@ -610,7 +610,7 @@ def resolve_codex_runtime_credentials(
     *, force_refresh: bool = False, refresh_if_expiring: bool = True,
     refresh_skew_seconds: int = CODEX_ACCESS_TOKEN_REFRESH_SKEW_SECONDS,
     read_only: bool = False) -> dict[str, Any]:
-    """Resolve runtime credentials from Hermes's own Codex token store.
+    """Resolve runtime credentials from Lattice's own Codex token store.
 
     ``read_only=True`` (status / doctor / pickers) reports the stored state as-is: no Codex CLI
     adoption, no token refresh, no auth-store write — and it wins over ``force_refresh``. A
@@ -980,14 +980,14 @@ def _login_openai_codex(args, pconfig: ProviderConfig, *, force_new_login: bool 
         cli_tokens = _import_codex_cli_tokens()
         if cli_tokens:
             print("Found existing Codex CLI credentials at ~/.codex/auth.json")
-            print("Hermes will create its own session to avoid conflicts with Codex CLI / VS Code.")
+            print("Lattice will create its own session to avoid conflicts with Codex CLI / VS Code.")
             if _prompt_yes_no(
                 "Import these credentials? (a separate login is recommended) [y/N]: ", default="n"):
                 _save_codex_tokens(cli_tokens)
                 config_path = _update_config_for_provider("openai-codex", _codex_base_url())
                 print()
                 print("Credentials imported. Note: if Codex CLI refreshes its token,")
-                print("Hermes will keep working independently with its own session.")
+                print("Lattice will keep working independently with its own session.")
                 print(f"  Config updated: {config_path} (model.provider=openai-codex)")
                 return
 

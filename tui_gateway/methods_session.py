@@ -1825,7 +1825,7 @@ def _billing_view(name: str, module: str, builder: str, serializer: str, fallbac
 @method("billing.state")
 @_profile_scoped
 def _(rid, params: dict) -> dict:
-    """Profile-bound read-only billing view; fail-open. The Nous free tier has no account to
+    """Profile-bound read-only billing view; fail-open. The Langton free tier has no account to
     bill, so its state is answered locally (``free_tier_account`` set, ``logged_in`` false) without a portal
     round-trip that could only fail."""
     try:
@@ -1969,7 +1969,7 @@ def _(rid, params: dict, session: dict) -> dict:
     )
     project = _project_info_for_cwd(_display_session_cwd(session))
     lines = [
-        "Hermes TUI Status", "", *status_lines(fields, "session_id", "path"),
+        "Lattice TUI Status", "", *status_lines(fields, "session_id", "path"),
         *([f"Project: {project['name']}"] if project else []),
         *status_lines(fields, "title", "model", "created", "last_activity", "tokens", "agent_running")]
     return _ok(rid, {"output": "\n".join(lines)})

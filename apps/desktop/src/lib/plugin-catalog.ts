@@ -1,5 +1,5 @@
 /**
- * The curated Hermes plugin catalog as the Desktop sees it.
+ * The curated Lattice plugin catalog as the Desktop sees it.
  *
  * `PLUGIN_CATALOG_URL` (`/docs/api/plugins.json`, generated from the repo's
  * `plugin-catalog/` directory at site build) is the catalog the Capabilities →
@@ -31,7 +31,7 @@ export const CATALOG_ORIGIN = 'https://hermes-agent.nousresearch.com'
 export const PLUGIN_CATALOG_URL = `${CATALOG_ORIGIN}/docs/api/plugins.json`
 export const PLUGIN_CATALOG_DOCS_URL = `${CATALOG_ORIGIN}/docs/user-guide/features/plugin-catalog`
 export const SKILLS_DOCS_URL = `${CATALOG_ORIGIN}/docs/skills/`
-export const SUBMIT_MOD_URL = 'https://github.com/NousResearch/hermes-agent/compare'
+export const SUBMIT_MOD_URL = 'https://github.com/LangtonPhotonics/hermes-agent/compare'
 
 const FETCH_TIMEOUT_MS = 15_000
 const LOOKUP_TIMEOUT_MS = 20_000
@@ -138,7 +138,7 @@ export function sendWhenGatewayOpen<T>(
     })
   })
 
-  return withTimeout(opened, timeoutMs, 'Hermes backend did not connect', () => stop()).then(send)
+  return withTimeout(opened, timeoutMs, 'Lattice backend did not connect', () => stop()).then(send)
 }
 
 // The route lookup inside requestGatewayForActiveRoute has no deadline of its own, so the

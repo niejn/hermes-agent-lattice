@@ -83,7 +83,7 @@ export interface ApiKeyOption {
 }
 
 // Curated order mirrors CANONICAL_PROVIDERS: Fireworks sits #2 overall (after
-// Nous Portal OAuth), ahead of OpenRouter and the rest of the key catalog.
+// Langton Portal OAuth), ahead of OpenRouter and the rest of the key catalog.
 const API_KEY_OPTIONS: ApiKeyOption[] = [
   {
     id: 'fireworks',
@@ -119,13 +119,13 @@ const API_KEY_OPTIONS: ApiKeyOption[] = [
     id: 'local',
     name: 'Local / custom endpoint',
     envKey: 'OPENAI_BASE_URL',
-    docsUrl: 'https://github.com/NousResearch/hermes-agent#bring-your-own-endpoint',
+    docsUrl: 'https://github.com/LangtonPhotonics/hermes-agent#bring-your-own-endpoint',
     placeholder: 'http://127.0.0.1:8000/v1'
   }
 ]
 
 // Build the FULL API-key provider catalog from the backend model options so the
-// onboarding / Providers key form lists every `api_key` provider `hermes model`
+// onboarding / Providers key form lists every `api_key` provider `lattice model`
 // knows about — not just the hand-curated five. Curated entries keep their
 // richer copy + placeholders and float to the top (recommended defaults); every
 // other api_key provider is appended with a generic "paste {KEY}" affordance.
@@ -390,7 +390,7 @@ export function DesktopOnboardingOverlay({
 
   // When the free tier itself failed to set up, its own notice explains the
   // picker; the runtime check's technical reason ("No usable credentials
-  // found for nous.") would only restate it in the wrong words.
+  // found for langton.") would only restate it in the wrong words.
   const reason =
     rawReason &&
     !setupFailure &&
@@ -584,17 +584,17 @@ function Header() {
   )
 }
 
-export const FEATURED_ID = 'nous'
+export const FEATURED_ID = 'langton'
 
-// Stand-in for the Nous row when the OAuth provider list could not be read
+// Stand-in for the Langton row when the OAuth provider list could not be read
 // (it failed or came back empty, which drops the picker onto the key form).
 // Starting sign-in only needs the id; the backend's start reply decides the flow.
 const NOUS_FALLBACK: OAuthProvider = {
-  cli_command: 'hermes auth add nous',
+  cli_command: 'lattice auth add langton',
   docs_url: 'https://portal.nousresearch.com',
   flow: 'device_code',
   id: FEATURED_ID,
-  name: 'Nous Portal',
+  name: 'Langton Portal',
   status: { logged_in: false }
 }
 
@@ -662,7 +662,7 @@ export function Picker({ ctx }: { ctx: OnboardingContext }) {
 
   const featured = ordered.find(p => p.id === FEATURED_ID) ?? null
   const rest = featured ? ordered.filter(p => p.id !== FEATURED_ID) : ordered
-  // Collapse the secondary providers behind a disclosure whenever Nous Portal
+  // Collapse the secondary providers behind a disclosure whenever Langton Portal
   // is present to anchor the choice — otherwise show the full list. The
   // Fireworks/OpenRouter key rows always live behind the disclosure, so the
   // toggle is warranted even when there are no other OAuth providers.
@@ -695,7 +695,7 @@ export function Picker({ ctx }: { ctx: OnboardingContext }) {
         {showRest ? (
           <>
             {/* Fireworks leads the expanded list, matching CANONICAL_PROVIDERS
-                (Nous → Fireworks), but stays hidden until the user opens it. */}
+                (Langton → Fireworks), but stays hidden until the user opens it. */}
             <FireworksProviderRow onClick={() => openKeyForm('FIREWORKS_API_KEY')} />
             {rest.map(p => (
               <ProviderRow key={p.id} onSelect={select} provider={p} />
@@ -729,7 +729,7 @@ export function Picker({ ctx }: { ctx: OnboardingContext }) {
   )
 }
 
-// The API-key step of the picker. Nous stays reachable from it, including when
+// The API-key step of the picker. Langton stays reachable from it, including when
 // the provider list failed to load and there is no picker to go back to; the
 // custom-endpoint form (localEndpoint) is a deliberate destination and skips it.
 function KeyFormStep({
@@ -751,11 +751,11 @@ function KeyFormStep({
   onSelect: (provider: OAuthProvider) => void
   providers: OAuthProvider[]
 }) {
-  const nous = localEndpoint ? null : (providers.find(p => p.id === FEATURED_ID) ?? NOUS_FALLBACK)
+  const langton = localEndpoint ? null : (providers.find(p => p.id === FEATURED_ID) ?? NOUS_FALLBACK)
 
   return (
     <div className="grid gap-3">
-      {nous ? <FeaturedProviderRow onSelect={onSelect} provider={nous} /> : null}
+      {langton ? <FeaturedProviderRow onSelect={onSelect} provider={langton} /> : null}
       <ApiKeyForm
         canGoBack={hasOauth && !localEndpoint}
         initialEnvKey={localEndpoint ? 'OPENAI_BASE_URL' : initialEnvKey}

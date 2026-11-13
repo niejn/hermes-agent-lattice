@@ -1,4 +1,4 @@
-"""Hermes CLI - Unified command-line interface for Hermes Agent."""
+"""Lattice CLI - Unified command-line interface for Lattice Agent."""
 
 import sys
 

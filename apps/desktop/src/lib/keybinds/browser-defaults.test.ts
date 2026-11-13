@@ -170,7 +170,7 @@ describe('browser-hosted shortcut defaults', () => {
     setPlatform('Win32')
     window.document.documentElement.dataset.hermesDesktopHost = 'browser'
     localStorage.setItem(
-      'hermes.desktop.keybinds',
+      'lattice.desktop.keybinds',
       JSON.stringify({
         'session.new': ['mod+shift+f6'],
         'session.newTab': [],
@@ -184,6 +184,6 @@ describe('browser-hosted shortcut defaults', () => {
     expect(bindingsFor('view.closeTab')).toEqual(['mod+w'])
     resetAllBindings()
     expect(bindingsFor('session.new')).toEqual(['alt+n'])
-    expect(JSON.parse(localStorage.getItem('hermes.desktop.keybinds')!)).toEqual({})
+    expect(JSON.parse(localStorage.getItem('lattice.desktop.keybinds')!)).toEqual({})
   })
 })

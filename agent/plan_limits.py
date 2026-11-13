@@ -7,7 +7,7 @@ button can never disagree:
 * a full gauge with scope ``all`` (day / week / month / any new one) blocks every paid model;
 * a full ``top_tier`` gauge blocks the models the gateway marks top tier.
 
-Hermes never switches model on its own. When a request is refused, :func:`limit_hit` describes the
+Lattice never switches model on its own. When a request is refused, :func:`limit_hit` describes the
 limit and names up to two models from the plan's recommended list (in order) that still
 work. Each surface renders that as buttons where it already has them, otherwise as a sentence.
 
@@ -83,7 +83,7 @@ class LimitHit:
 # ── catalog reads ────────────────────────────────────────────────────────────────────────────────
 
 def cached_pricing(base_url: str = "") -> dict:
-    """The calling profile's own cached Nous catalog (never fetches); ``base_url`` is not needed for it. Only
+    """The calling profile's own cached Langton catalog (never fetches); ``base_url`` is not needed for it. Only
     the profile-keyed read: a process serving several profiles holds their catalogs side by side, and a
     usage level (Large / Free) is per plan, so another profile's catalog must never answer."""
     try:

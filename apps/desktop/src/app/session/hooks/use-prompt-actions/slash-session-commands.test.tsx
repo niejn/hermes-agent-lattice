@@ -100,7 +100,7 @@ const COMPRESSING = new JsonRpcGatewayError('session_busy', {
 
 beforeEach(() => {
   clearSingleFlightSessionResumeState()
-  window.localStorage.removeItem('hermes.desktop.composerQueue.v1')
+  window.localStorage.removeItem('lattice.desktop.composerQueue.v1')
   $queuedPromptsBySession.set({})
   setComposerDraft('')
 })
@@ -379,7 +379,7 @@ function lostRewindReply(transcript = THREE_EXCHANGES) {
     if (loseReply) {
       loseReply = false
 
-      throw new Error('Hermes gateway connection lost')
+      throw new Error('Lattice gateway connection lost')
     }
 
     return receipt
@@ -466,7 +466,7 @@ describe('a repeat after a lost rewind reply on a canonical session', () => {
     )
 
     await handle!.submitText('/undo')
-    expect(renderedText(handle!)).toContain('Hermes gateway connection lost')
+    expect(renderedText(handle!)).toContain('Lattice gateway connection lost')
 
     await handle!.submitText('/undo')
 

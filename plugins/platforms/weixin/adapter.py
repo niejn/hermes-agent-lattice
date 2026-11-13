@@ -780,8 +780,8 @@ class WeixinAdapter(OwnAccessPolicyMixin, BasePlatformAdapter):
             logger.warning(
                 "[%s] WEIXIN_GROUP_POLICY=%s is set, but QR-login connects an iLink bot identity (e.g. ...@im.bot) "
                 "which typically cannot be invited into ordinary WeChat groups. iLink usually does not deliver "
-                "ordinary-group events for these accounts, so group messages may never reach Hermes regardless of "
-                "this policy. If group delivery doesn't work, the limitation is on the iLink side, not in Hermes.",
+                "ordinary-group events for these accounts, so group messages may never reach Lattice regardless of "
+                "this policy. If group delivery doesn't work, the limitation is on the iLink side, not in Lattice.",
                 self.name, self._group_policy)
         self._wire_plugin_handlers(None)  # plugin-registered native handlers
         return True
@@ -1327,9 +1327,9 @@ def interactive_setup() -> None:
     print_setup_header("💬 Weixin / WeChat")
     print()
     gw._print_info_lines(
-        "  1. Hermes will open Tencent iLink QR login in this terminal.",
+        "  1. Lattice will open Tencent iLink QR login in this terminal.",
         "  2. Use WeChat to scan and confirm the QR code.",
-        "  3. Hermes will store the returned account_id/token in ~/.hermes/.env.",
+        "  3. Lattice will store the returned account_id/token in ~/.hermes/.env.",
         "  4. This adapter supports native text, image, video, and document delivery.",
     )
     if not confirm_reconfigure("Weixin", "WEIXIN_ACCOUNT_ID", "WEIXIN_TOKEN"):
@@ -1417,7 +1417,7 @@ _SEND_TARGET_RE = re.compile(r"^\s*((?:wxid|gh|v\d+|wm|wb)_[A-Za-z0-9_-]+|[A-Za-
 
 
 def register(ctx) -> None:
-    """Plugin entry point — called by the Hermes plugin system."""
+    """Plugin entry point — called by the Lattice plugin system."""
     from . import gateway_env  # env -> GatewayConfig bridge (gateway.config_env)
     ctx.register_platform(
         target_ref_syntax_fn=regex_groups_parser(_SEND_TARGET_RE, thread_group=False),
@@ -1425,7 +1425,7 @@ def register(ctx) -> None:
         name="weixin", label="Weixin / WeChat", adapter_factory=WeixinAdapter, check_fn=check_weixin_requirements,
         dashboard_label="Weixin / WeChat (Personal)",
         dashboard_description="Connect a personal WeChat account through Tencent's iLink Bot API.",
-        docs_url="https://hermes-agent.nousresearch.com/docs/user-guide/messaging/weixin/",
+        docs_url="https://docs.langtonphotonics.com/docs/user-guide/messaging/weixin/",
         dashboard_env_vars=("WEIXIN_ACCOUNT_ID", "WEIXIN_TOKEN", "WEIXIN_BASE_URL"),
         is_connected=_is_connected, required_env=["WEIXIN_ACCOUNT_ID", "WEIXIN_TOKEN"], install_hint=_INSTALL_HINT,
         config_connected_fn=_config_connected,

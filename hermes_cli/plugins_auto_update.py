@@ -121,7 +121,7 @@ def set_auto_update(enabled: bool) -> dict[str, Any]:
 
     if is_managed():
         raise _pc().PluginOperationError(
-            "This Hermes install's configuration is managed by a package manager; set plugins.auto_apply there.")
+            "This Lattice install's configuration is managed by a package manager; set plugins.auto_apply there.")
     write_config_key(get_config_path(), "plugins.auto_apply", bool(enabled))
     if enabled:
         _clear_check_marker(get_hermes_home())

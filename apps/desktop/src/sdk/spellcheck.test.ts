@@ -14,12 +14,12 @@ describe('host.spellcheck dictionary verbs', () => {
 
     desktopWindow.hermesDesktop = { spellcheckDictionary }
 
-    expect(await host.spellcheck.addWord('Hermes')).toBe(true)
-    expect(await host.spellcheck.removeWord('Hermes')).toBe(true)
+    expect(await host.spellcheck.addWord('Lattice')).toBe(true)
+    expect(await host.spellcheck.removeWord('Lattice')).toBe(true)
 
     expect(spellcheckDictionary.mock.calls).toEqual([
-      ['add', 'Hermes'],
-      ['remove', 'Hermes']
+      ['add', 'Lattice'],
+      ['remove', 'Lattice']
     ])
 
     spellcheckDictionary.mockResolvedValueOnce(false)
@@ -28,7 +28,7 @@ describe('host.spellcheck dictionary verbs', () => {
   })
 
   it('resolves false instead of throwing without a desktop shell or with a non-string', async () => {
-    expect(await host.spellcheck.addWord('Hermes')).toBe(false)
+    expect(await host.spellcheck.addWord('Lattice')).toBe(false)
 
     const spellcheckDictionary = vi.fn(async () => {
       throw new Error('older shell')
@@ -36,7 +36,7 @@ describe('host.spellcheck dictionary verbs', () => {
 
     desktopWindow.hermesDesktop = { spellcheckDictionary }
 
-    expect(await host.spellcheck.removeWord('Hermes')).toBe(false)
+    expect(await host.spellcheck.removeWord('Lattice')).toBe(false)
     expect(await host.spellcheck.addWord(42 as unknown as string)).toBe(false)
     expect(spellcheckDictionary).toHaveBeenCalledTimes(1)
   })

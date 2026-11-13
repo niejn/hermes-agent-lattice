@@ -25,7 +25,7 @@ import {
   type UpdateTarget
 } from '@/store/updates'
 
-const RELEASE_NOTES_URL = 'https://github.com/NousResearch/hermes-agent/releases'
+const RELEASE_NOTES_URL = 'https://github.com/LangtonPhotonics/hermes-agent/releases'
 const INSTALLER_URL = 'https://hermes-agent.nousresearch.com/'
 
 export type UpdateStatusTone = 'idle' | 'available' | 'error' | 'unsupported'
@@ -217,7 +217,7 @@ function relativeTime(ms: number | undefined, u: Translations['updates']): strin
 }
 
 /**
- * The "Hermes Desktop / version / brand mark" hero shared by the About page
+ * The "Lattice Desktop / version / brand mark" hero shared by the About page
  * and the updates overlay, including the bundle-out-of-sync warning. The
  * heading render is injectable so a dialog surface can emit a DialogTitle
  * for its accessible name while About keeps a plain h2.

@@ -767,7 +767,7 @@ class ToolRegistry:
         return self._plugin_namespace_of_module(mod) if mod else None
 
     def is_builtin(self, entry: ToolEntry) -> bool:
-        """True for a tool Hermes ships: handler defined in the ``tools`` package, and not an
+        """True for a tool Lattice ships: handler defined in the ``tools`` package, and not an
         MCP server's tool (those handlers live in ``tools`` too, under an ``mcp-*`` toolset)."""
         return (not entry.toolset.startswith("mcp-")
                 and self._callable_module(entry.handler).partition(".")[0] == "tools")

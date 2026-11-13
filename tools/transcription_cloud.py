@@ -2,7 +2,7 @@
 
 OpenAI-SDK-shaped backends (groq, openai, deepinfra), Mistral Voxtral, REST multipart
 backends (xAI, ElevenLabs), and OpenAI audio credential resolution (config > keyless
-local server > env > managed Nous gateway). Facade-owned state and helpers
+local server > env > managed Langton gateway). Facade-owned state and helpers
 (``_HAS_OPENAI``, ``_resolve_provider_key``, ``_resolve_stt_language``, ``_load_stt_config``)
 are read lazily from ``tools.transcription_tools``.
 """
@@ -434,7 +434,7 @@ def _resolve_openai_audio_client_config() -> tuple[str, str]:
         managed = _managed()
         if managed is None:
             raise ValueError(selection_error("stt", NOUS_MANAGED_PROVIDER,
-                                             "the Nous Tool Gateway is not available (not entitled or unreachable)"))
+                                             "the Langton Tool Gateway is not available (not entitled or unreachable)"))
         return managed
     direct = _direct_openai_credentials(openai_cfg.get("api_key", ""), openai_cfg.get("base_url", ""))
     if direct is not None:

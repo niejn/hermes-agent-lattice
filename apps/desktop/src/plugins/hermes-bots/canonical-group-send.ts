@@ -3,7 +3,7 @@ import { randomUuid } from '@hermes/plugin-sdk'
 import type { CanonicalGroupBinding } from './canonical-groups'
 import { botsText } from './i18n'
 
-const STORAGE_KEY = 'hermes.desktop.canonicalGroupSends.v1'
+const STORAGE_KEY = 'lattice.desktop.canonicalGroupSends.v1'
 
 export interface PreparedCanonicalGroupSend {
   binding: CanonicalGroupBinding

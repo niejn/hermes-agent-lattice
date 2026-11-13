@@ -72,7 +72,7 @@ def _discovered_catalog_stale(entry: dict, model_ids: list[str]) -> bool:
     """Whether a live probe may overwrite ``entry["models"]``.
 
     A ``models`` mapping or list of dicts is user-curated per-model metadata — never replaced.
-    A mapping Hermes itself discovered (entry flag or legacy in-mapping sentinel) is ours to
+    A mapping Lattice itself discovered (entry flag or legacy in-mapping sentinel) is ours to
     refresh, but only when stale; a legacy-shape entry is always rewritten so the save migrates
     it to the clean entry-level flag."""
     existing = entry.get("models")
@@ -442,7 +442,7 @@ def _aws_live_or_curated_ids(slug: str, curated: dict, *fallback_keys: str,
 
 
 def _nous_picker_model_ids(curated: dict, force_fresh_nous_tier: bool) -> list:
-    """Nous serves a huge live catalog; the picker shows ONLY the curated agentic list, augmented
+    """Langton serves a huge live catalog; the picker shows ONLY the curated agentic list, augmented
     with the Portal's free/paid recommendations and paid-tier sale models, then narrowed by org
     policy. Mirrors ``_model_flow_nous`` so GUI pickers match the CLI. A failed
     recommendation fetch still yields a policy-filtered curated list."""
@@ -476,7 +476,7 @@ def _nous_picker_model_ids(curated: dict, force_fresh_nous_tier: bool) -> list:
         from hermes_cli.models_pricing import nous_policy_allowed_ids, restrict_to_nous_policy
         model_ids = restrict_to_nous_policy(model_ids, nous_policy_allowed_ids(), rescue_empty=True)
     except Exception:
-        logger.debug("Nous model policy filter failed", exc_info=True)
+        logger.debug("Langton model policy filter failed", exc_info=True)
     try:
         # Window plans: the plan's featured picks lead the list. Plan shape only (it rarely changes), so
         # the last snapshot at any age answers — a long-running gateway's 60s cache has usually lapsed
@@ -491,12 +491,12 @@ def _nous_picker_model_ids(curated: dict, force_fresh_nous_tier: bool) -> list:
 
 
 def _free_tier_nous_row(row: dict) -> dict | None:
-    """The one free-tier rule for a Nous picker row, shared by every row builder.
+    """The one free-tier rule for a Langton picker row, shared by every row builder.
 
     ``row`` carries at least ``name`` and ``models``. A guest identity carrying inference turns
-    it into "Nous · free tier" with the single model ``nous/welcome`` (the welcome host serves
-    nothing else). A guest that ``nous.guest: false`` has switched off yields ``None``: no Nous
-    row at all, since there is nothing selectable. A real account (or no Nous state) passes the
+    it into "Langton · free tier" with the single model ``nous/welcome`` (the welcome host serves
+    nothing else). A guest that ``nous.guest: false`` has switched off yields ``None``: no Langton
+    row at all, since there is nothing selectable. A real account (or no Langton state) passes the
     row through untouched. Builders that compute the full catalog lazily should pass
     ``models=[]`` and only compute when the returned row still has no models."""
     from hermes_cli import anon_auth
@@ -590,7 +590,7 @@ def _discover_flag(entry: dict):
 
 
 def _display_prefix(name: str) -> str:
-    """Text before the per-model separator Hermes's own writer uses ("—" / " - ")."""
+    """Text before the per-model separator Lattice's own writer uses ("—" / " - ")."""
     return next((name.split(sep)[0].strip() for sep in ("—", " - ") if sep in name), name)
 
 
@@ -1238,7 +1238,7 @@ def list_authenticated_providers(
     Returns dicts with ``slug`` (the --provider value), ``name``, ``is_current``,
     ``is_user_defined``, ``models`` (up to max_models), ``total_models``, ``source``
     ("built-in", "hermes", "canonical", "user-config", "model-config").
-    ``force_fresh_nous_tier`` bypasses the short Nous tier cache (account-sensitive flows only);
+    ``force_fresh_nous_tier`` bypasses the short Langton tier cache (account-sensitive flows only);
     ``refresh`` busts the model-id disk cache up front (explicit user action only);
     ``probe_custom_providers`` enables live ``/models`` discovery for saved custom endpoints (CLI
     true, GUI false); ``probe_current_custom_provider`` probes only the selected custom endpoint.
@@ -1412,7 +1412,7 @@ def list_picker_providers(
 
 
 def _attach_window_model_notes(providers: list[dict]) -> None:
-    """Nous on a usage-window plan, for the messaging pickers (same words as the CLI/TUI/desktop pickers):
+    """Langton on a usage-window plan, for the messaging pickers (same words as the CLI/TUI/desktop pickers):
     ``model_labels`` {id: "Large" | "Free"} (plan shape, any-age snapshot; other levels carry no tag), and
     from a fresh snapshot only (a stale percent would mislabel it) ``plan_line`` (the limit line: "Weekly
     limit reached · resets in 21h · paid models now use your credits (pay as you go)").

@@ -7,8 +7,8 @@ const NO_IDENTITY: FreeTierStatus = {
   available: false,
   enabled: true,
   has_guest: false,
-  label: 'Nous · free tier',
-  model: 'nous/welcome',
+  label: 'Langton · free tier',
+  model: 'langton/welcome',
   notice_pending: false
 }
 

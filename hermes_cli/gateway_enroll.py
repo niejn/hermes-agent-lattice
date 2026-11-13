@@ -81,7 +81,7 @@ def _post_enroll(
             pass
         if exc.code == 401:
             message = (
-                "Connector rejected the caller identity (401). Your Nous Portal "
+                "Connector rejected the caller identity (401). Your Langton Portal "
                 "token could not be verified — try `hermes auth add nous` and retry."
             )
         elif exc.code == 403:
@@ -146,7 +146,7 @@ def cmd_gateway_enroll(args) -> None:
     except AuthError as exc:
         if getattr(exc, "relogin_required", False):
             _fail(
-                "✗ You're not logged into Nous Portal.",
+                "✗ You're not logged into Langton Portal.",
                 "  Run `hermes setup` (or `hermes auth add nous`) first, then retry.",
             )
         _fail(f"✗ Could not resolve a Nous Portal access token: {exc}")

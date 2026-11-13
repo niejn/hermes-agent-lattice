@@ -34,7 +34,7 @@ const { clearBotAttentionMock, hostMock, noteBotAttentionMock, UnboundedCache } 
     pluginDecisions: {
       get: () => {
         try {
-          const raw = window.localStorage.getItem('hermes.desktop.pluginDecisions.v2')
+          const raw = window.localStorage.getItem('lattice.desktop.pluginDecisions.v2')
 
           return raw ? (JSON.parse(raw) as Record<string, boolean>) : {}
         } catch {
@@ -64,7 +64,7 @@ vi.mock('@hermes/plugin-sdk', async () => {
 })
 
 vi.mock('./data', () => ({
-  botHandle: (name: string) => (name === 'default' ? 'hermes' : name),
+  botHandle: (name: string) => (name === 'default' ? 'lattice' : name),
   clearBotAttention: clearBotAttentionMock,
   noteBotAttention: noteBotAttentionMock
 }))
@@ -149,7 +149,7 @@ async function pushAndSettle(times = 1, event?: { connectionId?: string }) {
   await vi.advanceTimersByTimeAsync(RELAY_PUSH_DEBOUNCE_MS + 10)
 }
 
-const PLUGIN_DECISIONS_KEY = 'hermes.desktop.pluginDecisions.v2'
+const PLUGIN_DECISIONS_KEY = 'lattice.desktop.pluginDecisions.v2'
 
 beforeEach(() => {
   vi.useFakeTimers()
@@ -696,7 +696,7 @@ describe('the roster loop pushes the OTHER connections’ agents', () => {
     ])
     // The primary profile is published by its callable alias, never "default".
     expect(syncs[1].params.agents).toEqual([
-      expect.objectContaining({ connection_id: 'a', handle: 'hermes', profile: 'default' })
+      expect.objectContaining({ connection_id: 'a', handle: 'lattice', profile: 'default' })
     ])
 
     stopBotRelay()
@@ -1197,7 +1197,7 @@ describe('the roster loop forgets a machine that left', () => {
       }
 
       if (call.method === 'bot_relay.roster.sync' && clearFails && !(call.params.agents as unknown[]).length) {
-        throw new Error('Hermes gateway is not connected')
+        throw new Error('Lattice gateway is not connected')
       }
 
       return {}

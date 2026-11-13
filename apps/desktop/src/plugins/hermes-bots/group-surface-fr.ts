@@ -109,7 +109,7 @@ export const GROUP_SURFACE_FR = {
     statusUnknown: "État inconnu",
     unavailable: "Indisponible",
     retryNow: "Réessayer maintenant",
-    rosterUnavailable: reason => `Liste indisponible : ${reason}. Si votre passerelle ne prend pas en charge profiles.list, mettez Hermes à jour et redémarrez la passerelle.`,
+    rosterUnavailable: reason => `Liste indisponible : ${reason}. Si votre passerelle ne prend pas en charge profiles.list, mettez Lattice à jour et redémarrez la passerelle.`,
     waitingForGateway: "En attente de la connexion à la passerelle… (les passerelles distantes peuvent prendre quelques secondes ; nouvelle tentative automatique)"
   },
   sections: {
@@ -156,7 +156,7 @@ export const GROUP_SURFACE_FR = {
     attentionFallback: "Nécessite votre attention",
     attentionProviderAuth: "Reconnectez-vous pour ce profil",
     attentionQuota: "Quota ou solde épuisé",
-    attentionMissingConfig: "Fournisseur non configuré — exécutez hermes model",
+    attentionMissingConfig: "Fournisseur non configuré — exécutez lattice model",
     attentionBlocked: "Bot bloqué — consultez son dernier message",
     editMenu: "Modifier…",
     duplicate: "Dupliquer",

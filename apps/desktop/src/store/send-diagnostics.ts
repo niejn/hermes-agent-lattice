@@ -3,12 +3,12 @@
 // Flow: an error card (or any surface) calls requestSendDiagnostics() with
 // optional error context → the modal host renders the privacy notice → the
 // user explicitly clicks Upload → diagnostics.share_nous runs backend-side
-// (collect + force-redact + Nous-S3 upload) → the modal shows the private
-// view link plus the support handoff (GitHub Issues · Nous Portal Support ·
+// (collect + force-redact + Langton-S3 upload) → the modal shows the private
+// view link plus the support handoff (GitHub Issues · Langton Portal Support ·
 // Discord).
 //
 // Consent is per-upload and explicit — no "always allow", mirroring the CLI's
-// `hermes debug share --nous` confirmation contract. On a remote connection
+// `lattice debug share --nous` confirmation contract. On a remote connection
 // the backend bundles ITS OWN logs (the runtime that owns the failure); the
 // local desktop.log is attached as a client-side extra so support sees both
 // halves in one bundle.
@@ -108,7 +108,7 @@ export async function confirmSendDiagnostics(): Promise<void> {
     const gateway = $gateway.get()
 
     if (!gateway) {
-      throw new Error('Hermes gateway unavailable')
+      throw new Error('Lattice gateway unavailable')
     }
 
     const extraFiles = { ...(await collectLocalExtras()), ...current.extraFiles }

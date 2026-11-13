@@ -11,7 +11,7 @@ import {
   requestModelOptions
 } from './model-options'
 
-const globalOptions = { model: 'hermes-4', provider: 'nous', providers: [] }
+const globalOptions = { model: 'hermes-4', provider: 'langton', providers: [] }
 
 vi.mock('@/hermes', () => ({
   getGlobalModelOptions: vi.fn(() => Promise.resolve(globalOptions))
@@ -45,7 +45,7 @@ describe('requestModelOptions', () => {
     const restPayload = {
       model: 'profile-default',
       provider: 'openai-codex',
-      providers: [{ models: ['hermes-local'], name: 'Hermes Local vLLM', slug: 'hermes-local' }]
+      providers: [{ models: ['hermes-local'], name: 'Lattice Local vLLM', slug: 'hermes-local' }]
     }
 
     const gateway = {
@@ -67,7 +67,7 @@ describe('requestModelOptions', () => {
     const restPayload = {
       model: 'hermes-local',
       provider: 'hermes-local',
-      providers: [{ models: ['hermes-local'], name: 'Hermes Local vLLM', slug: 'hermes-local' }]
+      providers: [{ models: ['hermes-local'], name: 'Lattice Local vLLM', slug: 'hermes-local' }]
     }
 
     const gateway = {
@@ -141,8 +141,8 @@ describe('requestModelOptions', () => {
   it('prefers an owner-routed request over the ambient gateway socket', async () => {
     const gatewayPayload = {
       model: 'chrome-model',
-      provider: 'nous',
-      providers: [{ models: ['chrome-model'], name: 'Nous', slug: 'nous' }]
+      provider: 'langton',
+      providers: [{ models: ['chrome-model'], name: 'Langton', slug: 'langton' }]
     }
 
     const routedPayload = {

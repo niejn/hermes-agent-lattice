@@ -104,7 +104,7 @@ def _image_error_max_dimension(error: Exception) -> Optional[int]:
 
 
 def _try_refresh_nous_paid_entitlement_credentials(agent) -> bool:
-    """Refresh Nous runtime credentials after a fresh paid-entitlement check."""
+    """Refresh Langton runtime credentials after a fresh paid-entitlement check."""
     try:
         from hermes_cli.nous_account import get_nous_portal_account_info
 
@@ -330,7 +330,7 @@ def recover_before_classification(
 
 
 def _print_nous_401_diagnostics(agent: Any, api_error: Exception) -> None:
-    """Nous 401 that survived a credential refresh: likely Portal OAuth expired/revoked,
+    """Langton 401 that survived a credential refresh: likely Portal OAuth expired/revoked,
     no credits, or agent key blocked."""
     from agent.conversation_loop import _print_nous_entitlement_guidance
     from hermes_constants import display_hermes_home
@@ -341,7 +341,7 @@ def _print_nous_401_diagnostics(agent: Any, api_error: Exception) -> None:
             _body_text = str(_body)[:200]
     except Exception:
         pass
-    _plines(agent, "🔐 Nous 401 — Portal authentication failed.")
+    _plines(agent, "🔐 Langton 401 — Portal authentication failed.")
     if _body_text:
         _plines(agent, f"   Response: {_body_text}")
     try:
@@ -349,12 +349,12 @@ def _print_nous_401_diagnostics(agent: Any, api_error: Exception) -> None:
         if is_anonymous_agent(agent):
             # The free tier has no credits, no agent key and no auth.json to inspect: its session
             # ended and could not be replaced. The two doors are a sign-in or another provider.
-            _plines(agent, "   Your session ended and Hermes couldn't start a new one.",
-                    "   Sign in with a Nous account (it's free), or switch providers with /model.")
+            _plines(agent, "   Your session ended and Lattice couldn't start a new one.",
+                    "   Sign in with a Langton account (it's free), or switch providers with /model.")
             return
     except Exception:
         pass
-    if not _print_nous_entitlement_guidance(agent, "Nous model access"):
+    if not _print_nous_entitlement_guidance(agent, "Langton model access"):
         _plines(agent, "   Most likely: Portal OAuth expired, account out of credits, or agent key revoked.")
     _plines(
         agent,
@@ -395,8 +395,8 @@ def _print_anthropic_401_diagnostics(agent: Any, key: Any) -> None:
         f"     • Check ANTHROPIC_TOKEN in {_dhh}/.env for Hermes-managed OAuth/setup tokens",
         f"     • Check ANTHROPIC_API_KEY in {_dhh}/.env for API keys or legacy token values",
         "     • For API keys: verify at https://platform.claude.com/settings/keys",
-        "     • Hermes login (OAuth): run 'hermes auth add anthropic' to sign in again, then retry",
-        "     • Inspect what Hermes holds: hermes auth list anthropic",
+        "     • Lattice login (OAuth): run 'hermes auth add anthropic' to sign in again, then retry",
+        "     • Inspect what Lattice holds: hermes auth list anthropic",
         "     • Legacy cleanup: hermes config set ANTHROPIC_TOKEN \"\"",
         "     • Clear stale keys: hermes config set ANTHROPIC_API_KEY \"\"",
     )
@@ -437,7 +437,7 @@ def _refresh_credentials_after_401(
         # The pool already spent this episode's one forced refresh (and its backoff retries):
         # a second force here would redeem the rotating grant again for a server-side 401.
         if not nous_pool_refreshed_this_turn(agent) and agent._try_refresh_nous_client_credentials(force=True):
-            agent._buffer_vprint("🔐 Nous agent key refreshed after 401. Retrying request...")
+            agent._buffer_vprint("🔐 Langton agent key refreshed after 401. Retrying request...")
             return True
         _print_nous_401_diagnostics(agent, api_error)
     if not _retry.provider_auth_refresh_attempted and (profile := _credential_refresh_profile(agent)) is not None:
@@ -552,13 +552,13 @@ def _recover_format_errors(
 
 _WELCOME_ROUTE_HEAL_COPY = {
     "anon_on_paid_host": "Reconnected to the free model's own route.",
-    "named_on_welcome_host": "Reconnected to your Nous account's own route.",
+    "named_on_welcome_host": "Reconnected to your Langton account's own route.",
     "session_expired": "Renewed the connection to the free model.",
 }
 
 
 def _recover_welcome_tier(agent: Any, classified: Any, _retry: TurnRetryState) -> bool:
-    """Two one-shot repairs for the Nous free tier, both silent on the wire and named once in chat.
+    """Two one-shot repairs for the Langton free tier, both silent on the wire and named once in chat.
 
     ``model_not_free``: the session asked the welcome host for a model it does not serve; move
     to the first alternate the gateway named (its own model) and retry, instead of failing the
@@ -658,11 +658,11 @@ def recover_after_classification(
 ) -> tuple[bool, bool]:
     """One-shot recovery chain that runs AFTER ``classify_api_error`` and before the
     generic retry path. Order is load-bearing (each branch may ``return`` early):
-    welcome-tier repair → credit-limited 402 output-cap clamp → ``reasoning.context`` opt-out → Nous paid-entitlement refresh →
+    welcome-tier repair → credit-limited 402 output-cap clamp → ``reasoning.context`` opt-out → Langton paid-entitlement refresh →
     Codex stale-reasoning strip on 401 ``token_expired`` → credential-pool rotation → image shrink → multimodal-tool-content strip → corrupt-image
     strip → Anthropic OAuth 1M-beta disable → per-provider 401 credential refresh →
     format-recovery strips.
-    Returns ``(retry_now, recovered_with_pool)``; the latter feeds the Nous rate-limit guard."""
+    Returns ``(retry_now, recovered_with_pool)``; the latter feeds the Langton rate-limit guard."""
     from agent.conversation_loop import _is_nous_inference_route
 
     # The credit-limited 402 clamp runs before pool rotation, which would bench a credential
@@ -693,7 +693,7 @@ def recover_after_classification(
     ):
         _retry.nous_paid_entitlement_refresh_attempted = True
         if _try_refresh_nous_paid_entitlement_credentials(agent):
-            _vlines(agent, "🔐 Nous paid access verified — refreshed runtime credentials and retrying request...")
+            _vlines(agent, "🔐 Langton paid access verified — refreshed runtime credentials and retrying request...")
             return True, False
 
     recovered_with_pool, _retry.has_retried_429 = agent._recover_with_credential_pool(
@@ -894,7 +894,7 @@ def _print_nonretryable_auth_guidance(
         model=model, unverified=classified.billing_unverified,
     ):
         return
-    if provider == "nous" and _print_nous_entitlement_guidance(agent, "Nous model access"):
+    if provider == "nous" and _print_nous_entitlement_guidance(agent, "Langton model access"):
         return
     if provider in {"openai-codex", "xai-oauth", "nous"} and status_code == 401:
         if provider == "openai-codex":
@@ -903,7 +903,7 @@ def _print_nonretryable_auth_guidance(
             _vlines(
                 agent,
                 "   💡 Codex OAuth token was rejected (HTTP 401). Your token may have been",
-                "      refreshed by another client (Codex CLI, VS Code) or another Hermes profile.",
+                "      refreshed by another client (Codex CLI, VS Code) or another Lattice profile.",
                 f"      Sign this profile in again: `{oauth_relogin_command(provider)}`",
             )
         elif provider == "xai-oauth":
@@ -915,7 +915,7 @@ def _print_nonretryable_auth_guidance(
         else:  # nous
             _vlines(
                 agent,
-                "   💡 Nous Portal OAuth token was rejected (HTTP 401). Your token may be",
+                "   💡 Langton Portal OAuth token was rejected (HTTP 401). Your token may be",
                 "      expired, revoked, or your account may be out of credits. To fix:",
                 "      1. Re-authenticate: hermes portal",
                 "      2. Check your portal account: https://portal.nousresearch.com",
@@ -926,7 +926,7 @@ def _print_nonretryable_auth_guidance(
                 _vlines(
                     agent,
                     f"      ⚠️  Note: `{model}` looks like an OpenRouter slug (`:free` suffix).",
-                    "         Nous Portal won't recognize that model name. Either switch to a",
+                    "         Langton Portal won't recognize that model name. Either switch to a",
                     f"         Nous catalog model, or run `/model openrouter:{model}` to use OpenRouter.",
                 )
         return
@@ -947,7 +947,7 @@ def _print_nonretryable_auth_guidance(
 
 
 def _welcome_tier_guidance(classified: Any, *, model: Any, in_chat: bool, door: bool = True) -> str:
-    """Copy for a Nous free-tier refusal the classifier parsed (``welcome_refusal`` /
+    """Copy for a Langton free-tier refusal the classifier parsed (``welcome_refusal`` /
     ``welcome_route`` in ``error_context``); empty for every other error."""
     ctx = getattr(classified, "error_context", None) or {}
     refusal, route = ctx.get("welcome_refusal"), ctx.get("welcome_route")
@@ -994,7 +994,7 @@ def _stamp_free_tier(result: dict[str, Any], kind: str, message: str) -> dict[st
 
 
 def _welcome_outage_copy(agent: Any, base_url: Any, classified: Any) -> str:
-    """On the Nous free tier, a transport / server failure that outlived every retry reads as one
+    """On the Langton free tier, a transport / server failure that outlived every retry reads as one
     plain sentence (the free model is having trouble) rather than the technical summary. Empty
     for every other route and for rate limits / billing, which have their own copy."""
     from hermes_cli.anon_auth import FREE_TIER_OUTAGE_COPY, on_free_model
@@ -1086,7 +1086,7 @@ def nonretryable_client_error_result(
             agent,
             "   💡 The endpoint's firewall/CDN blocked the request before it reached the model — your key",
             "      and model access are probably fine. Relays often reject the SDK's default User-Agent:",
-            "      set `extra_headers: {User-Agent: HermesAgent/1.0}` on the custom_providers entry,",
+            "      set `extra_headers: {User-Agent: LatticeAgent/1.0}` on the custom_providers entry,",
             "      or check the proxy/WAF rules and your network.",
         )
     # Content-policy blocks: the provider refused this prompt, so recovery is a rephrase
@@ -1101,7 +1101,7 @@ def nonretryable_client_error_result(
     if classified.reason == FailoverReason.ssl_cert_verification:
         _vlines(
             agent,
-            "   💡 Hermes couldn't verify the provider's security certificate. This fails the same",
+            "   💡 Lattice couldn't verify the provider's security certificate. This fails the same",
             "      way on every retry — fix the environment, then try again:",
             "      • Corporate TLS-inspecting proxy? Ask your administrator to install",
             "        its root certificate in the operating system trust store.",
@@ -1659,7 +1659,7 @@ def _failure_hint_for(code: Optional[int], api_duration: float) -> str:
 @dataclass
 class ClassifiedErrorVerdict:
     """Outcome of ``route_classified_error``. ``action``: ``"return"`` (terminal result),
-    ``"break"`` (restart armed on ``_retry``), ``"continue"`` (re-enter the retry loop; Nous
+    ``"break"`` (restart armed on ``_retry``), ``"continue"`` (re-enter the retry loop; Langton
     guard re-check) or ``"fallthrough"`` (proceed to overflow / client-error / backoff
     handling). The remaining fields are loop locals the router rebound or computed."""
 
@@ -1757,7 +1757,7 @@ def activate_codex_app_server_fallback(agent: Any, result: dict[str, Any]) -> bo
 
 
 def _is_genuine_nous_rate_limit(agent: Any, api_error: Exception, error_context: Any, classified: Any = None) -> bool:
-    """Record a genuine account-level Nous 429 to the cross-session breaker; upstream
+    """Record a genuine account-level Langton 429 to the cross-session breaker; upstream
     capacity 429s (no exhausted bucket in headers or last-known state) are left alone.
 
     *error_context* is the turn's (``extract_api_error_context``); *classified* brings the
@@ -1783,7 +1783,7 @@ def _is_genuine_nous_rate_limit(agent: Any, api_error: Exception, error_context:
             record_nous_rate_limit(headers=_err_hdrs, error_context=_merged, anonymous=anonymous)
         else:
             logger.info(
-                "Nous 429 looks like upstream capacity "
+                "Langton 429 looks like upstream capacity "
                 "(no exhausted bucket in headers or "
                 "last-known state) -- not tripping "
                 "cross-session breaker."
@@ -1806,7 +1806,7 @@ def route_classified_error(
     long-context tier 429 → cap at 200k and compress; eager fallback for rate-limit/billing
     (immediately) and transport failures (after 1 retry) unless credential-pool rotation may
     still recover (upstream-aggregator 429s always fall back); persistent 401/403 → fallback
-    chain once; genuine Nous 429 → cross-session breaker + re-enter the loop exactly once."""
+    chain once; genuine Langton 429 → cross-session breaker + re-enter the loop exactly once."""
     from agent.conversation_compression import conversation_history_after_compression
     from agent.conversation_loop import _arm_fallback_restart, _ra
     from agent.model_metadata import estimate_request_tokens_rough

@@ -440,7 +440,7 @@ describe('the mention middleware', () => {
   it('annotates the resolvable handle for a local row whose UI alias differs', async () => {
     // The reporter's shape (#97678 / Discord video): the LOCAL twin carries
     // the 'default-this-device' alias when the remote gateway is active.
-    // The local resolver only knows bare profile names / 'hermes'.
+    // The local resolver only knows bare profile names / 'lattice'.
     const { handler } = await contributions({
       focused: 'ops',
       profiles: [
@@ -452,7 +452,7 @@ describe('the mention middleware', () => {
     const result = await handler({ text: 'ping @default-this-device' })
 
     expect(result.text).toMatch(/@default-this-device = agent profile "default"/)
-    expect(result.text).toMatch(/message_agent target: "hermes"/)
+    expect(result.text).toMatch(/message_agent target: "lattice"/)
     expect(result.text).not.toMatch(/message_agent target: "default-this-device/)
   })
 
@@ -481,7 +481,7 @@ describe('the mention middleware', () => {
 
   it('keeps a poisoned bot title inert prose', async () => {
     // Nothing here is a command line, so there is nothing to break out of —
-    // the invariant that matters is that no hermes command is ever emitted.
+    // the invariant that matters is that no lattice command is ever emitted.
     const { handler } = await contributions({
       focused: 'ops',
       profiles: [
@@ -492,7 +492,7 @@ describe('the mention middleware', () => {
 
     const result = await handler({ text: 'ping @research please' })
 
-    expect(result.text).not.toMatch(/`hermes/)
+    expect(result.text).not.toMatch(/`lattice/)
   })
 
   it('resolves a cross-connection mention cold, before the Bots pane ever mounted (#94018)', async () => {
@@ -540,8 +540,8 @@ describe('the mention middleware', () => {
   })
 })
 
-describe('the local default when a real hermes profile exists', () => {
-  const RAW = ['default', 'hermes', 'researcher'].map(name => ({
+describe('the local default when a real lattice profile exists', () => {
+  const RAW = ['default', 'lattice', 'researcher'].map(name => ({
     connectionId: 'local',
     connectionKind: 'local',
     connectionLabel: 'This device',
@@ -575,10 +575,10 @@ describe('the local default when a real hermes profile exists', () => {
     const toDefault = (await handler({ text: 'please ask @default to review' })).text
     const toHermes = (await handler({ text: 'please ask @hermes to review' })).text
 
-    // message_agent maps 'hermes' to the real hermes profile, so the default must never be handed it.
+    // message_agent maps 'lattice' to the real lattice profile, so the default must never be handed it.
     expect(toDefault).toMatch(/@default = agent profile "default"/)
-    expect(toDefault).not.toMatch(/message_agent target: "hermes"/)
-    expect(toHermes).toMatch(/@hermes = agent profile "hermes"/)
+    expect(toDefault).not.toMatch(/message_agent target: "lattice"/)
+    expect(toHermes).toMatch(/@hermes = agent profile "lattice"/)
     expect(toHermes).not.toMatch(/agent profile "default"/)
   })
 })

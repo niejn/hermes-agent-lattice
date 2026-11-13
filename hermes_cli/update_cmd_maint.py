@@ -36,8 +36,8 @@ _PRE_UPDATE_SNAPSHOT_MAX_FILE_SIZE = 1 << 30  # 1 GiB
 #: Reinstalling through the official installer swaps in a Python whose SQLite is safe; the
 #: one-liner differs per OS (mirrors ``uninstall._REINSTALL_HINT``). windows -> command
 _REINSTALL_ONE_LINER = {
-    True: "iex (irm https://hermes-agent.nousresearch.com/install.ps1)",
-    False: "curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash",
+    True: "iex (irm https://docs.langtonphotonics.com/install.ps1)",
+    False: "curl -fsSL https://docs.langtonphotonics.com/install.sh | bash",
 }
 
 
@@ -48,7 +48,7 @@ def _sqlite_partial_completion_lines(sqlite_version: str) -> list[str]:
     from hermes_cli.update_cmd import _m
     return [
         f"⚠ Update partially complete — your Python's SQLite ({sqlite_version}) has a known "
-        "corruption bug. Hermes works, but sessions could be damaged.",
+        "corruption bug. Lattice works, but sessions could be damaged.",
         f"  Fix: run the installer again ({_REINSTALL_ONE_LINER[bool(_m()._is_windows())]}) "
         "which installs a safe Python, then run `hermes doctor` to confirm.",
     ]
@@ -102,7 +102,7 @@ def _print_curator_first_run_notice() -> None:
     )
     print("  Preview now:  hermes curator run --dry-run")
     print("  Pause it:     hermes curator pause")
-    print("  Docs:         https://hermes-agent.nousresearch.com/docs/user-guide/features/curator")
+    print("  Docs:         https://docs.langtonphotonics.com/docs/user-guide/features/curator")
 
 
 def _print_fts_optimize_available_notice() -> None:
@@ -383,7 +383,7 @@ def _post_update_sqlite_runtime_status():
 
 
 def _print_verified_update_completion(message: str) -> bool:
-    """Print a success completion only after probing the next Hermes runtime."""
+    """Print a success completion only after probing the next Lattice runtime."""
     from hermes_cli.update_cmd import _post_update_sqlite_runtime_status
     if not message.startswith("✓"):
         _print_update_completion(message)
@@ -580,7 +580,7 @@ def _ensure_fhs_path_guard() -> None:
         return  # already on PATH, nothing to do
 
     path_line = 'export PATH="/usr/local/bin:$PATH"'
-    path_comment = "# Hermes Agent — ensure /usr/local/bin is on PATH (RHEL non-login shells)"
+    path_comment = "# Lattice Agent — ensure /usr/local/bin is on PATH (RHEL non-login shells)"
     wrote_any = False
     for candidate in (".bashrc", ".bash_profile"):
         cfg = Path(home) / candidate
@@ -1001,7 +1001,7 @@ def _run_post_update_maintenance(
     if sys.platform == "darwin" and had_desktop_app_before_update:
         print()
         print(
-            "  ℹ macOS: if Hermes re-prompts for permissions you already "
+            "  ℹ macOS: if Lattice re-prompts for permissions you already "
             "granted (toggle shows ON), the stored grant is stale — run "
             "`tccutil reset ScreenCapture com.nousresearch.hermes` (repeat "
             "per affected service), toggle it ON in System Settings, then "

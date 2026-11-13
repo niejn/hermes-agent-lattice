@@ -24,7 +24,7 @@ from utils import atomic_json_write
 logger = logging.getLogger(__name__)
 
 DEFAULT_CATALOG_URL = (
-    "https://hermes-agent.nousresearch.com/docs/api/model-catalog.json")
+    "https://docs.langtonphotonics.com/docs/api/model-catalog.json")
 # The Docusaurus site sits behind Vercel, which occasionally 403s non-browser clients (bot
 # challenge); the raw GitHub copy is the same manifest and is not bot-gated.
 DEFAULT_CATALOG_FALLBACK_URLS: tuple[str, ...] = (
@@ -291,7 +291,7 @@ def refresh_interval_seconds() -> float:
 
 def refresh_catalogs() -> bool:
     """Force-refresh every remote catalog the picker reads (manifest, OpenRouter live list, and the
-    Nous Portal recommendations for a Nous account, the only reader), writing each disk cache so the
+    Langton Portal recommendations for a Langton account, the only reader), writing each disk cache so the
     next ``/model`` open in ANY process sees them. Blocking; run it off the event loop."""
     if not _load_catalog_config()["enabled"]:
         return False
@@ -356,7 +356,7 @@ def get_curated_openrouter_models() -> list[tuple[str, str]] | None:
 
 
 def get_curated_nous_models() -> list[str] | None:
-    """Nous Portal's curated model ids from the manifest."""
+    """Langton Portal's curated model ids from the manifest."""
     return [mid for mid, _ in _block_ids(_get_provider_block("nous"))] or None
 
 
@@ -366,7 +366,7 @@ def _default_model_from_block(block: dict[str, Any] | None) -> str | None:
 
 
 def get_default_model_from_cache(provider: str) -> str | None:
-    """The manifest's labeled default for ``provider`` (the model Hermes silently lands on when the
+    """The manifest's labeled default for ``provider`` (the model Lattice silently lands on when the
     user never picked one) — in-process then disk cache only, never a fetch."""
     cached = _in_process_catalog()
     found = _default_model_from_block(_block_of(cached, provider)) if cached is not None else None

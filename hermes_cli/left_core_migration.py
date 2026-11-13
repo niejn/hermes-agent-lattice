@@ -201,7 +201,7 @@ def _core_platforms_except(platform: str, *others: str) -> tuple[str, ...]:
 # platform's default composite carried them. A third-party plugin platform core never knew stays uncovered.
 _YUANBAO_OFF_PLATFORMS = _core_platforms_except("yuanbao", "homeassistant")
 
-_YUANBAO_NOTICE = ("Yuanbao is now a Hermes Labs plugin: built by Nous Research, not supported, and likely not "
+_YUANBAO_NOTICE = ("Yuanbao is now a Lattice Labs plugin: built by Langton Photonics, not supported, and likely not "
                    "maintained going forward. Fixes from the community are welcome.")
 
 
@@ -457,7 +457,7 @@ def copilot_in_use(home: Path, *, process_env: bool = False) -> bool:
 def copilot_relogin_notice(home: Path, *, process_env: bool = False) -> str:
     """The Copilot API provider is in use in *home* with no token the plugin reads: no
     COPILOT_GITHUB_TOKEN / GH_TOKEN / GITHUB_TOKEN in its dotenv layers (process env too for the launch home
-    with *process_env*) and no Hermes login in its ``auth.json`` (a ``manual`` credential-pool row from
+    with *process_env*) and no Lattice login in its ``auth.json`` (a ``manual`` credential-pool row from
     ``hermes auth add copilot``, or ``providers.copilot``). Core also took ``gh auth token`` and the
     GitHub/Copilot CLI's token files, which the plugin does not; read-only, never runs ``gh``."""
     if not providers_selected(home, _COPILOT_API, process_env=process_env):
@@ -594,7 +594,7 @@ LEFT_CORE: tuple[LeftCoreFeature, ...] = (
     LeftCoreFeature(
         # MCP clients that launch `hermes mcp serve` are configured outside Hermes, so no home shows the
         # feature in use: nothing installs automatically, and the old spelling prints where it went.
-        plugin="mcp-serve", label="Hermes as an MCP server", in_use=lambda home, **_: False,
+        plugin="mcp-serve", label="Lattice as an MCP server", in_use=lambda home, **_: False,
         unchanged="the conversation tools keep their names; MCP clients change their args to [\"mcp-serve\"]",
         command="mcp-serve", old_command="hermes mcp serve",
     ),
@@ -961,7 +961,7 @@ def record_core_use(home: Path, config: dict, version: int) -> bool:
 def _predates_split(home: Path, feature: LeftCoreFeature) -> bool:
     """*home* ran *feature* in core: its config is still below ``left_at`` (this pass ran before the
     config step), that step recorded the feature in use, or config.yaml is missing or unstamped. Every
-    config.yaml Hermes writes carries a stamp, and the first save that stamps one records the rows in use
+    config.yaml Lattice writes carries a stamp, and the first save that stamps one records the rows in use
     (``config_version_stamp.note_first_stamp``), so only a home from before the split lacks it; core ran
     the feature there from its .env alone."""
     if not feature.left_at:
@@ -1330,7 +1330,7 @@ def recover_for_command(name: Optional[str]) -> None:
     """``hermes <name>`` names a command a left-core plugin registers, and the active home uses that
     feature but lacks the plugin: run :func:`recover_at_startup` now, before plugin commands are
     discovered, so the command it installs runs in this same invocation. A home nothing migrated yet
-    (a Docker image swap runs no ``hermes update``) whose only Hermes process is a scheduled
+    (a Docker image swap runs no ``hermes update``) whose only Lattice process is a scheduled
     ``hermes import-agent --sync`` never starts an agent or a gateway to do it."""
     from hermes_constants import get_hermes_home
     home = Path(get_hermes_home())

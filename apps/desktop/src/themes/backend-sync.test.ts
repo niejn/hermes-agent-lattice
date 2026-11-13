@@ -41,8 +41,8 @@ describe('ingestBackendSkin', () => {
     expect($pendingSkinApply.get()).toBeNull()
 
     // The activation event was missed (skin set while disconnected / backend
-    // restarted). Hermes re-affirms it — `hermes config set display.skin neon`
-    // or a `hermes skin set` recolor. That explicit event must repaint even
+    // restarted). Lattice re-affirms it — `lattice config set display.skin neon`
+    // or a `lattice skin set` recolor. That explicit event must repaint even
     // though the name matches the seed.
     ingestBackendSkin(skin('neon'), { apply: true })
     expect($pendingSkinApply.get()).toBe('neon')
@@ -53,7 +53,7 @@ describe('ingestBackendSkin', () => {
     expect($pendingSkinApply.get()).toBeNull()
 
     // ...and a genuine switch still applies.
-    ingestBackendSkin(skin('forest'), { apply: true }) // Hermes authored a new skin
+    ingestBackendSkin(skin('forest'), { apply: true }) // Lattice authored a new skin
     expect($pendingSkinApply.get()).toBe('forest')
   })
 
@@ -83,7 +83,7 @@ describe('ingestBackendSkin', () => {
 
   it('applies a runtime switch back to default (repaints the desktop to its own default)', () => {
     ingestBackendSkin(skin('neon'), { apply: false }) // gateway.ready seed on some skin
-    ingestBackendSkin(skin('default'), { apply: true }) // Hermes switched back to default
+    ingestBackendSkin(skin('default'), { apply: true }) // Lattice switched back to default
 
     expect($pendingSkinApply.get()).toBe('default')
   })
@@ -107,7 +107,7 @@ describe('ingestBackendSkin', () => {
     ingestBackendSkin(skinWithCSS('default', 'body { background: red; }'), { apply: true })
 
     expect($backendThemes.get().default).toBeUndefined()
-    // setTheme normalizes `default` → DEFAULT_SKIN_NAME ('nous'), so the CSS
+    // setTheme normalizes `default` → DEFAULT_SKIN_NAME ('langton'), so the CSS
     // must be findable under that name when the theme is derived.
     expect($backendCustomCSS.get().nous).toBe('body { background: red; }')
   })

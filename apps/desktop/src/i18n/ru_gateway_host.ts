@@ -4,9 +4,9 @@ import type { GatewayHostTranslations } from './types_gateway_host'
 export const ruGatewayHost: GatewayHostTranslations = {
   unavailableTitle: 'Настройки шлюза недоступны',
   unavailableDesc: 'IPC-мост приложения не предоставляет настройки шлюза.',
-  webappHostTitle: 'Хост Hermes',
+  webappHostTitle: 'Хост Lattice',
   webappHostDesc:
-    'Webapp всегда работает на хосте Hermes, который её обслуживает. Сохранённые подключения ниже — список этого компьютера, общий с приложением Hermes Desktop; другие шлюзы доступны через этот хост.',
+    'Webapp всегда работает на хосте Lattice, который её обслуживает. Сохранённые подключения ниже — список этого компьютера, общий с приложением Lattice Desktop; другие шлюзы доступны через этот хост.',
   webappOauthPaste: {
     title: 'Завершить вход',
     description: 'Если вкладка входа остановилась на адресе, который не открывается (этот браузер не на компьютере шлюза), вставьте этот адрес сюда.',
@@ -16,7 +16,7 @@ export const ruGatewayHost: GatewayHostTranslations = {
   },
   webAccess: {
     title: 'Веб-доступ',
-    intro: 'Откройте Hermes этого компьютера с телефона или другого компьютера, войдя через аккаунт Nous. Вошедший может запускать команды на этом компьютере.',
+    intro: 'Откройте Lattice этого компьютера с телефона или другого компьютера, войдя через аккаунт Langton. Вошедший может запускать команды на этом компьютере.',
     failed: 'Не удалось изменить веб-доступ',
     running: 'Работает',
     stopped: 'Остановлен',
@@ -24,8 +24,8 @@ export const ruGatewayHost: GatewayHostTranslations = {
     stopping: 'Останавливается',
     restartNeeded: 'Нужен перезапуск',
     unavailable: 'Недоступен',
-    notRunningDetail: 'Запустите его, чтобы открыть Hermes с другого устройства.',
-    needsNous: 'Сначала войдите в аккаунт Nous в разделе «Провайдеры».',
+    notRunningDetail: 'Запустите его, чтобы открыть Lattice с другого устройства.',
+    needsNous: 'Сначала войдите в аккаунт Langton в разделе «Провайдеры».',
     runningLan: 'Откройте этот адрес на устройстве в той же сети.',
     runningPublic: 'Доступен через ваш URL.',
     runningLocal: 'Открыть его можно только на этом компьютере. Остановите и снова запустите его, чтобы открыть с других устройств.',
@@ -40,7 +40,7 @@ export const ruGatewayHost: GatewayHostTranslations = {
     startStages: {
       preparing: 'Готовим веб-приложение. Сборка может занять несколько минут.',
       building: 'Собираем веб-приложение. Это может занять несколько минут.',
-      registering: 'Настраиваем вход через Nous для этого адреса.',
+      registering: 'Настраиваем вход через Langton для этого адреса.',
       restarting: 'Перезапускаем шлюз, чтобы открыть веб-приложение.'
     },
     startElapsed: time => `Прошло: ${time}`,

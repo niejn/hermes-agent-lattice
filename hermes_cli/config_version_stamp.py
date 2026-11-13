@@ -68,7 +68,7 @@ def newer_stamp_message(stamp: int) -> str:
     latest = _coerce_config_version(DEFAULT_CONFIG.get("_config_version", 1)) or 1
     return (f"config.yaml is at version {stamp}, written by a newer Hermes (this build knows up to "
             f"{latest}). No migration runs on it, so this build does not rewrite settings the newer one "
-            "wrote. Update Hermes to migrate it.")
+            "wrote. Update Lattice to migrate it.")
 
 
 def check_config_version(*, raise_on_parse_error: bool = False) -> tuple[int, int]:

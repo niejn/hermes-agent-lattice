@@ -98,7 +98,7 @@ export function StartupOverlay() {
 }
 
 /** A Webapp tab without a valid sign-in. The service is running, so there is nothing to recover or
- * dismiss: only hermes webapp signs the tab in. */
+ * dismiss: only lattice webapp signs the tab in. */
 function WebappSignInOverlay() {
   const copy = useI18n().t.boot.failure
 
@@ -297,7 +297,7 @@ export function BootFailureOverlay() {
   }
 
   // Clear this gateway's stale auth first, then re-establish it through the
-  // connection's owning login flow. Hermes Cloud must reuse its portal session
+  // connection's owning login flow. Lattice Cloud must reuse its portal session
   // and per-agent cascade; generic remote gateways use native/embedded OAuth.
   // Reload after success so boot mints a fresh ticket against the new session.
   // The cloud ladder is shared with Settings (reestablishCloudAgentSession) so
@@ -424,7 +424,7 @@ export function BootFailureOverlay() {
 
   let actions: RecoveryAction[]
   let hint: string
-  // The electron boot path flags a Nous Cloud backend-down (502/503/504) with
+  // The electron boot path flags a Langton Cloud backend-down (502/503/504) with
   // the structured isCloudBackendDown/statusCode it carries through boot
   // progress. When set, the recovery screen leads with the cloud-specific
   // guidance instead of the generic remote-failure copy (#85335).
@@ -444,7 +444,7 @@ export function BootFailureOverlay() {
     ]
     hint = copy.remoteSignInHint(label)
   } else if (cloudDown) {
-    // A Nous Cloud agent is down — the user cannot restart the managed
+    // A Langton Cloud agent is down — the user cannot restart the managed
     // instance and Repair is local-only. Lead with the paths that actually
     // resolve it: check the portal (status/instance controls), switch to the
     // local gateway, retry, or get support on Discord. Portal/Discord are
@@ -462,7 +462,7 @@ export function BootFailureOverlay() {
       {
         key: 'discord',
         label: copy.cloudDownDiscord,
-        onClick: () => openExternalLink('https://discord.gg/NousResearch'),
+        onClick: () => openExternalLink('https://discord.gg/LangtonPhotonics'),
         variant: 'ghost'
       },
       { ...settingsAction, variant: 'ghost' }

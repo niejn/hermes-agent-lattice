@@ -76,7 +76,7 @@ def _codex_device_code_start_error(resp: Any) -> str:
     if "device" in lower and ("authori" in lower or "enable" in lower):
         message = (
             "OpenAI rejected the device-code login request. Your OpenAI "
-            "account may need device-code authorization enabled before Hermes "
+            "account may need device-code authorization enabled before Lattice "
             "can start this dashboard login. Enable device-code authorization "
             "in OpenAI, then return here and click Login again."
         )
@@ -382,7 +382,7 @@ def _epoch_ms_to_iso(value: Any) -> Optional[str]:
 # credential source), not the internal auth_mode string ("oauth_pkce").
 _PROVIDER_STATUS: dict[str, tuple[str, Callable[[dict], dict]]] = {
     "nous": ("get_nous_auth_status_local", lambda r: {**_status_card(
-        r, "nous_portal", r.get("portal_base_url") or "Nous Portal",
+        r, "nous_portal", r.get("portal_base_url") or "Langton Portal",
         _truncate_token(r.get("access_token")), r.get("access_expires_at"), bool(r.get("has_refresh_token")),
     ), "free_tier": bool(r.get("free_tier")), "account_tier": r.get("account_tier")}),
     "openai-codex": ("get_codex_auth_status", lambda r: _status_card(
@@ -433,7 +433,7 @@ def _resolve_provider_status(provider_id: str, status_fn) -> dict[str, Any]:
 
 
 async def _start_nous_device_code(profile: Optional[str]) -> dict[str, Any]:
-    """Start a Nous sign-in: the shared ``anon_auth.run_sign_in`` flow, the plain device-code login.
+    """Start a Langton sign-in: the shared ``anon_auth.run_sign_in`` flow, the plain device-code login.
     This route creates the generator, pulls its first state (the device page link and code) and
     hands that to the UI, then the poller drains the rest. A free tier the account replaces hands
     its apps over after the save, inside the flow."""
@@ -665,7 +665,7 @@ def _oauth_provider_disconnect_hint(provider: dict[str, Any], status: dict[str, 
     if provider.get("flow") == "external" and provider.get("id") != "anthropic":
         if _oauth_provider_disconnect_command(provider):
             # Fallback wording for surfaces without the one-click "run in terminal" path.
-            return "Managed outside Hermes — run the disconnect command to remove it."
+            return "Managed outside Lattice — run the disconnect command to remove it."
         return "Managed by that provider's CLI; remove it there."
     if status.get("source") == "env_var":
         return "Remove the API key from Settings → Keys instead."

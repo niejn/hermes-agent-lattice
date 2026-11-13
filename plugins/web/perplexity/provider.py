@@ -23,7 +23,7 @@ Env vars::
 
 No anonymous tier at Perplexity itself. The managed route serves search through
 ``perplexity-gateway.<TOOL_GATEWAY_DOMAIN>`` as ``search_type: "fast"``, which the
-gateway serves to any Nous identity (paid, unpaid or anonymous guest); a direct key
+gateway serves to any Langton identity (paid, unpaid or anonymous guest); a direct key
 takes precedence.
 Managed extract stays on Firecrawl.
 
@@ -55,8 +55,8 @@ _KEY_URL = "https://www.perplexity.ai/account/api"
 # request; the call already carries the user's own API key.
 def _headers() -> dict[str, str]:
     return {
-        "HTTP-Referer": "https://hermes-agent.nousresearch.com",
-        "X-Title": "Hermes Agent",
+        "HTTP-Referer": "https://lattice.langtonphotonics.com",
+        "X-Title": "Lattice Agent",
         "User-Agent": hermes_user_agent("HermesAgent"),
         "X-Pplx-Integration": "hermes-agent",
     }
@@ -74,7 +74,7 @@ def _missing_key_error() -> str:
 
 
 def _managed_gateway(token_reader=None):
-    """Nous Tool Gateway config when web_search is on the managed route, else None."""
+    """Langton Tool Gateway config when web_search is on the managed route, else None."""
     from tools import managed_tool_gateway as gw
     from tools.web_tools import _managed_web_search
 
@@ -186,7 +186,7 @@ class PerplexityWebSearchProvider(WebSearchProvider):
         return "Perplexity"
 
     def is_available(self) -> bool:
-        """True with a ``PERPLEXITY_API_KEY``, or on the managed route with a likely-usable Nous token."""
+        """True with a ``PERPLEXITY_API_KEY``, or on the managed route with a likely-usable Langton token."""
         from agent.web_search_provider import get_provider_env
         from tools.managed_tool_gateway import peek_nous_access_token
 
@@ -222,7 +222,7 @@ class PerplexityWebSearchProvider(WebSearchProvider):
                 from tools.tool_backend_helpers import NOUS_MANAGED_PROVIDER, selection_error
 
                 raise ValueError(selection_error(
-                    "web", NOUS_MANAGED_PROVIDER, "there is no usable Nous identity (sign in with `/login`)"))
+                    "web", NOUS_MANAGED_PROVIDER, "there is no usable Langton identity (sign in with `/login`)"))
             logger.info("Perplexity search: '%s' (limit=%d%s)", query, limit, ", managed" if gateway else "")
             payload = {
                 "query": query,

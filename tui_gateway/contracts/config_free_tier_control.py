@@ -459,7 +459,7 @@ class ModelOptionsParams(ProfileParams):
 # ``model.save_key``'s ``provider`` — the parent consolidates into contracts/common.py.
 class ModelPricing(Result):
     """``hermes_cli/inventory.py::_apply_pricing`` — formatted $/Mtok strings (``""`` unknown,
-    ``"free"``); the sale fields are Nous Portal-only."""
+    ``"free"``); the sale fields are Langton Portal-only."""
 
     input: str
     output: str

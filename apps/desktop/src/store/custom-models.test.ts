@@ -33,11 +33,11 @@ describe('custom models', () => {
   })
 
   it('appends each remembered id under its own provider and keeps the input when nothing applies', () => {
-    const providers = [provider('openrouter', ['openai/gpt-5']), provider('nous', ['hermes-4'])]
+    const providers = [provider('openrouter', ['openai/gpt-5']), provider('lattice', ['hermes-4'])]
 
     const customs = [
       { model: 'acme/model-x', provider: 'openrouter' },
-      { model: 'hermes-4', provider: 'nous' },
+      { model: 'hermes-4', provider: 'lattice' },
       { model: 'ghost', provider: 'missing' }
     ]
 
@@ -48,13 +48,13 @@ describe('custom models', () => {
     expect(withCustomModels(providers, [])).toBe(providers)
   })
 
-  it('merges custom models into a usage-window Nous row too (window plans allow any model)', () => {
-    const nous: ModelOptionProvider = {
-      ...provider('nous', ['example/model-b']),
+  it('merges custom models into a usage-window Langton row too (window plans allow any model)', () => {
+    const usageRow: ModelOptionProvider = {
+      ...provider('lattice', ['example/model-b']),
       plan_usage: { kind: 'usage_window', gauges: [] }
     }
 
-    const merged = withCustomModels([nous], [{ model: 'acme/model-x', provider: 'nous' }])
+    const merged = withCustomModels([usageRow], [{ model: 'acme/model-x', provider: 'lattice' }])
 
     expect(merged[0]?.models).toEqual(['example/model-b', 'acme/model-x'])
   })
@@ -94,7 +94,7 @@ describe('resetModelVisibilityKeepingCustoms', () => {
     const visible = effectiveVisibleKeys($visibleModels.get(), catalog)
 
     expect($customModels.get()).toEqual([{ model: 'acme/model-x', provider: 'openrouter' }])
-    expect(window.localStorage.getItem('hermes.desktop.custom-models')).toContain('acme/model-x')
+    expect(window.localStorage.getItem('lattice.desktop.custom-models')).toContain('acme/model-x')
     expect(visible.has(modelVisibilityKey('openrouter', 'acme/model-x'))).toBe(true)
 
     for (const key of defaultVisibleKeys(catalog)) {

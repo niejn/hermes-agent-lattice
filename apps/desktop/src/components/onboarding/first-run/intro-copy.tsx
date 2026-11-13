@@ -119,6 +119,12 @@ export function IntroCopy() {
 
   return (
     <div aria-label={lines.join(' ')} data-risen={risen ? '' : undefined} data-slot="intro-copy" role="status">
+      <img
+        alt=""
+        aria-hidden="true"
+        className="intro-copy-mascot"
+        src="/mascot/baize.svg"
+      />
       <div aria-hidden="true" className="intro-copy-text">
         <p>{first}</p>
         <p className="intro-copy-second">{second}</p>

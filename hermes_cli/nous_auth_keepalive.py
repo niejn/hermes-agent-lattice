@@ -1,4 +1,4 @@
-"""Background keepalive for long-lived Nous Portal sessions."""
+"""Background keepalive for long-lived Langton Portal sessions."""
 
 from __future__ import annotations
 
@@ -81,7 +81,7 @@ def _interval_seconds(value: Optional[int]) -> int:
 
 
 def _observed_lifetime_seconds() -> Optional[int]:
-    """Server-issued lifetime (seconds) of the current Nous credentials; the shorter of the access
+    """Server-issued lifetime (seconds) of the current Langton credentials; the shorter of the access
     token and the invoke agent key governs. None when nothing usable is stored.
     """
     state = get_provider_auth_state("nous") or {}
@@ -117,21 +117,21 @@ def _entry_state(entry: object) -> dict:
 
 def _refresh_selected_pool_entry(*, min_key_ttl_seconds: int, min_access_ttl_seconds: Optional[int] = None) -> Optional[bool]:
     """Refresh the current pool entry when stale. True = usable/refreshed; False = pool exists but
-    no usable entry; None = no Nous pool.
+    no usable entry; None = no Langton pool.
     """
     try:
         from agent.credential_pool import load_pool
 
         pool = load_pool("nous")
     except Exception as exc:
-        logger.debug("Nous auth keepalive: credential pool unavailable: %s", exc)
+        logger.debug("Langton auth keepalive: credential pool unavailable: %s", exc)
         return None
     if not pool or not pool.has_credentials():
         return None
     try:
         entry = pool.select()
     except Exception as exc:
-        logger.debug("Nous auth keepalive: credential pool selection failed: %s", exc)
+        logger.debug("Langton auth keepalive: credential pool selection failed: %s", exc)
         return False
     if entry is None:
         return False
@@ -142,7 +142,7 @@ def _refresh_selected_pool_entry(*, min_key_ttl_seconds: int, min_access_ttl_sec
     if access_expiring or not key_usable:
         if pool.try_refresh_current() is None:
             return False
-        logger.debug("Nous auth keepalive: refreshed credential pool entry")
+        logger.debug("Langton auth keepalive: refreshed credential pool entry")
     return True
 
 
@@ -150,7 +150,7 @@ def refresh_nous_auth_keepalive_once(
     *, min_key_ttl_seconds: int = NOUS_INVOKE_JWT_MIN_TTL_SECONDS,
     min_access_ttl_seconds: Optional[int] = None, timeout_seconds: Optional[float] = None,
 ) -> bool:
-    """Refresh Nous auth once if credentials are configured (pool entry first, then singleton state)."""
+    """Refresh Langton auth once if credentials are configured (pool entry first, then singleton state)."""
     # This runs in a bare daemon thread, so it does not inherit a request's ContextVars. Once a
     # gateway multiplexes profiles, even the launch profile must bind its own scope before a
     # credential read; otherwise the fail-closed routing reader warns on every tick.
@@ -177,13 +177,13 @@ def refresh_nous_auth_keepalive_once(
             from hermes_cli.anon_challenge import background_caller
             with background_caller():
                 resolve_nous_runtime_credentials(timeout_seconds=_timeout_seconds(timeout_seconds))
-            logger.debug("Nous auth keepalive: refreshed singleton auth state")
+            logger.debug("Langton auth keepalive: refreshed singleton auth state")
             return True
         except Exception as exc:
             if isinstance(exc, AuthError) and exc.relogin_required:
-                logger.info("Nous auth keepalive requires re-login: %s", exc)
+                logger.info("Langton auth keepalive requires re-login: %s", exc)
             else:
-                logger.debug("Nous auth keepalive failed: %s", exc)
+                logger.debug("Langton auth keepalive failed: %s", exc)
             return False
 
 
@@ -209,7 +209,7 @@ def start_nous_auth_keepalive(
     initial_delay_seconds: int = NOUS_AUTH_KEEPALIVE_INITIAL_DELAY_SECONDS,
     min_key_ttl_seconds: int = NOUS_INVOKE_JWT_MIN_TTL_SECONDS, timeout_seconds: Optional[float] = None,
 ) -> Optional[threading.Thread]:
-    """Start the process-wide Nous auth keepalive thread (idempotent; None when disabled)."""
+    """Start the process-wide Langton auth keepalive thread (idempotent; None when disabled)."""
     # Free-tier handoff retries run in every long-lived Nous process, guest or not and keepalive or
     # not: a CLI sign-in in another process may have left a move this one has to finish.
     from hermes_cli.guest_handoff import start_worker
@@ -222,7 +222,7 @@ def start_nous_auth_keepalive(
     from hermes_cli.anon_auth import is_guest_state
     try:
         if is_guest_state(get_provider_auth_state("nous")):
-            logger.debug("Nous auth keepalive skipped: free tier has no refresh token")
+            logger.debug("Langton auth keepalive skipped: free tier has no refresh token")
             return None
     except Exception:
         pass
@@ -241,7 +241,7 @@ def start_nous_auth_keepalive(
             },
         )
         _keepalive_thread.start()
-        logger.debug("Nous auth keepalive started")
+        logger.debug("Langton auth keepalive started")
         return _keepalive_thread
 
 

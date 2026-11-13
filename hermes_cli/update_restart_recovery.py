@@ -171,7 +171,7 @@ def _systemd_verified_active(profile: str, *, run: Callable[..., Any]) -> bool:
 def _host_state_dir() -> str:
     """The path ``gateway.host_rendezvous.host_state_dir()`` resolves, computed locally.
 
-    This module imports no Hermes code at runtime — importing the freshly pulled tree is exactly
+    This module imports no Lattice code at runtime — importing the freshly pulled tree is exactly
     what aborted the phase that calls us — so the rule is duplicated here rather than shared.
     """
     override = os.environ.get("HERMES_GATEWAY_LOCK_DIR")
@@ -269,7 +269,7 @@ def restart_profiles(
 def _systemctl_scopes() -> list[tuple[str, list[str]]]:
     """``(label, systemctl argv)`` for the user and system scopes (the pair the in-process phase walks), or nothing.
 
-    ``systemctl`` comes from ``shutil.which`` so this module never imports a Hermes platform helper —
+    ``systemctl`` comes from ``shutil.which`` so this module never imports a Lattice platform helper —
     importing the freshly pulled tree is exactly what aborted the phase that called us. Scopes carry
     their label because the same unit name in both managers is two different processes.
     """
@@ -413,7 +413,7 @@ def _read_env_provenance(raw) -> None:
 
 def _adopt_parent_provenance() -> None:
     """Record the updater's provenance as this process's own, right before a routed child env is built
-    (only then: a same-profile restart imports no Hermes code)."""
+    (only then: a same-profile restart imports no Lattice code)."""
     from hermes_cli.env_loader import adopt_env_provenance
     adopt_env_provenance(_parent_provenance)
 

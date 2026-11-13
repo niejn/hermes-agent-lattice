@@ -7,7 +7,7 @@
 //               with an explicit Upload button; nothing is sent before it.
 //   uploading — spinner while the backend collects, redacts and uploads.
 //   done      — the private view link (copyable) + where to pick up the
-//               discussion: GitHub Issues · Nous Portal Support · Discord.
+//               discussion: GitHub Issues · Langton Portal Support · Discord.
 import { useStore } from '@nanostores/react'
 
 import { Button } from '@/components/ui/button'
@@ -31,9 +31,9 @@ import {
 } from '@/store/send-diagnostics'
 
 const SUPPORT_LINKS = [
-  { key: 'github', url: 'https://github.com/NousResearch/hermes-agent/issues' },
+  { key: 'github', url: 'https://github.com/LangtonPhotonics/hermes-agent/issues' },
   { key: 'portal', url: 'https://portal.nousresearch.com/help' },
-  { key: 'discord', url: 'https://discord.gg/NousResearch' }
+  { key: 'discord', url: 'https://discord.gg/LangtonPhotonics' }
 ] as const
 
 export function SendDiagnosticsHost() {

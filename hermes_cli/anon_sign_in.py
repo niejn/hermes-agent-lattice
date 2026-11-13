@@ -1,4 +1,4 @@
-"""The one Nous sign-in: the plain device-code login every surface renders, plus its states and copy."""
+"""The one Langton sign-in: the plain device-code login every surface renders, plus its states and copy."""
 
 from __future__ import annotations
 
@@ -11,16 +11,16 @@ from typing import Any, Callable, ClassVar, ContextManager, Iterator, Optional
 from hermes_cli.auth_constants import httpx
 
 
-UPGRADE_START = "Sign in with a Nous account to unlock more models and tools."
+UPGRADE_START = "Sign in with a Langton account to unlock more models and tools."
 UPGRADE_ALREADY_SIGNED_IN = "Already signed in."
 UPGRADE_DO_NOT_SHARE = "Do not share this code."
 UPGRADE_TIMED_OUT = "That sign-in link has expired. Start again whenever you're ready."
 UPGRADE_NOT_COMPLETED = "Sign-in didn't finish. Try again whenever you're ready."
 # The account service was busy or unreachable mid sign-in (an ``anon_*`` code from
 # ``anon_auth.classify_mint_exception``): nothing was saved, so the copy reassures before the way forward.
-UPGRADE_SERVICE_BUSY = ("Signing in couldn't finish because the Nous service is busy. "
+UPGRADE_SERVICE_BUSY = ("Signing in couldn't finish because the Langton service is busy. "
                         "Try again in {wait}. Your session is still here in the meantime.")
-UPGRADE_SERVICE_UNREACHABLE = ("The Nous service couldn't be reached to finish signing you in. "
+UPGRADE_SERVICE_UNREACHABLE = ("The Langton service couldn't be reached to finish signing you in. "
                                "Check your internet connection and try again. Your session is still here.")
 
 UPGRADE_NO_DEFAULT_TERMINAL = "No default model is set yet; run `hermes model` to pick one."
@@ -30,9 +30,9 @@ UPGRADE_WAITING_UP_TO = "Waiting for sign-in, up to {minutes}."
 UPGRADE_CANCELLED = "\nSign-in cancelled."
 LOGIN_COMMAND = "/login"
 LOGIN_STARTING = "Starting sign-in..."
-LOGIN_DM_ONLY = "Sign in from a direct message with Hermes."
-LOGIN_BUSY_ELSEWHERE = "Another sign-in is already running on this Hermes. Try again in a few minutes."
-LOGIN_NOT_ALLOWED = "Only an operator of this Hermes can sign it in."
+LOGIN_DM_ONLY = "Sign in from a direct message with Lattice."
+LOGIN_BUSY_ELSEWHERE = "Another sign-in is already running on this Lattice. Try again in a few minutes."
+LOGIN_NOT_ALLOWED = "Only an operator of this Lattice can sign it in."
 # The card form (a surface with its own sign-in button) and the chat form (names /login).
 FREE_TIER_RATE_LIMIT_CARD = (
     "You've used up the allowance for chatting without signing in. It refreshes in {reset}. "
@@ -258,7 +258,7 @@ def run_sign_in(
     scope: Optional[Callable[[], ContextManager[Any]]] = None,
     client_factory: Optional[Callable[[float, Any], ContextManager[httpx.Client]]] = None,
 ) -> Iterator[SignInState]:
-    """Sign in with a Nous account: the plain device-code login. Yields :class:`SignInState`s.
+    """Sign in with a Langton account: the plain device-code login. Yields :class:`SignInState`s.
 
     One composition behind every surface: device code, then a cancel-aware token poll on one
     deadline, then the save. The save is where the guest handoff hooks in (``guest_handoff``): a free

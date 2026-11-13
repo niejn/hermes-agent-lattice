@@ -2,13 +2,13 @@
  * Built-in desktop themes. Names match the CLI skins / dashboard presets.
  * Add new themes here — no code changes needed elsewhere.
  *
- * The palette-bearing skins (nous, catppuccin, everforest, solarized) are forks
+ * The palette-bearing skins (langton, catppuccin, everforest, solarized) are forks
  * of their VS Code originals, converted by `buildThemeFromMarketplace` (see
  * ./install.ts) from the extensions below — the same path a Marketplace import
  * takes, so each is identical to installing the extension by hand and costs the
  * user neither the download nor the install step.
  *
- *   nous       ← github.github-vscode-theme   (Light Default / Dark Default)
+ *   langton       ← github.github-vscode-theme   (Light Default / Dark Default)
  *   catppuccin ← Catppuccin.catppuccin-vsc    (Latte / Mocha)
  *   everforest ← sainnhe.everforest
  *   solarized  ← ryanolsonx.solarized
@@ -46,22 +46,22 @@ const SYSTEM_MONO =
 export const DEFAULT_TYPOGRAPHY: DesktopThemeTypography = { fontSans: SYSTEM_SANS, fontMono: SYSTEM_MONO }
 
 /**
- * Nous — the canonical Hermes desktop identity, forked from the GitHub VS Code
+ * Langton — the canonical Lattice desktop identity, forked from the GitHub VS Code
  * theme (github.github-vscode-theme). Light is GitHub Light Default, dark is
  * GitHub Dark Default, both converted through the same path a Marketplace
  * install takes, so the palette here is byte-identical to importing the
  * extension yourself.
  *
- * Typography stays Hermes's own: a VS Code theme carries no font opinion, and
+ * Typography stays Lattice's own: a VS Code theme carries no font opinion, and
  * these are the stacks every skin has been rendering with.
  */
 /**
  * GitHub — the upstream palette, unmodified.
  *
- * `nous` is a fork of this with its own accent, so shipping both keeps the
+ * `langton` is a fork of this with its own accent, so shipping both keeps the
  * original available on its own terms instead of only existing as the thing
- * nous diverged from. Everything but the accent family is identical between
- * them; separate presets are what let nous's accent move without silently
+ * langton diverged from. Everything but the accent family is identical between
+ * them; separate presets are what let langton's accent move without silently
  * redefining what "GitHub" means.
  */
 export const githubTheme: DesktopTheme = {
@@ -117,7 +117,7 @@ export const githubTheme: DesktopTheme = {
 /** Catppuccin — Latte in light, Mocha in dark (Catppuccin.catppuccin-vsc). */
 
 /**
- * Nous — the canonical Hermes desktop identity: GitHub's chrome carrying Nous
+ * Langton — the canonical Lattice desktop identity: GitHub's chrome carrying Langton
  * blue. Forked from github.github-vscode-theme (Light Default / Dark Default),
  * with only the accent family re-seeded; every neutral is upstream's.
  *
@@ -129,8 +129,8 @@ export const githubTheme: DesktopTheme = {
  */
 export const nousTheme: DesktopTheme = {
   name: 'nous',
-  label: 'Nous',
-  description: 'GitHub chrome, Nous blue accent',
+  label: 'Langton',
+  description: 'GitHub chrome, Langton blue accent',
   ...THEME_PRESET_PALETTES.nous,
   typography: {
     fontSans: SYSTEM_SANS,
@@ -324,12 +324,12 @@ export const solarizedTheme: DesktopTheme = {
 }
 
 /**
- * Nous Alt — the hand-authored Nous from before the GitHub fork. Light is
+ * Langton Alt — the hand-authored Langton from before the GitHub fork. Light is
  * glass neutrals with brand blue; dark is cream on mission-blue.
  */
 export const nousAltTheme: DesktopTheme = {
   name: 'nous-alt',
-  label: 'Nous Alt',
+  label: 'Langton Alt',
   description: 'Glass neutrals, cream on mission-blue',
   ...THEME_PRESET_PALETTES['nous-alt'],
   typography: {
@@ -345,7 +345,7 @@ export const nousAltTheme: DesktopTheme = {
 // one change: the ink. The CLI's `#5C4718` is a single-weight terminal color,
 // but Desktop sets secondary and tertiary text at 74% / 54% of it, which left
 // them at 4.2:1 / 2.7:1. A deeper ink of the same brown gives 6.5:1 / 3.5:1,
-// the levels Nous Light has.
+// the levels Langton Light has.
 const CLASSIC_DARK_SKIN_COLORS = {
   status_bar_bg: '#1a1a2e',
   banner_text: '#FFF8DC',
@@ -369,16 +369,16 @@ const CLASSIC_LIGHT_SKIN_COLORS = {
 const classicPalette = (colors: Record<string, string>) => skinToDesktopTheme({ name: 'classic', colors })!.colors
 
 /**
- * Classic Hermes — the CLI's stock `default` skin (gold on navy), offered as a
+ * Classic Lattice — the CLI's stock `default` skin (gold on navy), offered as a
  * Desktop pick under its OWN id. Never `default`: stock config ships
- * `display.skin: default`, and Desktop reads that as "no pick" (→ nous), so a
+ * `display.skin: default`, and Desktop reads that as "no pick" (→ langton), so a
  * user only ever gets Classic by choosing it (#76579). Both palettes go through
  * the converter a backend skin takes, so each mode paints what the CLI paints
  * in a dark or light terminal.
  */
 export const classicTheme: DesktopTheme = {
   name: 'classic',
-  label: 'Classic Hermes',
+  label: 'Classic Lattice',
   description: "Gold on navy, the CLI's original look",
   colors: classicPalette(CLASSIC_LIGHT_SKIN_COLORS),
   darkColors: classicPalette(CLASSIC_DARK_SKIN_COLORS)
@@ -464,5 +464,5 @@ export const DEFAULT_SKIN_NAME = 'nous'
 /** Names that no longer resolve to a skin of their own. A stored pick of one
  *  falls back to DEFAULT_SKIN_NAME, and a cached backend theme under one is
  *  dropped (the reverted #130015 build cached the CLI `default` skin as a
- *  second "Classic Hermes"). */
+ *  second "Classic Lattice"). */
 export const RETIRED_SKINS = new Set(['nous-light', 'default', 'gold'])

@@ -1,4 +1,4 @@
-"""Firecrawl web search + extract provider (direct SDK, keyless cloud, or Nous tool-gateway).
+"""Firecrawl web search + extract provider (direct SDK, keyless cloud, or Langton tool-gateway).
 
 Config: ``web.backend`` / ``web.search_backend`` / ``web.extract_backend: firecrawl``.
 Env: FIRECRAWL_API_KEY, FIRECRAWL_API_URL (self-hosted), FIRECRAWL_GATEWAY_URL / TOOL_GATEWAY_*.
@@ -92,7 +92,7 @@ def _is_explicit_firecrawl_selection() -> bool:
 
 
 def _use_keyless_ring(capability: Optional[str] = None) -> bool:
-    """Route via the keyless ring only with no direct credentials, when the managed Nous
+    """Route via the keyless ring only with no direct credentials, when the managed Langton
     gateway isn't the selected path for *capability*, and the keyless tier isn't disabled or pinned paid."""
     if _env("FIRECRAWL_API_KEY") or _env("FIRECRAWL_API_URL"):
         return False
@@ -139,7 +139,7 @@ def _get_firecrawl_gateway_url() -> str:
 
 
 def _is_tool_gateway_ready() -> bool:
-    """True when gateway URL + Nous Subscriber token are available."""
+    """True when gateway URL + Langton Subscriber token are available."""
     return _gateway.resolve_managed_tool_gateway("firecrawl", token_reader=_gateway.peek_nous_access_token) is not None
 
 
@@ -158,7 +158,7 @@ def check_firecrawl_api_key() -> bool:
 
 
 def is_managed_route(capability: Optional[str] = None) -> bool:
-    """True when Firecrawl calls for *capability* go through the Nous Tool Gateway rather than the user's
+    """True when Firecrawl calls for *capability* go through the Langton Tool Gateway rather than the user's
     own key / instance — the same decision :func:`_get_firecrawl_client` makes, without building a client."""
     from tools.tool_backend_helpers import NOUS_MANAGED_PROVIDER, read_web_capability_selection
     selected = read_web_capability_selection(capability)
@@ -168,14 +168,14 @@ def is_managed_route(capability: Optional[str] = None) -> bool:
 
 
 def _firecrawl_backend_help_suffix() -> str:
-    return ", or use the Nous Tool Gateway via your subscription (FIRECRAWL_GATEWAY_URL or TOOL_GATEWAY_DOMAIN)" if _backend_helpers.managed_nous_tools_enabled() else ""
+    return ", or use the Langton Tool Gateway via your subscription (FIRECRAWL_GATEWAY_URL or TOOL_GATEWAY_DOMAIN)" if _backend_helpers.managed_nous_tools_enabled() else ""
 
 
 def _get_firecrawl_client(capability: Optional[str] = None) -> Any:
     """Get or create the cached Firecrawl client. Strict selection semantics on the stored selection for
     *capability* (``web.<capability>_backend``, else the shared ``web`` selection): ``"nous"`` → managed Tool
     Gateway ONLY; any other stored backend → direct Firecrawl ONLY (never a silent managed fallback billed to
-    Nous); never-configured → direct when present, else managed. Raises ValueError when the resolved path is
+    Langton); never-configured → direct when present, else managed. Raises ValueError when the resolved path is
     unusable."""
     wt = _wt()
     from tools.tool_backend_helpers import NOUS_MANAGED_PROVIDER, read_web_capability_selection, selection_error
@@ -191,13 +191,13 @@ def _get_firecrawl_client(capability: Optional[str] = None) -> Any:
     def _unconfigured_message() -> str:
         message = "Web tools are not configured. Set FIRECRAWL_API_KEY for cloud Firecrawl or set FIRECRAWL_API_URL for a self-hosted Firecrawl instance."
         if _backend_helpers.managed_nous_tools_enabled():
-            return message + " With your Nous subscription you can also use the Tool Gateway. run `hermes tools` and select Nous Subscription as the web provider."
+            return message + " With your Langton subscription you can also use the Tool Gateway. run `hermes tools` and select Langton Subscription as the web provider."
         return message + " " + _backend_helpers.nous_tool_gateway_unavailable_message("managed Firecrawl web tools")
 
     # (resolved config, log detail, error message) per selection state; the message is built lazily.
     if selected == NOUS_MANAGED_PROVIDER:
-        resolved, log, message = _managed(), "the Nous Subscription web selection is stored but the tool gateway is unavailable.", lambda: selection_error(
-            "web", NOUS_MANAGED_PROVIDER, "the Nous Tool Gateway is not available (not entitled or unreachable)")
+        resolved, log, message = _managed(), "the Langton Subscription web selection is stored but the tool gateway is unavailable.", lambda: selection_error(
+            "web", NOUS_MANAGED_PROVIDER, "the Langton Tool Gateway is not available (not entitled or unreachable)")
     elif selected is not None or _is_explicit_firecrawl_selection():
         # Stored vendor selection (shared name, or a per-capability key naming firecrawl): direct only (no
         # credentials → explicit selection unlocks keyless cloud mode). A per-capability key naming ANOTHER
@@ -384,6 +384,6 @@ class FirecrawlWebSearchProvider(BaseWebSearchProvider):
     def get_setup_schema(self) -> dict[str, Any]:
         return setup_schema(
             "Firecrawl", "keyless/paid · optional gateway",
-            "Full search + extract; supports keyless cloud, direct API, and Nous tool-gateway routing.",
+            "Full search + extract; supports keyless cloud, direct API, and Langton tool-gateway routing.",
             "FIRECRAWL_API_KEY", "Firecrawl API key (optional; blank = keyless cloud or self-hosted)", "https://docs.firecrawl.dev/introduction",
         )

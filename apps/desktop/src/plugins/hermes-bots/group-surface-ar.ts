@@ -109,7 +109,7 @@ export const GROUP_SURFACE_AR = {
     statusUnknown: "الحالة غير معروفة",
     unavailable: "غير متاح",
     retryNow: "إعادة المحاولة الآن",
-    rosterUnavailable: reason => `القائمة غير متاحة: ${reason}. إذا كانت البوابة لا تدعم profiles.list، فحدّث Hermes وأعد تشغيل البوابة.`,
+    rosterUnavailable: reason => `القائمة غير متاحة: ${reason}. إذا كانت البوابة لا تدعم profiles.list، فحدّث Lattice وأعد تشغيل البوابة.`,
     waitingForGateway: "في انتظار الاتصال بالبوابة… (قد تستغرق البوابات البعيدة بضع ثوانٍ؛ تُعاد المحاولة تلقائيًا)"
   },
   sections: {
@@ -156,7 +156,7 @@ export const GROUP_SURFACE_AR = {
     attentionFallback: "يحتاج إلى انتباه",
     attentionProviderAuth: "سجّل الدخول مجددًا لهذا الملف الشخصي",
     attentionQuota: "نفدت الحصة أو الرصيد",
-    attentionMissingConfig: "لم يُضبط المزوّد — نفّذ hermes model",
+    attentionMissingConfig: "لم يُضبط المزوّد — نفّذ lattice model",
     attentionBlocked: "الروبوت محظور — راجع آخر رسالة له",
     editMenu: "تعديل…",
     duplicate: "إنشاء نسخة",

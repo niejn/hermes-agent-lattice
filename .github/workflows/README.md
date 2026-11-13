@@ -375,7 +375,7 @@ There are three release paths, and none of them starts from a tag push:
 | | Canary | Stable | One-off / channel build |
 |---|---|---|---|
 | Entry | `canary-release.yml` (daily cron or dispatch) | `python scripts/release.py release …` → dispatches `stable-release.yml` | `python scripts/release.py --build-commit REV [--channel NAME] --publish` → dispatches `desktop-bundled-release.yml` |
-| Identity | `v<stable>+canary.<UTC>` tag, separate `hermes-canary` app | `rc.<N>-vX.Y.Z` attempt ref, then a `vX.Y.Z` receipt at publish | commit: `hermes-<sha7>` app; channel: `Hermes NAME` or stable branding |
+| Identity | `v<stable>+canary.<UTC>` tag, separate `hermes-canary` app | `rc.<N>-vX.Y.Z` attempt ref, then a `vX.Y.Z` receipt at publish | commit: `hermes-<sha7>` app; channel: `Lattice NAME` or stable branding |
 | Tests | native smokes of each bundle | full CI (strict) + Docker + Nix + PM bundle + install/update E2E + signed upgrade acceptance, per the claim's lanes | native smokes |
 | Publishes | canary feeds, canary GitHub prerelease | Docker versioned tag → `stable`/`latest`, R2 stable feeds, App Installer, Store, APT, GitHub release | commit/channel pages under R2; never a feed or Store |
 

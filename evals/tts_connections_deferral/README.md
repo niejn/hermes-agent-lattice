@@ -23,7 +23,7 @@ TCD_... python3 run.py qwen/qwen3.8-27b 3
 python3 run.py --report
 ```
 
-Inference defaults to the Nous Portal agent key, read fresh from `$HERMES_HOME/auth.json` for every
+Inference defaults to the Langton Portal agent key, read fresh from `$HERMES_HOME/auth.json` for every
 cell and passed as a `custom` provider; set `TCD_INFERENCE_URL` + `TCD_INFERENCE_KEY` for another endpoint.
 
 ## Sandboxed multi-arm battery (manage_connections only)
@@ -44,7 +44,7 @@ TCD_RESULTS=<dir> python3 battery.py --report
 
 Every cell runs in bubblewrap (`bwrap` and `socat` must be installed): its own network namespace with
 only loopback and the relay socket, `/home`, `/tmp`, `/run`, `/mnt` replaced by empty tmpfs, the tree and
-the interpreter bound read-only, one writable dir at `/home/cell`. The operator's Hermes home, tokens
+the interpreter bound read-only, one writable dir at `/home/cell`. The operator's Lattice home, tokens
 and CLI do not exist inside a cell, and `relay.jsonl` lists every outbound request the battery made.
 The dry cell checks all of that plus the stubs (inline executor, registry and bridge paths) before any
 model is called. Battery: four MCP-install phrasings (5 reps), four hosted-connection tasks, two

@@ -1,6 +1,6 @@
 """The plane credential (design §4.4 step 2, D26, D31, D32).
 
-Cloud: the Nous access token from the profile's ``auth.json`` (``resolve_nous_access_token``).
+Cloud: the Langton access token from the profile's ``auth.json`` (``resolve_nous_access_token``).
 On-prem: an IdP workload token from the OAuth2 client-credentials grant, configured by
 ``GATEWAY_RELAY_IDP_*`` values in ``.env``. Never from config.yaml (the config is what this token
 fetches) and never from a secret source: :data:`PLANE_CREDENTIAL_ENV_NAMES` lists every env name

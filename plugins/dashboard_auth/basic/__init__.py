@@ -4,7 +4,7 @@ Login is a credential form (``supports_password`` + ``complete_password_login``)
 verify, refresh, ws-tickets and logout are the shared framework. Sessions are stateless
 HMAC-signed tokens (no IDP, no database) whose key is derived from the signing secret AND the
 configured credential, so changing the username or password ends every session; logout records
-the login's session id in ``dashboard_auth/basic-revoked-sessions.json`` under the Hermes home,
+the login's session id in ``dashboard_auth/basic-revoked-sessions.json`` under the Lattice home,
 which every renewal of that login carries, so a copied token of it stops working too. Passwords use stdlib scrypt and login always hashes
 even for an unknown username (no username-enumeration timing oracle). Config: ``dashboard.
 basic_auth.{username,password_hash|password,secret,session_ttl_seconds}`` or the

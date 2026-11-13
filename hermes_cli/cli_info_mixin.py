@@ -715,9 +715,9 @@ class CLIInfoMixin:
         print()
 
     def _show_usage(self):
-        """Rate limits + session token usage (when a live agent exists) + Nous credits.
+        """Rate limits + session token usage (when a live agent exists) + Langton credits.
 
-        The Nous credits block is agent-independent (portal fetch), so it runs even with no live
+        The Langton credits block is agent-independent (portal fetch), so it runs even with no live
         agent — the TUI's /usage slash-worker resumes the session WITHOUT building an agent.
         """
         from cli import datetime, format_duration_compact

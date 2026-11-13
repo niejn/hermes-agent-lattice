@@ -342,7 +342,7 @@ def _validate_ollama_native(req: _Request) -> Optional[dict[str, Any]]:
     if models is None:
         return _soft_accept(
             f"Note: could not reach this Ollama endpoint's `/api/tags` model listing to validate `{req.requested}`. "
-            "Hermes will save the model name, but local Ollama model discovery could not verify it."
+            "Lattice will save the model name, but local Ollama model discovery could not verify it."
         )
     match = _match_in_catalog(req.lookup, models, suggest_label="Similar local Ollama models")
     if match.exact:
@@ -506,7 +506,7 @@ def _validate_minimax(req: _Request) -> Optional[dict[str, Any]]:
     return match.verdict(req) or _soft_accept(
         f"Note: `{req.requested}` was not found in the MiniMax catalog."
         f"{match.suggestion_text}"
-        "\n  MiniMax does not expose a /models endpoint, so Hermes cannot verify the model name."
+        "\n  MiniMax does not expose a /models endpoint, so Lattice cannot verify the model name."
         "\n  The model may still work if it exists on the server."
     )
 
@@ -670,7 +670,7 @@ def _validate_live_listing(req: _Request) -> Optional[dict[str, Any]]:
     # time, so mirror that source of truth for per-message /model validation.
     if req.normalized == "nous" and req.lookup.lower() in _nous_portal_recommended_names():
         return _accept_with_note(f"Note: `{req.requested}` was not found in the live /v1/models listing "
-                                 "but is a current Nous Portal recommendation — accepted.")
+                                 "but is a current Langton Portal recommendation — accepted.")
     return _reject(f"Model `{req.requested}` was not found in this provider's model listing.{match.suggestion_text}")
 
 

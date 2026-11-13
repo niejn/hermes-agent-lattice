@@ -593,7 +593,7 @@ def _init_prompt_cache_config(agent):
         # Config values and traceback frames may contain credentials.
         logger.warning(
             "Agent configuration for prompt_caching.cache_ttl could not be loaded (%s); "
-            "using default prompt caching settings. Check the active Hermes Python "
+            "using default prompt caching settings. Check the active Lattice Python "
             "environment and dependencies; run 'hermes config check' after "
             "configuration imports work again.",
             type(exc).__name__,
@@ -1953,7 +1953,7 @@ def _warn_nonagentic_hermes_model(agent):
         _hermes_warn = _check_hermes_model_warning(agent.model or "")
         if _hermes_warn:
             _user_msg = (
-                "⚠ Nous Research Hermes 3 & 4 models are NOT agentic — they "
+                "⚠ Langton Photonics Lattice 3 & 4 models are NOT agentic — they "
                 "lack reliable tool-calling for agent workflows (delegation, "
                 "cron, proactive tools). Consider an agentic model instead "
                 "(Claude, GPT, Gemini, Qwen-Coder, etc.)."
@@ -2184,7 +2184,7 @@ def init_agent(
         logger.warning(
             "Agent configuration could not be loaded (%s); using defaults for "
             "memory, skills, compression and related settings. Check the active "
-            "Hermes Python environment and dependencies; run 'hermes config check' "
+            "Lattice Python environment and dependencies; run 'hermes config check' "
             "after configuration imports work again.",
             type(exc).__name__,
         )

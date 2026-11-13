@@ -2,5 +2,7 @@
   <!-- app-icon background, macOS HIG grid, light: white rounded square (824x824, r=185.4)
        centered in the 1024 canvas with 100px transparent margins, so the icon matches the
        size of Apple-template neighbors in the Dock -->
-  <rect x="100" y="100" width="824" height="824" rx="185.4" fill="#ffffff"/>
+  <rect x="100" y="100" width="824" height="824" rx="185.4" fill="#0C3C84"/>
+  <!-- gold swoosh from the official lt-icon -->
+  <path d="M180 390 C 258 140, 766 140, 844 390" fill="none" stroke="#FCA818" stroke-width="42" stroke-linecap="round"/>
 </svg>

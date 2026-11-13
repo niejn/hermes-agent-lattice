@@ -430,7 +430,7 @@ describe('browser-hosted Desktop bridge', () => {
     ])
     await expect(win.hermesDesktop!.getAgentRoster?.()).resolves.toMatchObject({
       agents: [
-        { connectionId: 'local', connectionKind: 'local', handle: 'hermes', profile: 'default' },
+        { connectionId: 'local', connectionKind: 'local', handle: 'lattice', profile: 'default' },
         { connectionId: 'local', connectionKind: 'local', handle: 'research', profile: 'research' }
       ],
       primaryConnectionId: 'local',

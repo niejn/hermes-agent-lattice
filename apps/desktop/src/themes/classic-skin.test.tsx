@@ -9,7 +9,7 @@ import { skinToDesktopTheme } from './skin'
 // (`display.skin: default`): the CLI's classic gold skin, by name `default`.
 const stockDefaultSkin = {
   name: 'default',
-  description: 'Classic Hermes — gold and kawaii',
+  description: 'Classic Lattice — gold and kawaii',
   colors: { banner_text: '#FFF8DC', status_bar_bg: '#1a1a2e', ui_accent: '#FFBF00', banner_border: '#CD7F32' }
 }
 
@@ -58,7 +58,7 @@ async function launch(localSkin: typeof stockDefaultSkin | null) {
   return { api, bootPaint, connect }
 }
 
-describe('Classic Hermes is an explicit Desktop pick, never inferred from stock config (#76579)', () => {
+describe('Classic Lattice is an explicit Desktop pick, never inferred from stock config (#76579)', () => {
   beforeEach(() => window.localStorage.clear())
 
   afterEach(() => {
@@ -71,7 +71,7 @@ describe('Classic Hermes is an explicit Desktop pick, never inferred from stock 
   it.each([
     ['display.skin: default', stockDefaultSkin],
     ['display.skin unset', null]
-  ])('a stock user (%s) with no Desktop pick paints Nous on boot, connect and relaunch', async (_label, local) => {
+  ])('a stock user (%s) with no Desktop pick paints Langton on boot, connect and relaunch', async (_label, local) => {
     let run = await launch(local)
     expect(run.bootPaint).toBe('nous')
     run.connect()
@@ -85,9 +85,9 @@ describe('Classic Hermes is an explicit Desktop pick, never inferred from stock 
     expect(paintedSkin()).toBe('nous')
   })
 
-  it('a Classic pick paints gold/navy (dark mode) and survives connect, reconnect and relaunch; a later Nous pick sticks', async () => {
+  it('a Classic pick paints gold/navy (dark mode) and survives connect, reconnect and relaunch; a later Langton pick sticks', async () => {
     let run = await launch(stockDefaultSkin)
-    expect(run.api.theme?.availableThemes.find(t => t.name === 'classic')?.label).toBe('Classic Hermes')
+    expect(run.api.theme?.availableThemes.find(t => t.name === 'classic')?.label).toBe('Classic Lattice')
 
     act(() => run.api.theme?.setMode('dark'))
     act(() => run.api.theme?.setTheme('classic'))
@@ -105,28 +105,28 @@ describe('Classic Hermes is an explicit Desktop pick, never inferred from stock 
     expect(paintedSkin()).toBe('classic')
     expect(cssVar('--theme-background-seed')).toBe('#1a1a2e')
 
-    act(() => run.api.theme?.setTheme('nous'))
+    act(() => run.api.theme?.setTheme('langton'))
     run = await launch(stockDefaultSkin)
     run.connect()
     expect(run.bootPaint).toBe('nous')
     expect(paintedSkin()).toBe('nous')
   })
 
-  it('/skin gold and /skin hermes select Classic; /skin default stays the Desktop default (Nous)', async () => {
+  it('/skin gold and /skin lattice select Classic; /skin default stays the Desktop default (Langton)', async () => {
     const run = await launch(stockDefaultSkin)
 
     act(() => void run.api.skin?.('gold'))
     expect(run.api.theme?.themeName).toBe('classic')
 
-    act(() => void run.api.skin?.('nous'))
-    act(() => void run.api.skin?.('hermes'))
+    act(() => void run.api.skin?.('langton'))
+    act(() => void run.api.skin?.('lattice'))
     expect(run.api.theme?.themeName).toBe('classic')
 
     act(() => void run.api.skin?.('default'))
     expect(run.api.theme?.themeName).toBe('nous')
   })
 
-  it('a cache left by the reverted #130015 build (CLI `default` as "Classic Hermes") shows ONE Classic and is purged', async () => {
+  it('a cache left by the reverted #130015 build (CLI `default` as "Classic Lattice") shows ONE Classic and is purged', async () => {
     // Exactly what that build wrote: the converted CLI `default` skin, relabelled.
     window.localStorage.setItem(
       BACKEND_THEMES_KEY,
@@ -134,7 +134,7 @@ describe('Classic Hermes is an explicit Desktop pick, never inferred from stock 
         default: {
           ...skinToDesktopTheme(stockDefaultSkin),
           description: stockDefaultSkin.description,
-          label: 'Classic Hermes'
+          label: 'Classic Lattice'
         }
       })
     )
@@ -143,9 +143,9 @@ describe('Classic Hermes is an explicit Desktop pick, never inferred from stock 
     run.connect()
 
     const themes = run.api.theme?.availableThemes ?? []
-    expect(themes.filter(t => t.label === 'Classic Hermes').map(t => t.name)).toEqual(['classic'])
+    expect(themes.filter(t => t.label === 'Classic Lattice').map(t => t.name)).toEqual(['classic'])
     expect(themes.some(t => t.name === 'default')).toBe(false)
-    expect(run.api.skin?.('list').match(/Classic Hermes/g)).toHaveLength(1)
+    expect(run.api.skin?.('list').match(/Classic Lattice/g)).toHaveLength(1)
     expect(JSON.parse(window.localStorage.getItem(BACKEND_THEMES_KEY) ?? '{}')).not.toHaveProperty('default')
   })
 

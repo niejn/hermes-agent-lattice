@@ -49,7 +49,7 @@ _HOME_PROFILE_NAMES: dict[tuple[str, str], str] = {}
 
 
 def home_profile_name() -> str:
-    """Profile name of the current Hermes home (the process home, or a routed turn's bound home);
+    """Profile name of the current Lattice home (the process home, or a routed turn's bound home);
     ``"default"`` when it cannot be resolved. One lookup for every reader that must agree: the
     persistent-Docker container key, the container's profile label, the name the TUI stamps on its
     sessions (``get_active_profile_name``, so ``custom`` for a home inside the root that is not a
@@ -205,7 +205,7 @@ def _in_sandbox_home(cwd: Any, env: Any) -> bool:
 
 @functools.lru_cache(maxsize=32)
 def _launch_dirs(home: str, native_home: str) -> frozenset[str]:
-    """The lexical launch set for one Hermes home. The root depends on that home and the platform default home
+    """The lexical launch set for one Lattice home. The root depends on that home and the platform default home
     (``native_home``, which keys the cache too); the install root is fixed per process. Cached: the shared root
     memo holds a single entry and thrashed when called once per command."""
     from hermes_cli._startup_fast import project_root_str
@@ -216,8 +216,8 @@ def _launch_dirs(home: str, native_home: str) -> frozenset[str]:
 
 
 def _is_container_launch_dir(path: str) -> bool:
-    """True when *path* (absolute) IS a directory Hermes starts in inside a container: the Hermes home, the
-    Hermes root (``/opt/data`` in the official image, which is also the image user's HOME), ``home/`` under
+    """True when *path* (absolute) IS a directory Lattice starts in inside a container: the Lattice home, the
+    Lattice root (``/opt/data`` in the official image, which is also the image user's HOME), ``home/`` under
     each, or the install root (``/opt/hermes``, as its real path). Those exist only in the container, never on
     an SSH target. The candidate is compared lexically: a symlink on this machine says nothing about the target.
     On a host they are left alone, since an SSH target may share the layout (``~/.hermes`` on an NFS home)."""
@@ -237,11 +237,11 @@ def coerce_ssh_remote_cwd(cwd: str | None, env_type: str | None) -> str | None:
     """Cwd to send to an SSH backend.
 
     ``~``-prefixed paths stay literal so the remote shell expands them to the
-    SSH user's home. The Hermes process's subprocess home (``/opt/data/home``
+    SSH user's home. The Lattice process's subprocess home (``/opt/data/home``
     in the official Docker image) is a directory on the machine running
-    Hermes: it and anything under it are rewritten onto the remote ``~``, since
+    Lattice: it and anything under it are rewritten onto the remote ``~``, since
     ``cd`` into the host path exits 126 on the target. In a container, the
-    directories Hermes starts in (the Hermes home, its root ``/opt/data``,
+    directories Lattice starts in (the Lattice home, its root ``/opt/data``,
     which is also the image user's HOME, ``home/`` under each, the install
     root) map to ``~`` too; folders below them are kept, except under the
     subprocess home (above), since a remote may use the same path. A

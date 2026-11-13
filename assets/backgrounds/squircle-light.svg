@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <!-- app-icon background, light: white rounded square (rx=245), transparent corners -->
-  <rect x="0" y="0" width="1024" height="1024" rx="245" fill="#ffffff"/>
+  <!-- app-icon background, light: brand navy rounded square (rx=245), transparent corners -->
+  <rect x="0" y="0" width="1024" height="1024" rx="245" fill="#0C3C84"/>
+  <!-- gold swoosh from the official lt-icon -->
+  <path d="M180 390 C 258 140, 766 140, 844 390" fill="none" stroke="#FCA818" stroke-width="42" stroke-linecap="round"/>
 </svg>

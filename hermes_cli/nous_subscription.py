@@ -1,4 +1,4 @@
-"""Helpers for Nous subscription managed-tool capabilities."""
+"""Helpers for Langton subscription managed-tool capabilities."""
 
 from __future__ import annotations
 
@@ -285,13 +285,13 @@ def _web_feature(web_cfg: dict[str, object], tool_enabled: bool, managed: bool, 
 
 
 def managed_image_partner(config: dict[str, object]) -> Optional[str]:
-    """Partner the image request is dispatched to (``"FAL"``, ``"Krea"`` or ``"Nous Portal"``);
+    """Partner the image request is dispatched to (``"FAL"``, ``"Krea"`` or ``"Langton Portal"``);
     ``None`` when a direct vendor owns it. Reads the stored values the way the runtime dispatcher
     does, so the label and the route cannot disagree."""
     from tools.image_generation_managed import FAL, KREA, PORTAL, managed_route
 
     section = _section(config, "image_gen")
-    return {FAL: "FAL", KREA: "Krea", PORTAL: "Nous Portal"}.get(
+    return {FAL: "FAL", KREA: "Krea", PORTAL: "Langton Portal"}.get(
         managed_route(section.get("provider"), section.get("model")))
 
 
@@ -301,7 +301,7 @@ def _fal_feature(key: str, tool_enabled: bool, direct: bool, managed: bool, sele
     if selected not in (None, "nous") or (selected is None and direct):
         label = "FAL"
     else:
-        label = "Nous Subscription" if (fal_managed or selected == "nous") else ""
+        label = "Langton Subscription" if (fal_managed or selected == "nous") else ""
     return _state(
         key, available=bool(managed or direct), active=bool(tool_enabled and (fal_managed or direct)),
         managed_by_nous=fal_managed, toolset_enabled=tool_enabled, current_provider=label,
@@ -592,7 +592,7 @@ def prompt_enable_tool_gateway(config: dict[str, object], *, force_fresh: bool =
     pool_only = bool(
         account_info and account_info.paid_service_access is not True and account_info.tool_access is not None and account_info.tool_access.enabled
     )
-    source_label = "free tool pool" if pool_only else "Nous subscription"
+    source_label = "free tool pool" if pool_only else "Langton subscription"
 
     # Unconfigured tools first (pre-checked for new users), then tools with the user's own key
     # (unchecked). Tools previously offered and left unchecked are recorded in
@@ -607,8 +607,8 @@ def prompt_enable_tool_gateway(config: dict[str, object], *, force_fresh: bool =
     ]
     pre_selected = [i for i, k in enumerate(unconfigured) if k not in declined]
     title = (
-        "Your free Nous tool pool — pick the tools to enable:" if pool_only
-        else "Your Nous subscription includes the Tool Gateway — pick the tools to enable:"
+        "Your free Langton tool pool — pick the tools to enable:" if pool_only
+        else "Your Langton subscription includes the Tool Gateway — pick the tools to enable:"
     )
     try:
         chosen_idx = prompt_checklist(title, labels, pre_selected)
@@ -633,8 +633,8 @@ def prompt_enable_tool_gateway(config: dict[str, object], *, force_fresh: bool =
 # Inline Nous Portal login for the Tool Gateway picker (`hermes tools`)
 
 
-def ensure_nous_portal_access(*, capability: str = "the Nous Tool Gateway", coverage_category: Optional[str] = None) -> bool:
-    """Make sure the user is entitled to the Nous Tool Gateway, logging in if needed.
+def ensure_nous_portal_access(*, capability: str = "the Langton Tool Gateway", coverage_category: Optional[str] = None) -> bool:
+    """Make sure the user is entitled to the Langton Tool Gateway, logging in if needed.
 
     Only performs the device-code OAuth (when not logged in) and refreshes entitlement — no model
     or provider switch. Entitlement is paid access OR a live free pool; with ``coverage_category``
@@ -669,7 +669,7 @@ def _confirm(prompt: str) -> Optional[bool]:
 
 
 def _run_nous_portal_login_only(*, capability: str) -> bool:
-    """Run the Nous Portal device-code OAuth and persist credentials only (no model selection, no
+    """Run the Langton Portal device-code OAuth and persist credentials only (no model selection, no
     provider switch, no Tool Gateway bulk prompt). ``False`` if the user declined or the flow failed."""
     try:
         from hermes_cli import auth
@@ -678,12 +678,12 @@ def _run_nous_portal_login_only(*, capability: str) -> bool:
         return False
     print()
     print(f"  {capability} requires a Nous Portal login.")
-    proceed = _confirm("  Log in to Nous Portal now? [Y/n]: ")
+    proceed = _confirm("  Log in to Langton Portal now? [Y/n]: ")
     if proceed is None:
         print()
         return False
     if not proceed:
-        print("  Skipped Nous Portal login.")
+        print("  Skipped Langton Portal login.")
         return False
     try:
         # Snapshot active_provider so a tool-config login never silently switches inference to Nous.
@@ -694,7 +694,7 @@ def _run_nous_portal_login_only(*, capability: str) -> bool:
         from hermes_cli.anon_auth import is_guest_state
 
         shared = auth._read_shared_nous_state()
-        if shared and not is_guest_state(shared) and _confirm("  Found existing Nous OAuth credentials. Import them? [Y/n]: ") is not False:
+        if shared and not is_guest_state(shared) and _confirm("  Found existing Langton OAuth credentials. Import them? [Y/n]: ") is not False:
             auth_state = auth._try_import_shared_nous_state(timeout_seconds=15.0)
         if auth_state is None:
             auth_state = auth._nous_device_code_login()
@@ -712,7 +712,7 @@ def _run_nous_portal_login_only(*, capability: str) -> bool:
         handoff = drain()  # a replaced free tier hands its apps over once both saves land
         auth._sync_nous_pool_from_auth_store()
         settle_after_upgrade(auth_state)  # a config left on the free tier's route moves to the account
-        print("  Nous Portal login successful.")
+        print("  Langton Portal login successful.")
         for line in (line for view in handoff for line in result_lines(view)):
             print(f"  {line}")
         return True

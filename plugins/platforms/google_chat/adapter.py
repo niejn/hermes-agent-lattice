@@ -1301,7 +1301,7 @@ class GoogleChatAdapter(BasePlatformAdapter):
         return SendResult(success=True, message_id=resp.get("name"))
 
     async def send_typing(self, chat_id: str, metadata: Any = None) -> None:
-        """Post a visible 'Hermes is thinking…' marker (Chat has no typing API); ``send()``
+        """Post a visible 'Lattice is thinking…' marker (Chat has no typing API); ``send()``
         PATCHes it with the reply, ``on_processing_complete`` reaps it otherwise. Created in
         the user's thread (patch cannot move it). ``_keep_typing`` wraps this in
         ``wait_for(timeout=1.5)``: a cancelled create would still land an unrecorded card and
@@ -1783,8 +1783,8 @@ def register(ctx) -> None:
     """Plugin entry point: registers the ``google_chat`` adapter with the platform registry."""
     ctx.register_platform(
         name="google_chat",
-        dashboard_description="Connect Hermes to Google Chat via Cloud Pub/Sub.",
-        docs_url="https://hermes-agent.nousresearch.com/docs/user-guide/messaging/google_chat",
+        dashboard_description="Connect Lattice to Google Chat via Cloud Pub/Sub.",
+        docs_url="https://docs.langtonphotonics.com/docs/user-guide/messaging/google_chat",
         label="Google Chat",
         adapter_factory=lambda cfg: GoogleChatAdapter(cfg),
         check_fn=_check_for_registry,
@@ -1811,7 +1811,7 @@ def register(ctx) -> None:
             "in your response. Native file attachments require the user to run /setup-files once in their own DM — "
             "until they do, file requests fall back to a text notice with the host path. Do NOT generate interactive "
             "Card v2 buttons — Google Chat interactivity is not yet supported by this gateway; ask for typed "
-            "confirmations instead. While you are generating a response, a 'Hermes is thinking…' marker message "
+            "confirmations instead. While you are generating a response, a 'Lattice is thinking…' marker message "
             "appears in the space and is deleted once your response is ready. You do NOT have access to Google "
             "Chat-specific APIs — you cannot search space history, list space members, or manage spaces. Do not "
             "promise to perform these actions; explain that you can only read messages sent directly to you and "

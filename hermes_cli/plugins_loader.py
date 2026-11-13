@@ -182,7 +182,7 @@ def _serialized_replacement(method):
 
 @contextmanager
 def _plugin_home_scope(home: Path):
-    """Bind discovery and loading to the manager's immutable Hermes home."""
+    """Bind discovery and loading to the manager's immutable Lattice home."""
     token = set_hermes_home_override(home)
     try:
         yield
@@ -233,7 +233,7 @@ def missing_python_dependencies(manifest: Any) -> list[str]:
 
 
 def _declared_requirements(manifest: Any) -> tuple[str, ...]:
-    """What PM installs into Hermes's environment for this plugin: its declaration read the way
+    """What PM installs into Lattice's environment for this plugin: its declaration read the way
     admission reads it (``pm.plugin_declarations.read_python_declaration`` — an authored
     ``pyproject.toml`` first, then ``python_dependencies`` / ``pip_dependencies``; nothing for a
     ``python_runtime: external`` sidecar). A plugin with no directory (an entry point) has only its
@@ -249,10 +249,10 @@ def _declared_requirements(manifest: Any) -> tuple[str, ...]:
 
 
 def hermes_fit_error(manifest: Any) -> Optional[str]:
-    """Why this Hermes is not one the plugin accepts: ``requires_hermes``, then the plugin's own
+    """Why this Lattice is not one the plugin accepts: ``requires_hermes``, then the plugin's own
     requirement on ``hermes-agent``. PM's build leaves such a plugin out by the same gate
     (``pm.workspace.hermes_fit_error``), so it is skipped here rather than imported without its
-    dependencies, and loads again once Hermes fits."""
+    dependencies, and loads again once Lattice fits."""
     from hermes_cli.plugins_manifest import requires_hermes_error
 
     reason = requires_hermes_error(manifest)
@@ -523,7 +523,7 @@ class PluginLoaderMixin:
         if installed_in_selected_environment(missing):
             logger.warning(
                 "Plugin %s's Python dependencies were installed after this process started: %s. "
-                "A running process never switches dependency environments; restart Hermes "
+                "A running process never switches dependency environments; restart Lattice "
                 "(hermes gateway restart for the gateway) to load them.",
                 key, ", ".join(missing),
             )
@@ -531,7 +531,7 @@ class PluginLoaderMixin:
             logger.warning(
                 "Plugin %s declares Python dependencies that are not "
                 "installed: %s. For an enabled plugin, run hermes pm repair, "
-                "then restart Hermes. Discovery does not install dependencies.",
+                "then restart Lattice. Discovery does not install dependencies.",
                 key, ", ".join(missing),
             )
 

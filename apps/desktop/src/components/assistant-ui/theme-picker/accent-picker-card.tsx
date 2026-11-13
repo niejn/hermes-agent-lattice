@@ -13,7 +13,7 @@ import { CARD_ACTION_CLASS } from '../setup-beat/card-type'
 import { useLookPreview } from './look-preview'
 
 export interface AccentPickerCardProps {
-  /** Answers with a swatch id, `custom:#rrggbb`, or null for the theme's own accent (Nous blue); true once sent. */
+  /** Answers with a swatch id, `custom:#rrggbb`, or null for the theme's own accent (Langton blue); true once sent. */
   onContinue: (accent: null | string) => boolean
 }
 
@@ -29,7 +29,7 @@ export function AccentPickerCard({ onContinue }: AccentPickerCardProps) {
     <div className="grid gap-3">
       <div className="flex flex-wrap items-center gap-2.5 p-1" role="group">
         {accentsFor(renderedMode === 'dark').map(swatch => {
-          const value = swatch.id === 'nous' ? null : swatch.id
+          const value = swatch.id === 'langton' ? null : swatch.id
 
           return (
             <AccentSwatch

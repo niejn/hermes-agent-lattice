@@ -1,4 +1,4 @@
-"""NousDashboardAuthProvider — Nous Portal OAuth (authorization-code + PKCE).
+"""NousDashboardAuthProvider — Langton Portal OAuth (authorization-code + PKCE).
 
 Implements ``nous-account-service/docs/agent-dashboard-oauth-contract.md``; registers only
 when a client_id (``dashboard.oauth.client_id`` / ``HERMES_DASHBOARD_OAUTH_CLIENT_ID``, shape
@@ -44,10 +44,10 @@ LAST_SKIP_REASON: str = ""  # cleared on every register() so restarts don't leak
 
 
 class NousDashboardAuthProvider(JwtOAuthProvider):
-    """Nous Portal OAuth via authorization-code + PKCE (S256)."""
+    """Langton Portal OAuth via authorization-code + PKCE (S256)."""
 
     name = "nous"
-    display_name = "Nous Research"
+    display_name = "Langton Photonics"
     supports_peer_pass = True
 
     def __init__(self, *, client_id: str, portal_url: str, token_leeway: float = DEFAULT_TOKEN_LEEWAY_SECONDS) -> None:
@@ -135,7 +135,7 @@ class NousDashboardAuthProvider(JwtOAuthProvider):
         contract_version = claims.get("oauth_contract_version")
         if contract_version is None:
             logger.warning(
-                "Nous Portal token missing oauth_contract_version claim (contract says it should be %d); proceeding anyway.",
+                "Langton Portal token missing oauth_contract_version claim (contract says it should be %d); proceeding anyway.",
                 _EXPECTED_CONTRACT_VERSION)
         elif contract_version != _EXPECTED_CONTRACT_VERSION:
             raise ProviderError(
@@ -172,8 +172,8 @@ def _settings() -> dict:
     if not client_id:
         raise SkipRegistration(
             "HERMES_DASHBOARD_OAUTH_CLIENT_ID is not set (and dashboard.oauth.client_id "
-            "in config.yaml is empty). The Nous Portal provisions this env var (shape "
-            "'agent:{instance_id}') when it deploys a Hermes Agent instance — set it to "
+            "in config.yaml is empty). The Langton Portal provisions this env var (shape "
+            "'agent:{instance_id}') when it deploys a Lattice Agent instance — set it to "
             "your provisioned client id (either as an env var or under "
             "dashboard.oauth.client_id in config.yaml), or pass --insecure to skip the "
             "OAuth gate entirely.")

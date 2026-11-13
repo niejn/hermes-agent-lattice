@@ -33,7 +33,7 @@ def parse_bang_command(text: str) -> str:
     """The shell command inside a bang submission (``""`` when bare).
 
     ``!  ls -la`` -> ``ls -la``; ``!!`` -> ``!`` — a literal second bang belongs to the user's shell
-    (history expansion), not to Hermes.
+    (history expansion), not to Lattice.
     """
     return text.strip()[1:].strip() if is_bang_command(text) else ""
 

@@ -1,18 +1,18 @@
 /**
- * Hermes Bot Mode — a "one chat per agent" roster for the Hermes desktop.
+ * Lattice Bot Mode — a "one chat per agent" roster for the Lattice desktop.
  *
- * Left pane "Bots": one row per Hermes profile (a bot = an agent profile) with
+ * Left pane "Bots": one row per Lattice profile (a bot = an agent profile) with
  * a customizable avatar (shape + color + eyes, image, or pet). Click opens that
  * bot's chat; right-click → Edit Profile (avatar, title, description).
  * "New Bot" creates a profile — Name / Title / Description with an
  * "Advanced" disclosure for full profile config.
  *
- * Right tile "Routines": scheduled tasks (Hermes cron jobs) scoped to the
+ * Right tile "Routines": scheduled tasks (Lattice cron jobs) scoped to the
  * bot you're currently chatting with — follows the live gateway profile.
  *
  * Bots message each other straight into each bot's ONE canonical "Bot
  * Chat" — @-mentions deliver over gateway RPCs (no CLI relay), and
- * bot-initiated sends use `hermes -p <bot> chat --in ~ -c "Bot Chat"`.
+ * bot-initiated sends use `lattice -p <bot> chat --in ~ -c "Bot Chat"`.
  */
 
 import {
@@ -725,7 +725,7 @@ export default {
       registerRoutinesPane(true)
     }
 
-    // A bot's chat before it has spoken: core's splash is Hermes' wordmark and
+    // A bot's chat before it has spoken: core's splash is Lattice' wordmark and
     // stands down for any session that exists, so the bot titles its own.
     ctx.register({
       id: 'chat-empty',
@@ -833,7 +833,7 @@ export default {
 
               // Same resolver as the cached path — renamed bots (display_name
               // / ui_meta title) stay taggable when the roster cache is cold.
-              // The same handle claim the pane applies: a real 'hermes'
+              // The same handle claim the pane applies: a real 'lattice'
               // profile keeps @hermes, so the default must not answer it too.
               mentionedBots = resolveRosterMentions(text, claimDefaultHandles(res?.profiles ?? []), live).map(bot => ({
                 ...bot,
@@ -862,11 +862,11 @@ export default {
 
             // message_agent only resolves canonical identities: the relay
             // matches a roster row's handle/profile (± @connection-id), the
-            // local path a bare profile name or 'hermes'. botHandle() prefers
+            // local path a bare profile name or 'lattice'. botHandle() prefers
             // the row's source-qualified UI alias ('default-vera'), which
             // neither resolver accepts — annotate the canonical form instead.
-            // The default's canonical form is 'hermes' only while no real
-            // 'hermes' profile holds it; then it is 'default' itself.
+            // The default's canonical form is 'lattice' only while no real
+            // 'lattice' profile holds it; then it is 'default' itself.
             const target =
               bot.remoteSource && bot.connectionId
                 ? `${bot.name}@${bot.connectionId}`

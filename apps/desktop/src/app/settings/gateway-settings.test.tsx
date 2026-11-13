@@ -412,7 +412,7 @@ describe('GatewaySettings', () => {
 
     const oauthProbe = {
       authMode: 'oauth',
-      providers: [{ displayName: 'Nous Research', name: 'nous', supportsPassword: false }],
+      providers: [{ displayName: 'Langton Photonics', name: 'langton', supportsPassword: false }],
       reachable: true
     }
 
@@ -431,7 +431,7 @@ describe('GatewaySettings', () => {
       // The env override still owns the URL: the editor stays read-only.
       expect(((await screen.findByDisplayValue(envUrl)) as HTMLInputElement).disabled).toBe(true)
 
-      fireEvent.click(await screen.findByRole('button', { name: 'Sign in with Nous Research' }))
+      fireEvent.click(await screen.findByRole('button', { name: 'Sign in with Langton Photonics' }))
 
       await waitFor(() => expect(oauthLoginConnectionConfig).toHaveBeenCalledWith(envUrl))
     })
@@ -448,12 +448,12 @@ describe('GatewaySettings', () => {
       render(<GatewaySettings embedded />)
 
       expect(((await screen.findByDisplayValue(envUrl)) as HTMLInputElement).disabled).toBe(false)
-      expect(await screen.findByRole('button', { name: 'Sign in with Nous Research' })).toBeTruthy()
+      expect(await screen.findByRole('button', { name: 'Sign in with Langton Photonics' })).toBeTruthy()
       expect(oauthLoginConnectionConfig).not.toHaveBeenCalled()
     })
   })
 
-  // The Webapp is served by one Hermes host and can only reach that host, so no
+  // The Webapp is served by one Lattice host and can only reach that host, so no
   // mode switch, Cloud sign-in or saved connection can act there. What applies
   // is which host this is and, behind the sign-in gate, signing out of it.
   describe('in the Webapp', () => {

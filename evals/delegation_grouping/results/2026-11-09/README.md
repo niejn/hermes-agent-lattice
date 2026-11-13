@@ -1,7 +1,7 @@
 # Validating run, 2026-11-09
 
 - Arms: `base` = `origin/main` at `e0f07847b8f3`; `cand` = `84d1c1a3a7a3` (the schema change).
-- Parents: `anthropic/claude-fable-5.2` and `openai/gpt-6-luna`; every child on `openai/gpt-6-luna`. Nous Portal
+- Parents: `anthropic/claude-fable-5.2` and `openai/gpt-6-luna`; every child on `openai/gpt-6-luna`. Langton Portal
   inference route, `delegation.independent_completions: true`, 7 tasks x 3 reps x 2 arms x 2 parents = 84 cells.
 - 84/84 cells produced a model turn; none errored or timed out, so no cell is excluded or rerun.
 - Dollars are provider usage x the route's list prices (`pricing.json`), not a reconciled invoice.

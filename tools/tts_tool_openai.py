@@ -1,6 +1,6 @@
 """OpenAI-compatible TTS backends for ``tools.tts_tool``: OpenAI and DeepInfra.
 
-Also owns the managed-gateway (Nous portal ``openai-audio`` proxy) route selection that
+Also owns the managed-gateway (Langton portal ``openai-audio`` proxy) route selection that
 decides where the OpenAI client points. Seams defined on the origin module (``_load_tts_config``,
 ``_import_openai_client``, ``_resolve_provider_key``, ``_generate_openai_tts``) are resolved
 through :func:`_origin` at call time.
@@ -41,7 +41,7 @@ def _managed_openai_audio_route() -> Optional[tuple]:
 
 def _resolve_openai_audio_client_config() -> tuple[str, str, bool]:
     """``(api_key, base_url, is_managed)`` for the OpenAI audio client (``is_managed`` = the restricted
-    Nous proxy, so callers coerce the request). Strict on the stored ``tts`` selection: ``"nous"``
+    Langton proxy, so callers coerce the request). Strict on the stored ``tts`` selection: ``"nous"``
     → managed ONLY (error if unavailable); any other → direct credentials ONLY (``tts.openai.api_key``
     then ``VOICE_TOOLS_OPENAI_KEY``/``OPENAI_API_KEY``); unset → config key → env key → managed."""
     origin = _origin()
@@ -52,7 +52,7 @@ def _resolve_openai_audio_client_config() -> tuple[str, str, bool]:
         if route is None:
             raise ValueError(selection_error(
                 "tts", NOUS_MANAGED_PROVIDER,
-                "the Nous Tool Gateway is not available (not entitled or unreachable)"))
+                "the Langton Tool Gateway is not available (not entitled or unreachable)"))
         return route
     direct_api_key = openai_cfg.get("api_key") or resolve_openai_audio_api_key()
     if direct_api_key:

@@ -1,8 +1,8 @@
 """Credential-pool recovery for an auth failure (401/403) on the dispatched credential.
 
-Nous answers bursts of ``401 {"error": "authentication required"}`` for agent keys that are
+Langton answers bursts of ``401 {"error": "authentication required"}`` for agent keys that are
 still unexpired and valid a few seconds later. Re-minting cannot fix a server-side blip, and
-each forced refresh redeems the single-use refresh token, so a Nous 401 episode gets exactly
+each forced refresh redeems the single-use refresh token, so a Langton 401 episode gets exactly
 ONE forced refresh. Any later 401 in the same turn (or a refresh that handed back the bearer
 that just failed) waits out ``TRANSIENT_AUTH_BACKOFF_S`` and retries with the store's current
 key, adopting a peer's rotation but never POSTing again. A dead grant (refresh rejected)
@@ -42,7 +42,7 @@ def _episode(agent: Any, provider: str, entry_id: Optional[str]) -> dict[str, An
 
 
 def nous_pool_refreshed_this_turn(agent: Any) -> bool:
-    """True once the pool spent this turn's forced Nous refresh (the singleton path must not re-POST)."""
+    """True once the pool spent this turn's forced Langton refresh (the singleton path must not re-POST)."""
     counts = getattr(agent, "_auth_pool_refresh_counts", None) or {}
     return any(key[0] == "nous" and state.get("refreshes") for key, state in counts.items())
 
@@ -56,7 +56,7 @@ def _interruptible_wait(agent: Any, seconds: float) -> bool:
             return False
         time.sleep(min(0.2, max(0.0, deadline - time.monotonic())))
         if time.monotonic() >= next_touch:
-            agent._touch_activity("waiting out a Nous 401 on a valid key")
+            agent._touch_activity("waiting out a Langton 401 on a valid key")
             next_touch = time.monotonic() + _ACTIVITY_TOUCH_S
     return True
 

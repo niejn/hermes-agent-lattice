@@ -40,7 +40,7 @@ function outcome(pending: Promise<unknown>): () => string | undefined {
 /** `/webapp/window` as the gateway serves it: says ready on the channel its fragment names, done once it has a ticket. */
 function handoffPage(href: string): unknown[] {
   const id = new URLSearchParams(new URL(href).hash.slice(1)).get('channel')
-  const channel = new BroadcastChannel(`hermes.webapp.window:${id}`)
+  const channel = new BroadcastChannel(`lattice.webapp.window:${id}`)
   const received: unknown[] = []
 
   channel.onmessage = event => {

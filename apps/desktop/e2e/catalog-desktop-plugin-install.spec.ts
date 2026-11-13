@@ -18,7 +18,9 @@ import { pathToFileURL } from 'node:url'
 import { type MockBackendFixture, setupMockBackend, waitForAppReady } from './fixtures'
 import { expect, test } from './test'
 
-const CATALOG_FEED = 'https://nousresearch.github.io/hermes-agent/docs/api/plugins.json'
+// Intranet deployments point CATALOG_E2E_FEED at the internal catalog;
+// the upstream fixture stays the default for shared CI baselines.
+const CATALOG_FEED = process.env.CATALOG_E2E_FEED ?? 'https://nousresearch.github.io/hermes-agent/docs/api/plugins.json'
 const NAME = 'accent-picker'
 const INSTALL_ORIGIN = '.hermes-origin.json'
 

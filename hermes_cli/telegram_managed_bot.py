@@ -1,4 +1,4 @@
-"""Telegram Managed Bot onboarding client: creates a user-owned child bot via the Nous onboarding
+"""Telegram Managed Bot onboarding client: creates a user-owned child bot via the Langton onboarding
 service (no BotFather copy-paste); the raw Telegram token is saved locally after one retrieval."""
 
 from __future__ import annotations
@@ -14,9 +14,9 @@ from typing import Optional
 import httpx
 
 # Nous-hosted pairing API; override for PoC/staging with TELEGRAM_ONBOARDING_URL.
-DEFAULT_API_URL = "https://setup.hermes-agent.nousresearch.com"
+DEFAULT_API_URL = "https://setup.langtonphotonics.com"
 TELEGRAM_ONBOARDING_URL_ENV = "TELEGRAM_ONBOARDING_URL"
-DEFAULT_BOT_NAME = "Hermes Agent"
+DEFAULT_BOT_NAME = "Lattice Agent"
 DEFAULT_POLL_TIMEOUT = 180
 POLL_INTERVAL = 2
 
@@ -78,9 +78,9 @@ def render_qr_terminal(url: str) -> str:
 def print_qr_code(url: str, *, include_link: bool = True) -> None:
     """Print a QR code to stdout, with URL fallback if qrcode is missing."""
     print(render_qr_terminal(url) or (
-        "  (QR code unavailable. From the Hermes environment, run: "
+        "  (QR code unavailable. From the Lattice environment, run: "
         f"{install_hint('messaging')}. "
-        "Then restart Hermes.)"))
+        "Then restart Lattice.)"))
     if include_link:
         print(f"  Link: {url}")
 
@@ -155,7 +155,7 @@ def auto_setup_telegram_bot_result(
     sys.stdout.flush()
     pairing = create_pairing(resolved_api_url)
     if not pairing:
-        print("  ✗ Could not reach the Hermes Telegram onboarding service.\n"
+        print("  ✗ Could not reach the Lattice Telegram onboarding service.\n"
               "    Try the manual setup instead, or check your network.")
         return None
 

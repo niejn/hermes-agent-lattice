@@ -991,13 +991,13 @@ it('keeps a first Send refused after its room closed for the next open, as an ed
   expect((await readCanonicalGroupSend(binding))?.attempts).toBe(0)
 })
 
-// Both surfaces Desktop dials: the session gateway (4001 + reason) and `hermes serve`
+// Both surfaces Desktop dials: the session gateway (4001 + reason) and `lattice serve`
 // (tui_gateway/methods_groups.py: 4111 room errors, 4123 no worker, 5112 anything else).
 it.each([
   ['the gateway refuses the payload', refusal('invalid_params', false)],
-  ['hermes serve finds the room ended', frame('hosted room not found', 4111, { admitted: false })],
-  ['hermes serve has no Group Chat worker', frame('Group Chat worker is unavailable.', 4123, { admitted: false })],
-  ['hermes serve refuses the payload', frame('user payload text must be a bounded string', 5112, { admitted: false })]
+  ['lattice serve finds the room ended', frame('hosted room not found', 4111, { admitted: false })],
+  ['lattice serve has no Group Chat worker', frame('Group Chat worker is unavailable.', 4123, { admitted: false })],
+  ['lattice serve refuses the payload', frame('user payload text must be a bounded string', 5112, { admitted: false })]
 ])('hands the words back for editing when %s before admitting the Send', async (_case, refused) => {
   const binding = { connectionId: 'local', profile: 'team', roomId: 'refused-before-admission' }
   room((params, attempt) => attempt === 1 ? Promise.reject(refused) : receipt(params))
@@ -1016,8 +1016,8 @@ it.each([
 // AM4: the same reasons and codes also follow a committed user event, without `admitted: false`.
 it.each([
   ['an invalid_params from the gateway', refusal('invalid_params')],
-  ['a room error from hermes serve', frame('hosted room not found', 4111)],
-  ['a failure from hermes serve', frame('storage is full', 5112)]
+  ['a room error from lattice serve', frame('hosted room not found', 4111)],
+  ['a failure from lattice serve', frame('storage is full', 5112)]
 ])('keeps the identity of a first Send after %s that does not prove nothing was admitted', async (_case, failed) => {
   const binding = { connectionId: 'local', profile: 'team', roomId: 'post-commit' }
   room((params, attempt) => attempt === 1 ? Promise.reject(failed) : receipt(params))
@@ -1127,7 +1127,7 @@ it('does not resend words handed back for editing once another window finished w
 it('offers a read-only retry when the Send journal cannot be read, then restores its pending intent', async () => {
   const binding = { connectionId: 'local', profile: 'team', roomId: 'unreadable' }
   const entry = await prepareCanonicalGroupSend(binding, { text: 'Saved before the failure', attachments: [] })
-  const saved = localStorage.getItem('hermes.desktop.canonicalGroupSends.v1')!
+  const saved = localStorage.getItem('lattice.desktop.canonicalGroupSends.v1')!
   const compareAndSet = vi.fn()
   const read = vi.fn().mockRejectedValueOnce(new Error('EACCES: journal unreadable')).mockResolvedValue(saved)
   window.hermesDesktop = { preparedSubmissions: { read, compareAndSet } } as unknown as typeof window.hermesDesktop

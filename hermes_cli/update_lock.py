@@ -1,4 +1,4 @@
-"""Cross-process mutual exclusion for in-flight Hermes updates.
+"""Cross-process mutual exclusion for in-flight Lattice updates.
 
 Two artifacts, one authority each:
 
@@ -535,7 +535,7 @@ def _is_ancestor_pid(pid: int) -> bool:
 
 
 def _is_runtime_host(cmdline: list[str]) -> bool:
-    """A long-lived Hermes host (``gateway run`` / ``serve`` / ``dashboard``), by the canonical
+    """A long-lived Lattice host (``gateway run`` / ``serve`` / ``dashboard``), by the canonical
     command-line matchers (profile flags, ``hermes_cli/main.py`` paths, inline bootstraps)."""
     from gateway.status import looks_like_gateway_command_line
     from hermes_cli.update_cmd_windows import _hermes_holder_subcommand
@@ -544,7 +544,7 @@ def _is_runtime_host(cmdline: list[str]) -> bool:
 
 
 def _runtime_host_below(holder_pid: int) -> bool:
-    """True when a Hermes gateway/serve/dashboard sits between us and *holder_pid* (or anywhere
+    """True when a Lattice gateway/serve/dashboard sits between us and *holder_pid* (or anywhere
     above us when the holder is not reached).
 
     Such a host is relaunched BY an update and outlives its stages; a ``hermes update`` its agent

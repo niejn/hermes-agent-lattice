@@ -19,7 +19,7 @@ import { DialReadiness, GATEWAY_NOT_CONNECTED_MESSAGE, remainingRequestBudget } 
 // /api/profiles runs list_profiles(), which does a recursive skill-tree walk
 // per profile — so the 15s default (DEFAULT_FETCH_TIMEOUT_MS in hardening.ts)
 // times out a backend that is alive-but-busy, surfacing as a spurious
-// "Timed out connecting to Hermes backend" that hangs the UI (#48504).
+// "Timed out connecting to Lattice backend" that hangs the UI (#48504).
 //
 // Give the boot burst a generous per-call timeout instead of raising the
 // global default: interactive/runtime calls and the liveness poll (/api/status)
@@ -63,7 +63,7 @@ const ATTACH_REQUIRED = new Set([
 // (`session_key`) is the same CAS mutation on a sidebar row.
 const PARENT_ATTACH_REQUIRED = new Set(['session.branch_stored', 'session.branch_whole', 'session.workspace.move'])
 
-// Canonical-only identity keys. The legacy `hermes serve` contract refuses an unknown key as
+// Canonical-only identity keys. The legacy `lattice serve` contract refuses an unknown key as
 // version skew (4000), so they are stripped on a non-canonical dial. `prompt.submit` keeps its
 // `submission_id` on purpose: the submit path retries identityless on that exact refusal and
 // records the send as legacy-attempted, which a silent strip here would hide. A message-level
@@ -375,7 +375,7 @@ export class HermesGateway extends JsonRpcGatewayClient {
     } catch (error) {
       this.readiness.failDial(ready, error instanceof Error ? error : new Error(GATEWAY_NOT_CONNECTED_MESSAGE))
 
-      if (generation === this.connectionGeneration) { this.invalidate('Hermes gateway protocol negotiation failed') }
+      if (generation === this.connectionGeneration) { this.invalidate('Lattice gateway protocol negotiation failed') }
       throw error
     }
   }
@@ -524,7 +524,7 @@ export class HermesGateway extends JsonRpcGatewayClient {
   }
 
   private requireConnectionGeneration(generation: number): void {
-    if (generation !== this.connectionGeneration) { throw new Error('Hermes gateway connection changed; reopen the session') }
+    if (generation !== this.connectionGeneration) { throw new Error('Lattice gateway connection changed; reopen the session') }
   }
 
   // Resume the session (and, for branch-like methods, its parent) on THIS socket before a
@@ -572,8 +572,8 @@ export class HermesGateway extends JsonRpcGatewayClient {
 
   constructor() {
     super({
-      closedErrorMessage: 'Hermes gateway connection closed',
-      connectErrorMessage: 'Could not connect to Hermes gateway',
+      closedErrorMessage: 'Lattice gateway connection closed',
+      connectErrorMessage: 'Could not connect to Lattice gateway',
       createRequestId: nextId => nextId,
       notConnectedErrorMessage: GATEWAY_NOT_CONNECTED_MESSAGE,
       // The channel already answered -32603; surface the crash in devtools like the dial-failure sink.
@@ -583,7 +583,7 @@ export class HermesGateway extends JsonRpcGatewayClient {
         console.error(`[gateway] error frame with no request id (code ${error.code ?? 'none'}): ${error.message}`),
       // The channel already answered -32601; note the missing registry in devtools.
       onUnhandledRequest: request =>
-        console.warn(`[gateway] Hermes Desktop has no server-request registry for ${request.method} (${request.id})`),
+        console.warn(`[gateway] Lattice Desktop has no server-request registry for ${request.method} (${request.id})`),
       requestTimeoutMs: DEFAULT_GATEWAY_REQUEST_TIMEOUT_MS,
       socketFactory: openGatewaySocket
     })

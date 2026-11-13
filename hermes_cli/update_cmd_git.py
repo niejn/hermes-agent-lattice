@@ -341,7 +341,7 @@ def _offer_upstream_remote(git_cmd: list[str], cwd: Path, *, assume_yes: bool, i
     ``--yes`` means "don't block", not "mutate my remotes", so a non-interactive skip is NOT persisted."""
     from hermes_cli.update_cmd import _add_upstream_remote, _mark_skip_upstream_prompt
     print(
-        "\nℹ Your fork is not tracking the official Hermes repository.\n"
+        "\nℹ Your fork is not tracking the official Lattice repository.\n"
         "  This means you may miss updates from NousResearch/hermes-agent.\n"
     )
     if assume_yes or (input_fn is None and not (sys.stdin.isatty() and sys.stdout.isatty())):
@@ -503,10 +503,11 @@ def _damaged_checkout_message(root: Path) -> str:
     would rebuild the default directory and leave a ``--dir`` install broken)."""
     if sys.platform == "win32":
         quoted = "'" + str(root).replace("'", "''") + "'"
-        repair = ("& ([scriptblock]::Create((irm https://hermes-agent.nousresearch.com/install.ps1)))"
+        repair = ("& ([scriptblock]::Create((irm https://docs.langtonphotonics.com/install.ps1)))"
                   f" -InstallDir {quoted}")
     else:
-        repair = f"curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --dir {shlex.quote(str(root))}"
+        repair = (f"curl -fsSL https://docs.langtonphotonics.com/install.sh | bash -s --"
+                  f" --dir {shlex.quote(str(root))}")
     return (f"✗ This Hermes checkout's git data is damaged (git no longer recognizes {root / '.git'}),"
             " so it cannot be updated in place.\n"
             "  Run the installer again to repair it; it moves the damaged checkout aside and keeps"

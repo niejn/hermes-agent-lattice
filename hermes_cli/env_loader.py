@@ -1,4 +1,4 @@
-"""Helpers for loading Hermes .env files consistently across entrypoints."""
+"""Helpers for loading Lattice .env files consistently across entrypoints."""
 
 from __future__ import annotations
 
@@ -537,7 +537,7 @@ def _bootstrap_env(home: Path | None = None, project_env: Path | None = None) ->
 
 def selected_config_backend_name(home: Path | None = None) -> str:
     """The config backend ``load_hermes_dotenv`` selects for *home*, decided without loading or
-    booting anything. For a caller that must decide before Hermes starts (Docker stage2 skips the
+    booting anything. For a caller that must decide before Lattice starts (Docker stage2 skips the
     config-file migration in remote mode, D12)."""
     from hermes_cli.config_backend import BACKEND_ENV
 
@@ -674,7 +674,7 @@ def load_hermes_dotenv(
     project_env: str | os.PathLike | None = None,
     load_external_secrets: bool = True,
 ) -> list[Path]:
-    """Load Hermes env files: ``~/.hermes/.env`` overrides stale shell exports; project ``.env`` is a dev
+    """Load Lattice env files: ``~/.hermes/.env`` overrides stale shell exports; project ``.env`` is a dev
     fallback that only fills gaps when the user env exists (and overrides shell vars when it does not)."""
     from agent.safe_worker_policy import worker_config_snapshot
 
@@ -918,7 +918,7 @@ def _refuse_protected_env_from_sources(report, backend=None, environ_before=None
               "chosen by .env or the process environment only).", file=sys.stderr)
         return
     outcome = (f"Hermes does not serve profile home {routed_home} with it." if routed_home is not None
-               else "Hermes does not start with it.")
+               else "Lattice does not start with it.")
     raise ConfigBackendUnavailable(
         f"A secrets: source supplies {', '.join(clash)}, which the {backend.name!r} config "
         "backend uses to reach its config plane. That credential must come from auth.json or .env, never "
@@ -936,7 +936,7 @@ def _publish_staged_env(staged: dict, environ_before: dict) -> None:
 
 def _apply_external_secret_sources(home_path: Path) -> None:
     """Pull secrets from every enabled external source into env — AFTER dotenv (sources need .env bootstrap
-    tokens), BEFORE Hermes reads credentials; failures never block startup. Precedence/conflicts/provenance
+    tokens), BEFORE Lattice reads credentials; failures never block startup. Precedence/conflicts/provenance
     live in ``registry.apply_all``; this wrapper owns the once-per-home guard, the post-apply ASCII sweep,
     the ``_SECRET_SOURCES`` map and status lines."""
     home_key = str(Path(home_path).resolve())

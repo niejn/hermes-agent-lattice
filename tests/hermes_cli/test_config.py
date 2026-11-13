@@ -1142,7 +1142,12 @@ class TestCustomProviderCompatibility:
         )
 
         with patch.dict(os.environ, {"HERMES_HOME": str(tmp_path)}):
-            compatible = get_compatible_custom_providers()
+            # The fork's defaults layer preseeds providers.lattice-internal; these
+            # tests assert what the USER layer contributes, so drop the preseed.
+            compatible = [
+                p for p in get_compatible_custom_providers()
+                if p["provider_key"] != "lattice-internal"
+            ]
 
         assert len(compatible) == 1
         assert compatible[0]["name"] == "OpenAI Direct"
@@ -1172,7 +1177,10 @@ class TestCustomProviderCompatibility:
         )
 
         with patch.dict(os.environ, {"HERMES_HOME": str(tmp_path)}):
-            compatible = get_compatible_custom_providers()
+            compatible = [
+                p for p in get_compatible_custom_providers()
+                if p["provider_key"] != "lattice-internal"
+            ]
 
         assert compatible == [
             {

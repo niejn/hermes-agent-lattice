@@ -1,13 +1,13 @@
 """Name the programs holding ``apps/desktop/release`` open by working directory (#101789).
 
 Windows refuses to rename a directory that a live process uses as its current working
-directory. A resident helper that some Hermes window spawned (an IME cloud service such as
+directory. A resident helper that some Lattice window spawned (an IME cloud service such as
 Sogou's ``SogouCloud.exe``, an AV or assistant component) inherits that window's cwd inside
 ``release/win-unpacked`` and keeps it after the app exits, so the stage-and-swap promotion
 fails on every retry although the build succeeded. Its exe lives elsewhere, so the
 exe-under-release stop never sees it.
 
-These holders belong to the user, not to Hermes: they are NAMED in the failure and closed
+These holders belong to the user, not to Lattice: they are NAMED in the failure and closed
 only with the user's consent, given either at an interactive terminal prompt or through the
 Desktop's "close it and retry" choice. That choice leaves a consent file in ``release/`` bound
 to the hand-off run it starts and to the exact processes (pid + start time) the user saw; the
@@ -231,7 +231,7 @@ def describe_block(holders: list[ReleaseHolder], release_dir: Path) -> str:
         "".join(f"  {h.holder_line()}\n" for h in holders)
         + f"✗ Windows would not replace the desktop app: {names} is using a folder inside {release_dir}.\n"
         f"    It is not part of Hermes, so it was left running. Close it (Task Manager, or `taskkill {pids}`)\n"
-        "    and run `hermes desktop --force-build`, or run Update now in Hermes Desktop and choose to close it."
+        "    and run `hermes desktop --force-build`, or run Update now in Lattice Desktop and choose to close it."
     )
 
 

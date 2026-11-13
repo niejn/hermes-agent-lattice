@@ -1,5 +1,5 @@
 """Config step 51 -> 52 (registered in ``hermes_cli.config_migrations.MIGRATIONS``): agent-browser and the
-built-in browser_* tools left Hermes, so ``browser.backend`` / ``browser.extension_control`` go and the
+built-in browser_* tools left Lattice, so ``browser.backend`` / ``browser.extension_control`` go and the
 AGENT_BROWSER_* settings a home's .env gave agent-browser move to the ``browser.*`` keys the launcher reads."""
 
 from __future__ import annotations
@@ -82,9 +82,9 @@ def _config_decided(key: str, current: Any) -> bool:
 # ``browser-use`` meant the built-in tools, on whatever browser the value named.
 _BACKEND_REASONS = {
     "browser-use": "browser_exec (Browser Use mode) is the only browser now",
-    "agent-browser": "agent-browser left Hermes; browser_exec is the browser now",
+    "agent-browser": "agent-browser left Lattice; browser_exec is the browser now",
     "camofox": "Camofox is now the camofox plugin (`hermes plugins install camofox`)",
-    "local": "browser_exec launches Hermes's packaged Chromium itself (browser.cloud_provider: local)",
+    "local": "browser_exec launches Lattice's packaged Chromium itself (browser.cloud_provider: local)",
     **dict.fromkeys(("browserbase", "firecrawl", "nous"),
                     "a cloud browser is chosen with browser.cloud_provider (`hermes tools` → Browser Automation)"),
 }

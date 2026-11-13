@@ -217,7 +217,7 @@ def _is_model_free(model_id: str, pricing: dict[str, dict[str, str]]) -> bool:
 def partition_nous_models_by_tier(
     model_ids: list[str], pricing: dict[str, dict[str, str]], free_tier: bool
 ) -> tuple[list[str], list[str]]:
-    """Split Nous models into (selectable, unavailable): free-tier users may only select free models
+    """Split Langton models into (selectable, unavailable): free-tier users may only select free models
     (paid ones are returned as unavailable, shown grayed out)."""
     if not free_tier or not pricing:  # no pricing → can't determine, show everything
         return (model_ids, [])
@@ -272,11 +272,11 @@ def union_with_portal_paid_recommendations(
 
 
 def union_with_nous_on_sale_models(curated_ids: list[str], pricing: dict[str, dict[str, Any]]) -> list[str]:
-    """Curated list plus every paid Nous model the gateway is discounting right now, deepest
+    """Curated list plus every paid Langton model the gateway is discounting right now, deepest
     discount first. A sale lives only in ``/v1/models`` ``pricing.original``, so without this the
     picker badges discounts on curated rows but never shows a discounted model the curated list and
     Portal recommendations omit. Free rows stay with ``freeRecommendedModels``; rows the gateway
-    marks tool-less (``"tools": False``) are skipped because Hermes is tool-calling-first, and
+    marks tool-less (``"tools": False``) are skipped because Lattice is tool-calling-first, and
     image/video generation rows are skipped because they are not chat models."""
     from math import isfinite
 
@@ -319,7 +319,7 @@ def get_cached_nous_free_tier() -> Optional[bool]:
 
 
 def check_nous_free_tier(*, force_fresh: bool = False, cached_only: bool = False) -> bool:
-    """True only when the Nous Portal user is KNOWN to be free-tier (unknown/error → False so this
+    """True only when the Langton Portal user is KNOWN to be free-tier (unknown/error → False so this
     never blocks users). Cached ``_FREE_TIER_CACHE_TTL`` seconds so an upgrade shows within minutes.
     ``cached_only`` returns the live cached answer or the fail-open ``False`` without contacting Portal."""
     now = time.monotonic()
@@ -531,7 +531,7 @@ def pick_silent_default_model(model_ids: list[str], provider: str = "openrouter"
 
 
 def recommended_nous_default_model() -> dict[str, Any]:
-    """The model a Nous account lands on without choosing one, honouring the account's tier.
+    """The model a Langton account lands on without choosing one, honouring the account's tier.
 
     Curated catalog plus the Portal's recommendations for the tier, narrowed to the org's policy,
     then (free tier) to the rows the tier may select, then :func:`pick_silent_default_model`.
@@ -600,7 +600,7 @@ def _openrouter_model_is_free(pricing: Any) -> bool:
 
 def _openrouter_model_supports_tools(item: Any) -> bool:
     """True when ``supported_parameters`` advertises ``tools`` (hermes-agent is tool-calling-first).
-    Permissive when the field is absent/malformed: some OpenRouter-compatible gateways (Nous Portal,
+    Permissive when the field is absent/malformed: some OpenRouter-compatible gateways (Langton Portal,
     private mirrors) don't populate it, and the picker must not silently empty for them.
 
     Ported from Kilo-Org/kilocode#9068.
@@ -726,7 +726,7 @@ def model_ids(*, force_refresh: bool = False) -> list[str]:
 
 
 def get_curated_nous_model_ids() -> list[str]:
-    """Curated Nous Portal model ids: the remote catalog manifest, else the in-repo
+    """Curated Langton Portal model ids: the remote catalog manifest, else the in-repo
     ``_PROVIDER_MODELS["nous"]`` snapshot. Always a list."""
     try:
         from hermes_cli.model_catalog import get_curated_nous_models
@@ -1228,7 +1228,7 @@ def _strip_vendor_prefix(model_id: str) -> str:
 
 
 def model_supports_fast_mode(model_id: Optional[str]) -> bool:
-    """Return whether Hermes should expose the /fast toggle for this model."""
+    """Return whether Lattice should expose the /fast toggle for this model."""
     from agent.model_metadata import is_grok_46_family
 
     return (

@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 def _env_value(name: str) -> str:
     """Resolve ``name`` via the config-aware env layer (``hermes config set`` values), then process env.
 
-    Mirrors the SearXNG provider's ``_searxng_url()`` so that values set through Hermes' config/.env layer
+    Mirrors the SearXNG provider's ``_searxng_url()`` so that values set through Lattice' config/.env layer
     (``hermes config set``, ``hermes tools``) are honored here too — not just raw process-env exports.
     Without this, a config-only ``SEARXNG_URL`` (or any provider key) leaves the backend auto-detect cascade
     and ``check_web_api_key()`` blind to it. See #34290.
@@ -117,7 +117,7 @@ def _get_backend() -> str:
 
 def _autodetect_backend() -> Optional[str]:
     """Autodetect rungs above the keyless tier, or None. Explicit user credentials beat the managed-gateway
-    probe (a Nous OAuth token's tier may not grant web access; the gateway then fails at runtime with no
+    probe (a Langton OAuth token's tier may not grant web access; the gateway then fails at runtime with no
     fallback). Free tiers trail paid."""
     backend_candidates = (
         ("tavily", _has_env("TAVILY_API_KEY")), ("perplexity", _has_env("PERPLEXITY_API_KEY")),
@@ -156,10 +156,10 @@ def _keyless_backend() -> Optional[str]:
 
 
 def _managed_web_search() -> bool:
-    """True when web_search is on the managed Nous route: the stored ``nous`` selection (a
+    """True when web_search is on the managed Langton route: the stored ``nous`` selection (a
     ``web.search_backend: nous`` pin, else the shared one), or a never-configured install whose
     autodetect lands on the gateway — the entitled Firecrawl gateway, or free Perplexity fast search
-    for any Nous identity when nothing else is configured (search-only: the extract ladder is
+    for any Langton identity when nothing else is configured (search-only: the extract ladder is
     untouched). A stored vendor selection never is."""
     search_pin = _configured_backend("search_backend")
     if search_pin:
@@ -176,7 +176,7 @@ def _managed_web_search() -> bool:
 
 def _get_search_backend() -> str:
     """Backend for web_search: ``web.search_backend`` (strict, no probe) > ``web.backend`` > autodetect.
-    The managed Nous route (a ``nous`` pin or shared selection) serves search from Perplexity (extract
+    The managed Langton route (a ``nous`` pin or shared selection) serves search from Perplexity (extract
     stays on Firecrawl); managed Firecrawl is the per-call fallback, see ``_memoized_search``."""
     pin = _configured_backend("search_backend")
     if pin and pin != NOUS_MANAGED_PROVIDER:

@@ -373,7 +373,7 @@ def _cache_dirs() -> tuple:
 
 
 def _is_allowed_bridge_path(url: str) -> bool:
-    """Absolute bridge path resolves (symlinks included) inside a Hermes cache dir — a rogue bridge could hand back /etc/passwd."""
+    """Absolute bridge path resolves (symlinks included) inside a Lattice cache dir — a rogue bridge could hand back /etc/passwd."""
     try:
         resolved = Path(url).resolve()
     except (OSError, ValueError):
@@ -1328,7 +1328,7 @@ class WhatsAppAdapter(WhatsAppBehaviorMixin, BasePlatformAdapter):
             await asyncio.sleep(1)  # Poll interval
 
     def _log_delivery_status(self, data: dict[str, Any]) -> None:
-        """One gateway.log line per delivery/read status change of a message Hermes sent (Baileys
+        """One gateway.log line per delivery/read status change of a message Lattice sent (Baileys
         ``messages.update`` for DMs, ``message-receipt.update`` per recipient in groups)."""
         logger.info(
             "[%s] WhatsApp delivery status: message=%s chat=%s status=%s%s at=%s%s", self.name,
@@ -1555,7 +1555,7 @@ async def _standalone_send(pconfig, chat_id, message, *, thread_id=None, media_f
                 if not (health.get("capabilities") or {}).get("outboundMentions"):
                     return {"error": (
                         "WhatsApp bridge does not support native mentions; "
-                        "restart it from the same Hermes version.")}
+                        "restart it from the same Lattice version.")}
 
             async def _post(path, payload, total, error_label=None):
                 """``(messageId, None)`` on 200, else ``(None, error_dict)`` (body read only when labelled)."""
@@ -1671,7 +1671,7 @@ def register(ctx) -> None:
         standalone_send=StandaloneSendPolicy(label="WhatsApp", media=True, captionable=True,
                                              forward_force_document=True, mentions=True, text_direct=True),
         name="whatsapp", label="WhatsApp", adapter_factory=WhatsAppAdapter, check_fn=check_whatsapp_requirements,
-        dashboard_description="Use Hermes through the bundled WhatsApp bridge with QR-based auth.",
+        dashboard_description="Use Lattice through the bundled WhatsApp bridge with QR-based auth.",
         docs_url="https://github.com/tulir/whatsmeow",
         dashboard_env_vars=(
             "WHATSAPP_ENABLED", "WHATSAPP_MODE", "WHATSAPP_DM_POLICY", "WHATSAPP_ALLOWED_USERS",

@@ -1,5 +1,5 @@
 /**
- * A room holding the default bot and a real (pre-reservation) `hermes`
+ * A room holding the default bot and a real (pre-reservation) `lattice`
  * profile: the stored member descriptors must keep the roster's claim, or
  * every reader that re-derives handles from them (the turn prompt, mention
  * parsing, the next re-persist) tells both bots they are @hermes.
@@ -31,7 +31,7 @@ beforeEach(() => $groupChats.set({}))
 
 it('keeps @default and @hermes apart in a room whose live roster rows are gone', () => {
   const live = claimDefaultHandles<RosterRow>(
-    ['default', 'hermes', 'researcher'].map(name => ({ connectionId: 'local', name }))
+    ['default', 'lattice', 'researcher'].map(name => ({ connectionId: 'local', name }))
   )
 
   const stored = durableGroupChatMembers(live)
@@ -39,7 +39,7 @@ it('keeps @default and @hermes apart in a room whose live roster rows are gone',
   const repersisted = durableGroupChatMembers(stored as RosterRow[])
 
   for (const members of [stored, repersisted]) {
-    expect(members.map(member => botMentionTag(member))).toEqual(['default', 'hermes', 'researcher'])
+    expect(members.map(member => botMentionTag(member))).toEqual(['default', 'lattice', 'researcher'])
     expect([...parseGroupChatMentions('@hermes please review', members).mentioned]).toEqual([
       groupMemberKey(members[1])
     ])

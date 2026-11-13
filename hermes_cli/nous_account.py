@@ -1,4 +1,4 @@
-"""Normalized Nous Portal account entitlement helpers."""
+"""Normalized Langton Portal account entitlement helpers."""
 
 from __future__ import annotations
 
@@ -91,8 +91,8 @@ class NousToolAccessInfo:
 
 _ANON_ACCOUNT_TIER = "anonymous"
 # Every billing / top-up / entitlement surface says exactly this for the free tier (R-USR-1).
-FREE_TIER_NEEDS_ACCOUNT = "This needs a Nous account. Run `hermes auth upgrade`."
-FREE_TIER_NEEDS_ACCOUNT_CHAT = "This needs a Nous account. Use /login to sign in."
+FREE_TIER_NEEDS_ACCOUNT = "This needs a Langton account. Run `hermes auth upgrade`."
+FREE_TIER_NEEDS_ACCOUNT_CHAT = "This needs a Langton account. Use /login to sign in."
 
 
 def _is_anonymous_tier(account_info: Optional[NousPortalAccountInfo]) -> bool:
@@ -146,7 +146,7 @@ class NousPortalAccountInfo:
 
     @property
     def is_anonymous_tier(self) -> bool:
-        """The free tier: no Nous account, so no billing, credits, or entitlement to speak of.
+        """The free tier: no Langton account, so no billing, credits, or entitlement to speak of.
         Compared case- and whitespace-insensitively — the claim is wire data."""
         return _normalize_tier(self.account_tier) == _ANON_ACCOUNT_TIER
 
@@ -171,7 +171,7 @@ class NousPortalAccountInfo:
 
 
 def nous_portal_billing_url(account_info: Optional[NousPortalAccountInfo] = None) -> str:
-    """Return the billing URL for a normalized Nous account snapshot."""
+    """Return the billing URL for a normalized Langton account snapshot."""
     try:
         from hermes_cli.auth import DEFAULT_NOUS_PORTAL_URL
     except Exception:
@@ -234,7 +234,7 @@ def format_nous_portal_entitlement_message(
     include_refresh_hint: bool = True, coverage_category: Optional[str] = None,
     in_chat: bool = False,
 ) -> Optional[str]:
-    """User-facing guidance for a missing Nous tool-gateway entitlement; ``None`` when entitled.
+    """User-facing guidance for a missing Langton tool-gateway entitlement; ``None`` when entitled.
 
     Entitled = paid access OR a live free pool that covers it (normalized fields, not price:
     purchased credits without a subscription count as paid, an exhausted paid subscription does
@@ -290,7 +290,7 @@ def format_nous_portal_entitlement_message(
     if reason == "no_usable_credits" or account_info.paid_service_access is False:
         message = _no_paid_access_message(account_info, capability, billing_url, in_chat=in_chat)
         if include_refresh_hint and not account_info.fresh:
-            message += " If you recently bought credits, run `hermes model` to refresh Hermes."
+            message += " If you recently bought credits, run `hermes model` to refresh Lattice."
         return message
     return (
         f"Your Nous Portal account does not currently have paid service access, "
@@ -353,7 +353,7 @@ def reset_nous_portal_account_info_cache() -> None:
 
 
 def get_nous_portal_account_info(*, force_fresh: bool = False, min_jwt_ttl_seconds: int = 60) -> NousPortalAccountInfo:
-    """Normalized Nous Portal account entitlement.
+    """Normalized Langton Portal account entitlement.
 
     A valid unexpired OAuth JWT serves as a local snapshot (UX gating only; the server stays
     authoritative). ``force_fresh=True`` always calls ``/api/oauth/account`` and bypasses the cache.
@@ -420,7 +420,7 @@ def cached_nous_portal_account_info(*, any_age: bool = False) -> Optional[NousPo
             return None
         return info
     except Exception:
-        logging.getLogger(__name__).debug("Cached Nous account info unreadable", exc_info=True)
+        logging.getLogger(__name__).debug("Cached Langton account info unreadable", exc_info=True)
         return None
 
 
@@ -438,7 +438,7 @@ def _account_identity(access_token: str, portal_base_url: Optional[str]) -> str:
 
 
 def _current_account_identity() -> Optional[str]:
-    """``_account_identity`` for the persisted Nous login, without a refresh or network call. None
+    """``_account_identity`` for the persisted Langton login, without a refresh or network call. None
     when logged out."""
     from hermes_cli.auth import get_provider_auth_state
 
@@ -495,7 +495,7 @@ def _fresh_account_info(state: dict[str, Any], force_fresh: bool, portal_base_ur
 
 
 def _info_from_inference_key_pool(portal_base_url: Optional[str]) -> Optional[NousPortalAccountInfo]:
-    """Return an explicit unknown-entitlement snapshot for opaque Nous keys."""
+    """Return an explicit unknown-entitlement snapshot for opaque Langton keys."""
     try:
         entry = _select_nous_pool_entry()
         if entry is None:
@@ -694,7 +694,7 @@ def _error_info(
     raw_account: Optional[dict[str, Any]] = None, account_tier: Optional[str] = None,
 ) -> NousPortalAccountInfo:
     """A failed-lookup snapshot. ``account_tier`` is carried through when the caller still holds the
-    stored state, so a guest whose lookup failed still gets the "needs a Nous account" copy rather
+    stored state, so a guest whose lookup failed still gets the "needs a Langton account" copy rather
     than billing or re-login guidance."""
     return NousPortalAccountInfo(
         logged_in=logged_in, source="error", fresh=False, portal_base_url=portal_base_url,

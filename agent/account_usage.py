@@ -26,8 +26,8 @@ _DEPLETED_LINE = "Status: access depleted — top up to restore"
 # Usage-window plans: allowances are shown as percent used.
 _WINDOW_TOP_TIER_USED_UP = "Monthly large-model usage is used up."
 _WINDOW_PAUSED_LINE = ("Status: included usage paused. Your subscription payment failed. Update your card to restore it. "
-                       "Until then, Hermes uses your credits.")
-_WINDOW_PAUSED_OTHER_LINE = "Status: included usage paused. See Billing in the Portal. Until then, Hermes uses your credits."
+                       "Until then, Lattice uses your credits.")
+_WINDOW_PAUSED_OTHER_LINE = "Status: included usage paused. See Billing in the Portal. Until then, Lattice uses your credits."
 
 
 def _utc_now() -> datetime:
@@ -195,10 +195,10 @@ def _is_finite_num(v: Any) -> TypeGuard[float]:
 
 def _nous_snapshot(windows: list, details: list, tail: list, *, source: str, plan: Optional[str] = None,
                    usage_window: bool = False) -> Optional[AccountUsageSnapshot]:
-    """Nous snapshot with *tail* lines appended, or None when there is nothing to show."""
+    """Langton snapshot with *tail* lines appended, or None when there is nothing to show."""
     if not windows and not details:
         return None
-    return _snapshot("nous", source, windows, details + tail, title="Nous credits", plan=plan, usage_window=usage_window)
+    return _snapshot("nous", source, windows, details + tail, title="Langton credits", plan=plan, usage_window=usage_window)
 
 
 def _bp_window(label: str, used_bp: Any, resets_at_ms: Any) -> Optional[AccountUsageWindow]:
@@ -224,7 +224,7 @@ def _window_top_tier_line(reset_at: Optional[datetime], keep_going_on_credits: A
     return f"{_WINDOW_TOP_TIER_USED_UP}{resets}{tail}"
 
 
-_WINDOW_KEEP_GOING_OFF_LINE = "Keep going on credits: off. Hermes waits for the reset (turn on in /topup)."
+_WINDOW_KEEP_GOING_OFF_LINE = "Keep going on credits: off. Lattice waits for the reset (turn on in /topup)."
 _WINDOW_KEEP_GOING_ON_LINE = "Keep going on credits: on. Uses your credits when included usage runs out."
 
 
@@ -323,7 +323,7 @@ def build_nous_credits_snapshot(account_info) -> Optional[AccountUsageSnapshot]:
 
 
 def _nous_logged_in() -> bool:
-    """Cheap local auth-state check: a Nous access token is present. Fail-open False."""
+    """Cheap local auth-state check: a Langton access token is present. Fail-open False."""
     try:
         from hermes_cli.auth import get_provider_auth_state
         tok = (get_provider_auth_state("nous") or {}).get("access_token")
@@ -434,7 +434,7 @@ def nous_credits_view(*, markdown: bool = False, timeout: float = 10.0, credits_
 
 
 def nous_credits_usage_fields(agent: Any = None) -> dict[str, Any]:
-    """The ``session.usage`` fields for the Nous credits block: ``credits_lines`` (when there are any) and
+    """The ``session.usage`` fields for the Langton credits block: ``credits_lines`` (when there are any) and
     ``credits_usage_window`` for the usage-window layout. Reads *agent*'s live credits headers. Never raises."""
     try:
         lines, is_window = nous_credits_view(credits_state=getattr(agent, "_credits_state", None) if agent else None)

@@ -1,6 +1,6 @@
 """Browser Use cloud browser provider — the only backend with dual auth: direct
-``BROWSER_USE_API_KEY`` (https://browser-use.com) or the managed Nous tool gateway (bills to a
-Nous subscription). Direct first, managed second, unless ``tool_gateway.browser: gateway`` flips
+``BROWSER_USE_API_KEY`` (https://browser-use.com) or the managed Langton tool gateway (bills to a
+Langton subscription). Direct first, managed second, unless ``tool_gateway.browser: gateway`` flips
 it. Config: ``browser.cloud_provider: "browser-use"``."""
 
 from __future__ import annotations
@@ -111,7 +111,7 @@ class BrowserUseBrowserProvider(CloudBrowserProvider):
         if selected == NOUS_MANAGED_PROVIDER:
             raise ValueError(selection_error(
                 "browser", NOUS_MANAGED_PROVIDER,
-                "the Nous Tool Gateway is not available (not entitled or unreachable)"))
+                "the Langton Tool Gateway is not available (not entitled or unreachable)"))
         if selected is not None:
             raise ValueError(selection_error("browser", selected, "BROWSER_USE_API_KEY is not set"))
         if managed_nous_tools_enabled():

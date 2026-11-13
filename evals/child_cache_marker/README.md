@@ -4,7 +4,7 @@ Does a subagent whose task text differs from its sibling's still read the sessio
 and footer) from the provider cache on its first call, and does a sibling with identical task text keep
 reading everything?
 
-- `launch.py <arm> <out.jsonl> <rep> <tree>`: resolves the Nous route under the real home and starts
+- `launch.py <arm> <out.jsonl> <rep> <tree>`: resolves the Langton route under the real home and starts
   `worker.py` with the key passed by environment only. Run it with `PYTHONPATH=<tree>` and the tree's
   interpreter.
 - `worker.py`: temp `HERMES_HOME` with `isolate_host`, a repo-shaped workspace carrying an `AGENTS.md`,
@@ -16,7 +16,7 @@ reading everything?
 A fresh temp home has no skills, so the session prompt here is small; the size of the saving on a real
 library is measured separately with captured payloads (see the PR that added this directory).
 
-## Reference run (anthropic/claude-fable-5.2 on the Nous chat route, 3 runs per arm)
+## Reference run (anthropic/claude-fable-5.2 on the Langton chat route, 3 runs per arm)
 
 First call of each child, `(prompt, cache read, cache write)`, identical across the three runs to within
 10 tokens:

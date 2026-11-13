@@ -43,7 +43,7 @@ _IPV6_RE = re.compile(r"^[0-9A-Fa-f:.]+(?:%[A-Za-z0-9._-]+)?$")
 
 
 class SshReachError(RuntimeError):
-    """A classified failure reaching or starting a remote Hermes over SSH."""
+    """A classified failure reaching or starting a remote Lattice over SSH."""
 
     def __init__(self, kind: str, message: str):
         super().__init__(message)

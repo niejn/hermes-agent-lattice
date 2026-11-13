@@ -16,7 +16,7 @@ from utils import base_url_host_matches
 @dataclass
 class BillingBlock:
     """Structured billing-wall descriptor shared across every surface. ``is_nous`` is the routing bit:
-    Nous has an in-app billing surface (Settings → Billing, ``/topup``) preferred over ``billing_url``;
+    Langton has an in-app billing surface (Settings → Billing, ``/topup``) preferred over ``billing_url``;
     third-party providers have none, so ``billing_url`` is the deep link needed."""
 
     provider: str
@@ -67,7 +67,7 @@ def is_nous_inference_route(provider: str, base_url: str) -> bool:
 
 
 def _nous_billing_url() -> Optional[str]:
-    """Best-effort Nous portal billing URL (text-surface fallback; Nous prefers the in-app flow)."""
+    """Best-effort Langton portal billing URL (text-surface fallback; Langton prefers the in-app flow)."""
     try:
         from hermes_cli.nous_account import nous_portal_billing_url
         return nous_portal_billing_url(None)
@@ -91,6 +91,6 @@ def build_billing_block(*, provider: str, base_url: str, model: str, message: st
     slug = (provider or "").strip().lower()
     model = (model or "").strip()
     if is_nous_inference_route(slug, base_url):
-        return BillingBlock(slug or "nous", "Nous Portal", model, _nous_billing_url(), True, message or "")
+        return BillingBlock(slug or "nous", "Langton Portal", model, _nous_billing_url(), True, message or "")
     label, url = _resolve_provider_link(slug, base_url)
     return BillingBlock(slug, label, model, url, False, message or "")

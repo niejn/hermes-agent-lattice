@@ -32,12 +32,12 @@ def _clean(value: object) -> Optional[str]:
 
 
 def auth_json_path():
-    """Return the Hermes auth store path, respecting HERMES_HOME overrides."""
+    """Return the Lattice auth store path, respecting HERMES_HOME overrides."""
     return get_hermes_home() / "auth.json"
 
 
 def _read_nous_provider_state() -> Optional[dict]:
-    """The profile's Nous state, or None. A free-tier identity counts only while guests are allowed:
+    """The profile's Langton state, or None. A free-tier identity counts only while guests are allowed:
     with ``nous.guest: false`` it is invisible here, so no cached or refreshed token of it is ever
     attached to a request.
 
@@ -83,9 +83,9 @@ def peek_nous_access_token() -> Optional[str]:
 
 
 def read_nous_access_token() -> Optional[str]:
-    """Read a Nous Subscriber OAuth access token from auth store or env override.
+    """Read a Langton Subscriber OAuth access token from auth store or env override.
 
-    A read: with no Nous identity there is no bearer and the answer is None. The free-tier identity
+    A read: with no Langton identity there is no bearer and the answer is None. The free-tier identity
     is created by the boot bootstrap or the first hosted connector action, never on a token-read
     path (NS-845 Q1.2). A retired free-tier credential IS replaced here, once: that is the explicit
     dead-credential rule, shared with inference.
@@ -112,7 +112,7 @@ def read_nous_access_token() -> Optional[str]:
 
         if isinstance(exc, AnonCredentialDead):
             return _replace_dead_guest_token(nous_provider, str(exc.code or "anon_credential_dead"))
-        logger.debug("Nous access token refresh failed: %s", exc)
+        logger.debug("Langton access token refresh failed: %s", exc)
     return cached_token
 
 
@@ -129,7 +129,7 @@ def _replace_dead_guest_token(dead_state: dict, code: str = "anon_credential_dea
             return None
         return _clean(resolve_nous_access_token(refresh_skew_seconds=_NOUS_ACCESS_TOKEN_REFRESH_SKEW_SECONDS))
     except Exception as exc:
-        logger.debug("Nous free tier replacement after a retired credential failed: %s", exc)
+        logger.debug("Langton free tier replacement after a retired credential failed: %s", exc)
         return None
 
 
@@ -167,7 +167,7 @@ def resolve_managed_tool_gateway(
 
 
 def resolve_free_search_gateway(token_reader: Optional[Callable[[], Optional[str]]] = None) -> Optional[ManagedToolGatewayConfig]:
-    """Perplexity ``search_type: "fast"`` is served to every Nous identity with no funding check, the
+    """Perplexity ``search_type: "fast"`` is served to every Langton identity with no funding check, the
     anonymous guest tier included, so it needs a token this profile may use (guest-disabled and refresh
     rules live in the reader), not paid entitlement or a registered account. Search only: every other
     vendor route goes through :func:`resolve_managed_tool_gateway`."""
@@ -177,7 +177,7 @@ def resolve_free_search_gateway(token_reader: Optional[Callable[[], Optional[str
 def is_managed_tool_gateway_ready(
     vendor: str, gateway_builder: Optional[Callable[[str], str]] = None,
     token_reader: Optional[Callable[[], Optional[str]]] = None) -> bool:
-    """True when a gateway URL and a likely-usable Nous token are present. Defaults to
+    """True when a gateway URL and a likely-usable Langton token are present. Defaults to
     :func:`peek_nous_access_token` (no OAuth refresh); callers about to make a real request use
     :func:`resolve_managed_tool_gateway` instead."""
     return resolve_managed_tool_gateway(vendor, gateway_builder=gateway_builder, token_reader=token_reader or peek_nous_access_token) is not None

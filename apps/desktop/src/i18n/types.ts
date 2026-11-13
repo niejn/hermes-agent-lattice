@@ -3402,7 +3402,7 @@ export interface Translations extends NoticeTranslations {
   onboarding: OnboardingTranslations
 
   freeTier: {
-    /** Settings › Providers row title while the Nous identity is the free tier. */
+    /** Settings › Providers row title while the Langton identity is the free tier. */
     providerRowTitle: string
     /** The featured row's pitch while the identity is the free tier: what signing in adds. */
     providerRowPitch: string
@@ -3462,7 +3462,7 @@ export interface Translations extends NoticeTranslations {
     }
     // First-launch set-up failure notice: the free tier could not be created at boot.
     // One sentence per backend code (`hermes_cli/anon_auth.py::ANON_*`); the copy never says
-    // the free MODEL is off — what is unavailable is using Hermes without signing in.
+    // the free MODEL is off — what is unavailable is using Lattice without signing in.
     setupFailed: {
       gateClosed: string
       paused: string
@@ -3472,7 +3472,7 @@ export interface Translations extends NoticeTranslations {
       powRequired: string
       locked: string
       generic: string
-      /** The sign-in door, when the account service is reachable: the Nous row sits right below. */
+      /** The sign-in door, when the account service is reachable: the Langton row sits right below. */
       signInBelow: string
       tryAgain: string
       retrying: string
@@ -4013,7 +4013,7 @@ export interface Translations extends NoticeTranslations {
       errorAddCredits: string
       /** Error card button: opens Settings → Billing in-app (Keep going, buy credits). */
       errorOpenBillingSettings: string
-      /** Error card body when a Nous account is out of credits (its button opens Settings → Billing). */
+      /** Error card body when a Langton account is out of credits (its button opens Settings → Billing). */
       errorCompressConversation: string
       errorCompressFailed: string
       errorOpenHermesFolder: string

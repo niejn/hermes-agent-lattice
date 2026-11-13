@@ -41,7 +41,7 @@ python3 evals/schema_dedupe/run.py anthropic/claude-fable-5.2 3 --parallel=8
 python3 evals/schema_dedupe/run.py --report
 ```
 
-Inference defaults to the Nous Portal agent key, read fresh from `$HERMES_HOME/auth.json` for every cell
+Inference defaults to the Langton Portal agent key, read fresh from `$HERMES_HOME/auth.json` for every cell
 (read-only). Set `SDD_INFERENCE_URL` + `SDD_INFERENCE_KEY` for any other OpenAI-compatible endpoint.
 Errored cells score 0 and stay in the denominator; exit 3 (no model turn, or a manage_connections call
 that bypassed the stub) is an infra failure and is never written.
@@ -58,7 +58,7 @@ that bypassed the stub) is an infra failure and is never written.
   every process still running from the cell directory is killed by PID at the end.
 - **A weak model can walk out of the workspace.** The sandbox moves HOME, it does not hide absolute paths:
   three qwen cells read the operator's real `~/.hermes` (read-only commands). Run from a scratch root that
-  does not sit under the real Hermes home when that matters.
+  does not sit under the real Lattice home when that matters.
 - **Dollar columns depend on provider cache warmth**, which depends on which arm's prefix was sent first
   and how recently. Compare tokens; treat dollars as the bill, not as an arm difference.
 

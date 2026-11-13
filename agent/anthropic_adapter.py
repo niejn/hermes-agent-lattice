@@ -1,4 +1,4 @@
-"""Anthropic Messages API adapter: client construction + the Messages call for Hermes's
+"""Anthropic Messages API adapter: client construction + the Messages call for Lattice's
 OpenAI-style internals. Auth: Console API keys (``sk-ant-api*``/``-usr*``/``-svc*``/``-admin*``) ->
 x-api-key; OAuth setup-tokens (``sk-ant-oat*``) and Claude Code credentials -> Bearer + beta header.
 Endpoint predicates, payload conversion and credentials live in ``agent/anthropic_{endpoints,
@@ -370,7 +370,7 @@ def _beta_header(betas: list) -> dict[str, str]:
 def _attribution_headers() -> dict[str, str]:
     """Same client-attribution set sent to OpenRouter / Vercel AI Gateway / Fireworks."""
     return {
-        "HTTP-Referer": "https://hermes-agent.nousresearch.com", "X-Title": "Hermes Agent",
+        "HTTP-Referer": "https://lattice.langtonphotonics.com", "X-Title": "Lattice Agent",
         "User-Agent": f"HermesAgent/{get_version_info().base_version}",
     }
 
@@ -548,7 +548,7 @@ def _normalize_to_mcp_wire(name: str) -> str:
     """OAuth wire form of a tool name (no aliasing): ``mcp__<...>``. Anthropic's OAuth billing
     classifier treats a single-underscore ``mcp_`` tool name as a third-party-app fingerprint
     (HTTP 400 "Third-party apps now draw from extra usage"); ``mcp__foo`` is accepted. Both bare
-    Hermes tools (``read_file``) and native MCP tools registered as ``mcp_<server>_<tool>`` must
+    Lattice tools (``read_file``) and native MCP tools registered as ``mcp_<server>_<tool>`` must
     land on the double-underscore form. normalize_response reverses both via registry lookup."""
     if name.startswith("mcp__"):
         return name  # already correct, don't double-prefix
@@ -576,7 +576,7 @@ def _oauth_wire_namer(anthropic_tools: list[dict[str, Any]]):
 
 
 _OAUTH_SYSTEM_REPLACEMENTS = (
-    ("Hermes Agent", "Claude Code"), ("Hermes agent", "Claude Code"), ("Nous Research", "Anthropic"),
+    ("Lattice Agent", "Claude Code"), ("Lattice agent", "Claude Code"), ("Langton Photonics", "Anthropic"),
 )
 # The slug is rewritten only as a standalone prose word. Joined to a host, path, repo, mailbox
 # or quoted as an identifier (``hermes-agent.nousresearch.com``, ``~/.hermes/hermes-agent/venv``,
@@ -618,7 +618,7 @@ def _thinking_kwargs(reasoning_config: dict[str, Any], model: str, effective_max
     """Map ``reasoning_config`` to Anthropic thinking kwargs. Adaptive models (Claude 4.6+,
     Kimi/Moonshot) get ``thinking.type=adaptive`` + ``output_config.effort``; older models and
     manual-only compat endpoints (MiniMax) get budget_tokens. Haiku through 4.5 gets none. On
-    4.7+ ``thinking.display`` defaults to "omitted", hiding the reasoning Hermes shows in its CLI,
+    4.7+ ``thinking.display`` defaults to "omitted", hiding the reasoning Lattice shows in its CLI,
     so "summarized" is requested to keep the activity feed populated."""
     if reasoning_config.get("enabled") is False:
         # Adaptive models think by DEFAULT, so omitting the parameter is not a disable — the user
@@ -866,7 +866,7 @@ def create_anthropic_message(
     turn path and fall back to ``create()`` only for providers that explicitly don't support
     streaming (restricted Bedrock roles). Both callbacks are best-effort and fire only on the
     streaming path: ``on_stream_event(event)`` lets liveness watchdogs see forward progress;
-    ``on_response(httpx_response)`` exposes headers the parsed Message drops (Nous Portal's
+    ``on_response(httpx_response)`` exposes headers the parsed Message drops (Langton Portal's
     ``x-nous-credits-*`` balance family)."""
     sanitize_anthropic_kwargs(api_kwargs, log_prefix=log_prefix)
     messages_api = getattr(client, "messages", None)

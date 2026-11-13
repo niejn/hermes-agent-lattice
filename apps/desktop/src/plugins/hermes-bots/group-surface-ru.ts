@@ -109,7 +109,7 @@ export const GROUP_SURFACE_RU = {
     statusUnknown: "Статус неизвестен",
     unavailable: "Недоступен",
     retryNow: "Повторить сейчас",
-    rosterUnavailable: reason => `Список недоступен: ${reason}. Если шлюз не поддерживает profiles.list, обновите Hermes и перезапустите шлюз.`,
+    rosterUnavailable: reason => `Список недоступен: ${reason}. Если шлюз не поддерживает profiles.list, обновите Lattice и перезапустите шлюз.`,
     waitingForGateway: "Ожидание подключения к шлюзу… (удалённые шлюзы могут отвечать несколько секунд; повторная попытка автоматически)"
   },
   sections: {
@@ -156,7 +156,7 @@ export const GROUP_SURFACE_RU = {
     attentionFallback: "Требует внимания",
     attentionProviderAuth: "Войдите заново для этого профиля",
     attentionQuota: "Квота или баланс исчерпаны",
-    attentionMissingConfig: "Провайдер не настроен — выполните hermes model",
+    attentionMissingConfig: "Провайдер не настроен — выполните lattice model",
     attentionBlocked: "Бот заблокирован — см. последнее сообщение",
     editMenu: "Изменить…",
     duplicate: "Дублировать",

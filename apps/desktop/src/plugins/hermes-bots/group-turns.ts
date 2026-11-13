@@ -57,7 +57,7 @@ interface GroupTurnTranscriptMessage {
 }
 
 /** What a finished turn left behind: the member's reply, or the notice of the
- *  `failed_turn` row Hermes closed it with (the member never answered), or
+ *  `failed_turn` row Lattice closed it with (the member never answered), or
  *  null when no assistant row landed. */
 type GroupTurnPick = { failedNotice: string } | null | string
 
@@ -524,7 +524,7 @@ interface GatewayErrorLike {
   message?: unknown
 }
 
-/** "This session does not exist" from either backend: 4007 from a `hermes serve`
+/** "This session does not exist" from either backend: 4007 from a `lattice serve`
  *  socket, a 4001 refusal whose reason is `not_found` from the gateway that owns
  *  local sessions (gateway/session_controls.py). Only this answer may lead to
  *  minting a fresh member session; every other failure fails closed. The

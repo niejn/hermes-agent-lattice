@@ -917,14 +917,14 @@ const withHaptic = (fn: () => void) => () => {
   fn()
 }
 
-// The profile whose Hermes home this chat runs in (a Bot chat owns its own).
+// The profile whose Lattice home this chat runs in (a Bot chat owns its own).
 function useOwnerProfile(): string | null | undefined {
   const gatewayProfile = useStore($activeGatewayProfile)
 
   return useComposerScope().profile || gatewayProfile
 }
 
-// Open a folder under the profile's Hermes home in the OS file manager (via its logs root).
+// Open a folder under the profile's Lattice home in the OS file manager (via its logs root).
 async function openProfileDir(
   profile: string | null | undefined,
   resolve: (logsRoot: string) => string,
@@ -1019,7 +1019,7 @@ const ErrorDetailsBlock: FC<{ errorText: string; hidden: boolean; id: string; su
 
   return (
     <div className="aui-error-details" data-slot="aui_error-details" hidden={hidden} id={id}>
-      {/* Nous DS Copy (portal /ds/components/copy, CommandBlock): the raw error on
+      {/* Langton DS Copy (portal /ds/components/copy, CommandBlock): the raw error on
           the dark code slab with the copy glyph at its end. */}
       {errorText && (
         <div className="aui-error-details-slab">
@@ -1096,8 +1096,8 @@ const textButton = (className: string, onClick: () => void, label: ReactNode) =>
 )
 
 // Out of credits runs the same recovery as the banner and toast: the failing provider's own
-// billing page (Nous → Settings → Billing). A plan limit is Nous billing. Without this chat's
-// billing descriptor Hermes doesn't know where a third-party provider bills, so no button.
+// billing page (Langton → Settings → Billing). A plan limit is Langton billing. Without this chat's
+// billing descriptor Lattice doesn't know where a third-party provider bills, so no button.
 const sameProvider = (a?: string | null, b?: string | null) =>
   Boolean(a && b && a.trim().toLowerCase() === b.trim().toLowerCase())
 
@@ -1118,7 +1118,7 @@ const OpenBillingAction: FC<{ className: string; label: string; surface?: ErrorS
       ? wall.block
       : null
 
-  const nousBilling = surface?.code === 'usage_window' || (surface?.provider || 'nous').toLowerCase() === 'nous'
+  const nousBilling = surface?.code === 'usage_window' || (surface?.provider || 'langton').toLowerCase() === 'langton'
 
   if (!block && !nousBilling) {
     return null
@@ -1237,7 +1237,7 @@ const ErrorActionControl: FC<{
   const link = variant === 'link'
 
   return ERROR_ACTION_RENDERERS[action]({
-    // Nous DS Button (portal /ds/components/button): the one action is `secondary`,
+    // Langton DS Button (portal /ds/components/button): the one action is `secondary`,
     // the optional second one is `ghost`.
     className: link ? 'aui-error-btn aui-error-btn-ghost' : 'aui-error-btn aui-error-btn-secondary',
     copy: t.assistant.thread,

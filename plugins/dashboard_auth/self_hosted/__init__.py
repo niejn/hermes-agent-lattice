@@ -81,7 +81,7 @@ class SelfHostedOIDCProvider(JwtOAuthProvider):
     """Generic self-hosted OpenID Connect provider (authorization-code + PKCE)."""
 
     name = "self-hosted"
-    display_name = "Self-Hosted OIDC"
+    display_name = "Langton SSO (Keycloak)"
 
     # Class-level default so partially-constructed instances (object.__new__ in
     # tests) still verify with the standard clock-skew leeway.

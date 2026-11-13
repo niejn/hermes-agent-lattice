@@ -91,7 +91,7 @@ class _SessionModelSettingsMixin:
         or rehydrates a session, or changes its settings. Custom endpoint live probes are
         disabled because they can persist discovered models into config; cached/curated
         catalogs remain available. Catalog infrastructure may maintain its own caches.
-        Only slug, name, models, total_models and is_current leave core. On older Hermes,
+        Only slug, name, models, total_models and is_current leave core. On older Lattice,
         feature-detect this method with getattr (see the platform adapter guide).
         """
         from hermes_cli.config import get_compatible_custom_providers

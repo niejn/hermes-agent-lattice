@@ -3,54 +3,54 @@ import type { Translations } from './types'
 // The boot screen's copy (including the update-hold screen), composed by en.ts.
 export const enBoot = {
   boot: {
-    ready: 'Hermes Desktop is ready',
+    ready: 'Lattice Desktop is ready',
     desktopBootFailedWithMessage: message => `Desktop boot failed: ${message}`,
     steps: {
       connectingGateway: 'Connecting live desktop gateway',
-      loadingSettings: 'Loading Hermes settings',
+      loadingSettings: 'Loading Lattice settings',
       loadingSessions: 'Loading recent sessions',
-      retryingRemoteBackend: 'Reconnecting to the remote Hermes backend…',
+      retryingRemoteBackend: 'Reconnecting to the remote Lattice backend…',
       startingDesktopConnection: 'Starting desktop connection',
-      startingHermesDesktop: 'Starting Hermes Desktop…'
+      startingHermesDesktop: 'Starting Lattice Desktop…'
     },
     errors: {
       backgroundExited:
         'The service that runs your chats closed unexpectedly. Restart it to keep going — your chats and settings are safe.',
-      backgroundExitedDuringStartup: 'Hermes stopped right after it started.',
-      backendStopped: 'Hermes stopped working in the background',
-      restartHermes: 'Restart Hermes',
+      backgroundExitedDuringStartup: 'Lattice stopped right after it started.',
+      backendStopped: 'Lattice stopped working in the background',
+      restartHermes: 'Restart Lattice',
       openLogs: 'Open logs',
-      desktopBootFailed: "Hermes couldn't start",
-      gatewayConnectionLost: 'Hermes lost its connection',
+      desktopBootFailed: "Lattice couldn't start",
+      gatewayConnectionLost: 'Lattice lost its connection',
       gatewayConnectionLostDetail:
         'Still trying to reconnect. You can keep reading and drafting. If this keeps up, reconnect now or check your connection settings.',
       reconnectNow: 'Reconnect now',
       connectionSettings: 'Connection settings',
-      gatewaySignInRequired: 'Your remote Hermes signed you out',
+      gatewaySignInRequired: 'Your remote Lattice signed you out',
       gatewaySignInRequiredDetail: 'Sign in again to reconnect. Your chats and settings are safe.',
       signInAgain: 'Sign in again',
-      ipcBridgeUnavailable: "Hermes Desktop couldn't talk to its own background layer. Restart the app."
+      ipcBridgeUnavailable: "Lattice Desktop couldn't talk to its own background layer. Restart the app."
     },
     // Plain causes for a local backend boot failure (`classifyBootFailure`);
     // the raw output stays behind "Show recent logs".
     causes: {
-      exitedEarly: "Hermes' background service stopped right after starting.",
-      timedOut: "Hermes' background service didn't answer in time.",
-      permission: "Hermes couldn't write to its data folder (permission problem).",
-      diskFull: 'The disk is full, so Hermes could not start.',
-      portInUse: 'Another program is using the network port Hermes needs.',
-      installMissing: "Part of Hermes' installation is missing. Choose Repair install to put it back."
+      exitedEarly: "Lattice' background service stopped right after starting.",
+      timedOut: "Lattice' background service didn't answer in time.",
+      permission: "Lattice couldn't write to its data folder (permission problem).",
+      diskFull: 'The disk is full, so Lattice could not start.',
+      portInUse: 'Another program is using the network port Lattice needs.',
+      installMissing: "Part of Lattice' installation is missing. Choose Repair install to put it back."
     },
     failure: {
-      title: "Hermes couldn't start",
+      title: "Lattice couldn't start",
       description:
-        "Hermes' background service didn't come up. Try one of the recovery steps below. Nothing here deletes your chats or settings.",
+        "Lattice' background service didn't come up. Try one of the recovery steps below. Nothing here deletes your chats or settings.",
       details: 'Details',
       remoteTitle: 'Remote gateway sign-in required',
       remoteDescription:
         'Your remote gateway session has expired. Sign in again to reconnect. Nothing here deletes your chats or settings.',
-      webappTitle: 'Sign in to Hermes',
-      webappDescription: 'Run hermes webapp on this computer to sign this browser in.',
+      webappTitle: 'Sign in to Lattice',
+      webappDescription: 'Run lattice webapp on this computer to sign this browser in.',
       retry: 'Retry',
       repairInstall: 'Repair install',
       useLocalGateway: 'Use local gateway',
@@ -65,11 +65,11 @@ export const enBoot = {
         `Signs out of the saved remote browser session, then opens ${signInLabel}. Use local gateway to switch to the bundled backend instead.`,
       signOutAndSignIn: 'Sign out & sign in',
       remoteFailureHint: 'Check the gateway URL and sign-in under Gateway settings, or switch to the local gateway.',
-      cloudDownTitle: 'Nous Cloud agent is down',
+      cloudDownTitle: 'Langton Cloud agent is down',
       cloudDownDescription:
-        'The Nous-managed cloud agent this gateway connects to is returning a server error. It cannot be restarted from here — check its status, switch to the local gateway, or get support.',
+        'The Langton-managed cloud agent this gateway connects to is returning a server error. It cannot be restarted from here — check its status, switch to the local gateway, or get support.',
       cloudDownHint:
-        'The buttons below open the Nous Portal (instance status and controls) and our Discord for support.',
+        'The buttons below open the Langton Portal (instance status and controls) and our Discord for support.',
       cloudDownCheckPortal: 'Check Portal status',
       cloudDownDiscord: 'Get help on Discord',
       hideRecentLogs: 'Hide recent logs',
@@ -84,28 +84,28 @@ export const enBoot = {
       identityProvider: 'your identity provider'
     },
     updateHold: {
-      title: 'An earlier update still holds Hermes',
-      titleUnverified: "Hermes can't confirm the last update finished",
+      title: 'An earlier update still holds Lattice',
+      titleUnverified: "Lattice can't confirm the last update finished",
       description:
-        "Hermes is holding off on starting so it can't load files an update may still be changing. It starts by itself as soon as the hold ends.",
+        "Lattice is holding off on starting so it can't load files an update may still be changing. It starts by itself as soon as the hold ends.",
       heldByProcess: pid =>
-        `The update (process ${pid}) exited, but a process it started still holds the Hermes install.`,
-      heldUnknown: 'An update exited, but a process it started still holds the Hermes install.',
-      unverified: "The update helper couldn't check who owns the Hermes install right now. Hermes keeps checking.",
+        `The update (process ${pid}) exited, but a process it started still holds the Lattice install.`,
+      heldUnknown: 'An update exited, but a process it started still holds the Lattice install.',
+      unverified: "The update helper couldn't check who owns the Lattice install right now. Lattice keeps checking.",
       since: time => `Waiting since ${time}`,
       lastChecked: time => `Last checked ${time}`,
       recoveryHint:
-        'This usually clears in a few minutes. If it does not: quit Hermes, end leftover git or hermes processes (or restart the computer), then open Hermes again.',
+        'This usually clears in a few minutes. If it does not: quit Lattice, end leftover git or lattice processes (or restart the computer), then open Lattice again.',
       checkAgain: 'Check again',
-      quit: 'Quit Hermes',
+      quit: 'Quit Lattice',
       openLogs: 'Open logs',
       startAnyway: 'Start anyway…',
-      confirmTitle: 'Start Hermes while the update still holds it?',
+      confirmTitle: 'Start Lattice while the update still holds it?',
       confirmBody:
-        "The leftover update process may still be changing Hermes' files. Starting now can load a half-updated install, which may not work until you run the update again. Hermes records this choice in its log and leaves the update marker in place.",
+        "The leftover update process may still be changing Lattice' files. Starting now can load a half-updated install, which may not work until you run the update again. Lattice records this choice in its log and leaves the update marker in place.",
       confirmKeepWaiting: 'Keep waiting',
       confirmStart: 'Start anyway',
-      startAnywayRefused: 'What holds the install changed before Hermes could start. Review it and try again.'
+      startAnywayRefused: 'What holds the install changed before Lattice could start. Review it and try again.'
     }
   }
 } satisfies Pick<Translations, 'boot'>

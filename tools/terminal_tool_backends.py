@@ -111,7 +111,7 @@ def _modal_unavailable_reason(modal_state: dict[str, Any]) -> tuple[str, str]:
     Single decision shared by the requirements checker and the env builder."""
     gateway = nous_tool_gateway_unavailable_message("managed Modal execution")
     if modal_state["managed_mode_blocked"] or modal_state["mode"] == "managed":
-        tail = (("Nous Tool Gateway access is not currently available and no direct Modal credentials/config "
+        tail = (("Langton Tool Gateway access is not currently available and no direct Modal credentials/config "
                  f"were found. {gateway} Choose TERMINAL_MODAL_MODE=direct/auto to use direct Modal credentials.")
                 if modal_state["managed_mode_blocked"] else f"the managed tool gateway is unavailable. {gateway}")
         return (f"Modal backend selected with TERMINAL_MODAL_MODE=managed, but {tail}",

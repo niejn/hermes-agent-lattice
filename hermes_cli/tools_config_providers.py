@@ -276,7 +276,7 @@ def _any_plugin_provider_available(registry_module: str) -> bool:
 
 def _configure_tool_category(ts_key: str, cat: dict, config: dict, *, force_fresh: bool = True, reconfigure: bool = False):
     """Provider selection for a tool category, then API-key setup for the chosen row.
-    ``reconfigure`` ("Reconfigure an existing tool"): no setup note / skip row / Nous marker, and the
+    ``reconfigure`` ("Reconfigure an existing tool"): no setup note / skip row / Langton marker, and the
     chosen provider goes through the key-update prompts instead of the new-enable prompts."""
     from hermes_cli.tools_config import _prompt_choice, _provider_env_ready, get_nous_subscription_features
 
@@ -318,7 +318,7 @@ def _configure_tool_category(ts_key: str, cat: dict, config: dict, *, force_fres
         # Subscribers get the "included" star; everyone else a hint that selecting triggers a Portal login.
         sub_marker = ""
         if not reconfigure and p.get("managed_nous_feature"):
-            sub_marker = "  ★ Included with your Nous subscription" if _nous_logged_in else "  ★ via Nous Portal (login on select)"
+            sub_marker = "  ★ Included with your Langton subscription" if _nous_logged_in else "  ★ via Langton Portal (login on select)"
         provider_choices.append(f"{p['name']}{badge}{tag}{configured}{sub_marker}")
 
     if not reconfigure:
@@ -379,7 +379,7 @@ def _web_serving_backends(config: dict) -> set:
 def _web_backend_active(provider: dict, config: dict) -> bool:
     """True when a web row's ``web_backend`` serves either capability as configured: a vendor serving
     one capability through its override is in use even when the shared key names a different one,
-    and a shared vendor shadowed by both overrides serves nothing. Managed Nous rows never reach
+    and a shared vendor shadowed by both overrides serves nothing. Managed Langton rows never reach
     here — they answer in ``_managed_provider_active``."""
     backend = provider.get("web_backend")
     if not (backend and backend in _web_serving_backends(config) and _web_tier_matches(provider, config)):
@@ -530,7 +530,7 @@ def _managed_image_catalog(config: dict):
 # picker time. "nous" is the single managed row: one catalog spanning the FAL, Krea and Portal gateways.
 IMAGEGEN_BACKENDS = {
     "fal": {"display": "FAL.ai", "config_key": "image_gen", "catalog_fn": _fal_model_catalog},
-    "nous": {"display": "Nous Subscription", "config_key": "image_gen", "catalog_fn": _managed_image_catalog}}
+    "nous": {"display": "Langton Subscription", "config_key": "image_gen", "catalog_fn": _managed_image_catalog}}
 
 
 def _plugin_model_catalog(registry_module: str, plugin_name: str):
@@ -690,7 +690,7 @@ _PROVIDER_MARKER_SECTIONS = {
 
 def _write_provider_config(provider: dict, config: dict, *, managed_feature) -> None:
     """Persist the provider/backend config keys for a selected provider.
-    Pure, non-interactive core of :func:`_configure_provider` (no env prompts, post-setup hooks, Nous
+    Pure, non-interactive core of :func:`_configure_provider` (no env prompts, post-setup hooks, Langton
     auth gating or model pickers) shared by the CLI and the GUI ``PUT .../provider`` endpoint. Each pick
     writes exactly ONE provider string per category (``nous`` for managed rows) and removes any legacy
     ``use_gateway`` key so the read-time shim cannot override the new choice."""
@@ -779,7 +779,7 @@ def apply_provider_selection(ts_key: str, provider_name: str, config: dict) -> N
 
 def _nous_provider_gate(provider: dict, config: dict, managed_feature, *, force_fresh: bool) -> bool:
     """Return False (after printing why) when a Nous-gated row cannot be selected.
-    Managed Tool Gateway rows are always listed but only *activate* with paid Nous Portal access —
+    Managed Tool Gateway rows are always listed but only *activate* with paid Langton Portal access —
     selecting one runs an inline Portal login (auth + entitlement only, no inference-provider switch).
     Pure pre-auth UX rows (``requires_nous_auth`` without a managed feature) keep the older logged-in +
     entitled gate."""
@@ -789,9 +789,9 @@ def _nous_provider_gate(provider: dict, config: dict, managed_feature, *, force_
         from hermes_cli.nous_subscription import ensure_nous_portal_access
 
         if not ensure_nous_portal_access(
-            capability=f"{provider.get('name', 'the Nous Tool Gateway')}",
+            capability=f"{provider.get('name', 'the Langton Tool Gateway')}",
             coverage_category=MANAGED_FEATURE_COVERAGE_CATEGORY.get(managed_feature)):
-            _print_warning("  Not enabled — Nous Portal access is required for this backend.")
+            _print_warning("  Not enabled — Langton Portal access is required for this backend.")
             return False
         return True
 
@@ -800,8 +800,8 @@ def _nous_provider_gate(provider: dict, config: dict, managed_feature, *, force_
         entitled = bool(features.account_info and features.account_info.paid_service_access is True)
         if not features.nous_auth_present or not entitled:
             message = format_nous_portal_entitlement_message(
-                features.account_info, capability=f"{provider.get('name', 'Nous Subscription')}")
-            _print_warning(f"  {message or 'Nous Subscription is only available after logging into Nous Portal.'}")
+                features.account_info, capability=f"{provider.get('name', 'Langton Subscription')}")
+            _print_warning(f"  {message or 'Langton Subscription is only available after logging into Langton Portal.'}")
             return False
     return True
 
@@ -850,7 +850,7 @@ def _print_provider_selection(provider: dict, managed_feature, *, reconfigure: b
 
 def _show_portal_hint(provider: dict, config: dict, managed_feature, force_fresh: bool) -> bool:
     """True when a BYOK row shares its category with a Nous-managed sibling and the user is not authed to
-    Nous — a single dim hint tells them the key is avoidable via a Portal subscription."""
+    Langton — a single dim hint tells them the key is avoidable via a Portal subscription."""
     from hermes_cli.tools_config import TOOL_CATEGORIES, get_nous_subscription_features
 
     if managed_feature or provider.get("requires_nous_auth"):
@@ -933,12 +933,12 @@ def _configure_provider(provider: dict, config: dict, *, force_fresh: bool = Tru
             _run_post_setup(provider["post_setup"])
         _print_success(f"  {provider['name']} - no configuration needed!")
         if managed_feature:
-            _print_info("  Requests for this tool will be billed to your Nous subscription.")
+            _print_info("  Requests for this tool will be billed to your Langton subscription.")
         _finish_provider_selection(provider, config, managed_feature)
         return
 
     if not reconfigure and _show_portal_hint(provider, config, managed_feature, force_fresh):
-        _print_info("  Available through Nous Portal subscription.")
+        _print_info("  Available through Langton Portal subscription.")
 
     all_configured = _prompt_env_vars(env_vars, reconfigure=reconfigure)
     if provider.get("post_setup") and all_configured:

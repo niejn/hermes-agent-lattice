@@ -278,7 +278,7 @@ describe('PluginsTab', () => {
         kind: 'disk',
         status: 'loaded',
         packageName: 'hermes-media-studio',
-        packageOrigin: { repo: 'https://github.com/NousResearch/hermes-media-studio.git', sha: 'abc' }
+        packageOrigin: { repo: 'https://github.com/LangtonPhotonics/hermes-media-studio.git', sha: 'abc' }
       }
     })
 
@@ -291,7 +291,7 @@ describe('PluginsTab', () => {
       expect($pluginInstallRequest.get()).toMatchObject({
         legacyHint: 'agent',
         profile: 'workbot',
-        repo: 'https://github.com/NousResearch/hermes-media-studio.git',
+        repo: 'https://github.com/LangtonPhotonics/hermes-media-studio.git',
         sha: 'abc'
       })
     })
@@ -308,7 +308,7 @@ describe('PluginsTab', () => {
         packageName: 'hermes-media-studio',
         packageOrigin: {
           catalogName: 'hermes-media-studio',
-          repo: 'https://github.com/NousResearch/hermes-media-studio.git',
+          repo: 'https://github.com/LangtonPhotonics/hermes-media-studio.git',
           sha: 'abc'
         }
       }
@@ -610,7 +610,7 @@ describe('PluginsTab', () => {
       expect(checked()).toBe('false')
       expect($pluginRecords.get().kanban.status).toBe('disabled')
       expect($pluginDecisions.get()).not.toHaveProperty('kanban')
-      expect(window.localStorage.getItem('hermes.desktop.pluginDecisions.v2')).toBeNull()
+      expect(window.localStorage.getItem('lattice.desktop.pluginDecisions.v2')).toBeNull()
       expect(notices('success')).toHaveLength(0)
 
       // Same intended value again, backend healthy: both halves turn on.

@@ -422,7 +422,7 @@ export async function waitFor<T>(
 export const FIRST_RUN_SCREENS = [
   'Set up Hermes Desktop',
   'Hermes needs a one-time install',
-  'Setting up Hermes Agent',
+  'Setting up Lattice Agent',
   'Install Hermes locally',
   'Use Hermes on this computer'
 ]

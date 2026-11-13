@@ -65,7 +65,7 @@ def _resolve_managed_fal_gateway():
         if gateway is None:
             raise ValueError(selection_error(
                 "image_gen", NOUS_MANAGED_PROVIDER,
-                "the Nous Tool Gateway is not available (not entitled or unreachable)"))
+                "the Langton Tool Gateway is not available (not entitled or unreachable)"))
         return gateway
     if selected is not None:
         if fal_key_is_configured():
@@ -563,7 +563,7 @@ def _build_no_backend_setup_message() -> str:
               "  1. Get a free API key at https://fal.ai and set FAL_KEY=<your-key> "
               "(then restart the session)"]
     if managed:
-        lines.append("  2. Sign in to a Nous account that has the managed FAL gateway enabled "
+        lines.append("  2. Sign in to a Langton account that has the managed FAL gateway enabled "
                      "(`hermes setup`)")
     lines.append("  3. Configure a different image_gen provider via `hermes tools` → Image Generation "
                  "(run `hermes plugins list` to see installed backends)")

@@ -1,6 +1,6 @@
-"""Centralized Nous Portal request tags.
+"""Centralized Langton Portal request tags.
 
-Every Hermes request to the Nous Portal (main loop, auxiliary client, fallback
+Every Lattice request to the Langton Portal (main loop, auxiliary client, fallback
 paths) must carry the same product-attribution tags, sent in OpenAI-compatible
 ``extra_body['tags']``: ``["product=hermes-agent", "client=hermes-client-v<base_version>"]``.
 The value comes from the canonical runtime identity's base version so build
@@ -83,7 +83,7 @@ def conversation_tag(session_id: str) -> str:
 
 
 def nous_portal_tags(session_id: str | None = None) -> list[str]:
-    """Fresh list of the canonical Nous Portal tags.
+    """Fresh list of the canonical Langton Portal tags.
 
     The ambient conversation context (lineage ROOT id) wins over the explicit
     ``session_id``, a fallback for callers outside any agent turn.

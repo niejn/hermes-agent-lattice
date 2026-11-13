@@ -389,7 +389,7 @@ def _active_profile_line(agent: Any) -> str:
         # Without one, keep the ambient (patchable) resolution byte-identical.
         _root_str = str(get_default_hermes_root() if _agent_home_path is not None else get_hermes_home())
         return (
-            "Active Hermes profile: default. Other profiles (if any) live "
+            "Active Lattice profile: default. Other profiles (if any) live "
             "under " + _root_str + "/profiles/<name>/. Each profile has its own "
             "skills/, plugins/, cron/, and memories/ that affect a different "
             "session than this one. Do not modify another profile's "
@@ -733,7 +733,7 @@ def _context_files_part(agent: Any, ctx_len: Optional[int], soul_loaded: bool) -
     install-tree fallback is only legitimate for cli/tui where the launch dir
     IS the user's shell cwd. Desktop launch artifacts skip the session cwd but
     still honor the profile-scoped TERMINAL_CWD; without one, the fallback guard
-    can reject Hermes's bundled AGENTS.md."""
+    can reject Lattice's bundled AGENTS.md."""
     if agent.skip_context_files:
         return []
     launch_artifact = getattr(agent, "_context_cwd_is_launch_artifact", False)

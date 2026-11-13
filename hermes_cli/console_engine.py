@@ -1,4 +1,4 @@
-"""Safe Hermes Console command engine."""
+"""Safe Lattice Console command engine."""
 
 from __future__ import annotations
 
@@ -354,27 +354,27 @@ _BLOCKED_TOP = frozenset(
     "oneshot proxy serve setup uninstall update whatsapp whatsapp-cloud".split())
 
 _BLOCKED_PAIRS = {
-    ("config", "edit"): "`config edit` opens an editor and is not available in Hermes Console.",
-    ("profile", "alias"): "`profile alias` creates shell wrappers and is not available in Hermes Console.",
-    ("skills", "config"): "`skills config` is interactive and is not available in Hermes Console.",
-    ("skills", "publish"): "`skills publish` is not available in Hermes Console.",
-    ("portal", "login"): "`portal login` is interactive and is not available in Hermes Console.",
-    ("portal", "open"): "`portal open` opens a browser and is not available in Hermes Console.",
-    ("kanban", "tail"): "`kanban tail` streams output and is not available in Hermes Console.",
-    ("kanban", "watch"): "`kanban watch` streams output and is not available in Hermes Console.",
-    ("kanban", "daemon"): "`kanban daemon` starts a service and is not available in Hermes Console.",
-    ("kanban", "dispatcher"): "`kanban dispatcher` starts a worker and is not available in Hermes Console.",
-    ("kanban", "swarm"): "`kanban swarm` starts agent work and is not available in Hermes Console.",
-    ("kanban", "decompose"): "`kanban decompose` starts agent work and is not available in Hermes Console.",
-    ("kanban", "specify"): "`kanban specify` starts agent work and is not available in Hermes Console.",
-    ("kanban", "gc"): "`kanban gc` is not available in Hermes Console.",
-    ("sessions", "delete"): "`sessions delete` and `sessions prune` are not available in Hermes Console.",
-    ("sessions", "prune"): "`sessions delete` and `sessions prune` are not available in Hermes Console.",
+    ("config", "edit"): "`config edit` opens an editor and is not available in Lattice Console.",
+    ("profile", "alias"): "`profile alias` creates shell wrappers and is not available in Lattice Console.",
+    ("skills", "config"): "`skills config` is interactive and is not available in Lattice Console.",
+    ("skills", "publish"): "`skills publish` is not available in Lattice Console.",
+    ("portal", "login"): "`portal login` is interactive and is not available in Lattice Console.",
+    ("portal", "open"): "`portal open` opens a browser and is not available in Lattice Console.",
+    ("kanban", "tail"): "`kanban tail` streams output and is not available in Lattice Console.",
+    ("kanban", "watch"): "`kanban watch` streams output and is not available in Lattice Console.",
+    ("kanban", "daemon"): "`kanban daemon` starts a service and is not available in Lattice Console.",
+    ("kanban", "dispatcher"): "`kanban dispatcher` starts a worker and is not available in Lattice Console.",
+    ("kanban", "swarm"): "`kanban swarm` starts agent work and is not available in Lattice Console.",
+    ("kanban", "decompose"): "`kanban decompose` starts agent work and is not available in Lattice Console.",
+    ("kanban", "specify"): "`kanban specify` starts agent work and is not available in Lattice Console.",
+    ("kanban", "gc"): "`kanban gc` is not available in Lattice Console.",
+    ("sessions", "delete"): "`sessions delete` and `sessions prune` are not available in Lattice Console.",
+    ("sessions", "prune"): "`sessions delete` and `sessions prune` are not available in Lattice Console.",
 }
 
 
 class HermesConsoleEngine:
-    """Curated line-command executor for Hermes Console."""
+    """Curated line-command executor for Lattice Console."""
 
     def __init__(self, *, output_limit: int = 20000):
         self.output_limit = output_limit
@@ -394,8 +394,8 @@ class HermesConsoleEngine:
                 return ConsoleResult("ok", output=self.help_text())
             if _contains_shell_syntax(raw_line, tokens):
                 raise ConsoleCommandError(
-                    "Hermes Console does not run shell syntax. Use one supported "
-                    "Hermes command at a time.")
+                    "Lattice Console does not run shell syntax. Use one supported "
+                    "Lattice command at a time.")
             builtin = self._execute_builtin(tokens)
             if builtin is not None:
                 if raw_line not in {"history", "clear"}:
@@ -417,7 +417,7 @@ class HermesConsoleEngine:
         if subject:
             command, _args = self._resolve_command(subject.split())
             return f"{command.usage}\n{command.summary}"
-        lines = ["Hermes Console", "", "Supported commands:"]
+        lines = ["Lattice Console", "", "Supported commands:"]
         for command in sorted(self.commands.values(), key=lambda c: c.usage):
             marker = " *" if command.mutating else "  "
             lines.append(f"{marker} {command.usage:<32} {_table_summary(command.summary)}")
@@ -538,7 +538,7 @@ def _apply_confirmed_defaults(args: argparse.Namespace) -> None:
         auth_type = getattr(args, "auth_type", None)
         if auth_type in {"api-key", "api_key"} and not getattr(args, "api_key", None):
             raise ConsoleCommandError(
-                "auth add --type api-key requires --api-key in Hermes Console.")
+                "auth add --type api-key requires --api-key in Lattice Console.")
     if getattr(args, "import_name", None) is not None:
         return  # profile import has no prompt flag; leave it alone.
     if getattr(args, "skills_action", None) in {"install", "reset", "opt-out", "repair-official"}:
@@ -566,7 +566,7 @@ _cron_status = _simple_command("cron status", "hermes_cli.cron", "cron_status")
 
 def _logs(_engine: HermesConsoleEngine, args: list[str]) -> str:
     if "-f" in args or "--follow" in args:
-        raise ConsoleCommandError("`logs -f` is not available in Hermes Console.")
+        raise ConsoleCommandError("`logs -f` is not available in Lattice Console.")
     ns = _parse(
         "logs", args, (("log_name",), dict(nargs="?", default="agent")),
         (("-n", "--lines"), dict(type=int, default=50)),
@@ -793,10 +793,10 @@ def _cron_run(_engine: HermesConsoleEngine, args: list[str]) -> str:
 
 # (path, usage, summary, handler, confirmation prompt) — a non-empty prompt marks it mutating.
 _BUILTIN_COMMANDS = (
-    (("status",), "status", "Show Hermes component status.", _status, ""),
-    (("version",), "version", "Show Hermes version information.", _version, ""),
+    (("status",), "status", "Show Lattice component status.", _status, ""),
+    (("version",), "version", "Show Lattice version information.", _version, ""),
     (("doctor",), "doctor", "Run diagnostics without auto-fix.", _doctor, ""),
-    (("logs",), "logs [name] [-n N]", "Show recent Hermes logs.", _logs, ""),
+    (("logs",), "logs [name] [-n N]", "Show recent Lattice logs.", _logs, ""),
     (("sessions", "list"), "sessions list [--limit N]", "List recent sessions.", _sessions_list,
      ""),
     (("sessions", "stats"), "sessions stats", "Show session store statistics.", _sessions_stats,
@@ -807,7 +807,7 @@ _BUILTIN_COMMANDS = (
     (("cron", "status"), "cron status", "Show cron scheduler status.", _cron_status, ""),
     (("profile",), "profile", "Show active profile status.", _profile_status, ""),
     (("config", "set"), "config set <key> <value>", "Set a configuration value.", _config_set,
-     "Update Hermes configuration?"),
+     "Update Lattice configuration?"),
     (("cron", "pause"), "cron pause <job>", "Pause a scheduled job.", _cron_pause,
      "Pause this cron job?"),
     (("cron", "resume"), "cron resume <job>", "Resume a paused cron job.", _cron_resume,
@@ -815,7 +815,7 @@ _BUILTIN_COMMANDS = (
     (("cron", "run"), "cron run <job>", "Run a job on the next scheduler tick.", _cron_run,
      "Trigger this cron job?"),
     (("config", "migrate"), "config migrate", "Update config with new options.", _config_migrate,
-     "Update Hermes configuration with missing defaults?"),
+     "Update Lattice configuration with missing defaults?"),
     (("sessions", "export"), "sessions export <output> [--source SOURCE] [--session-id ID]",
      "Export sessions to JSONL.", _sessions_export, "Export session data?"),
     (("sessions", "rename"), "sessions rename <session> <title>", "Rename a session.",
@@ -839,7 +839,7 @@ def run_console_repl(
         if interactive:
             print(text, file=stdout, **kw)
 
-    say("Hermes Console. Type `help` for commands, `exit` to quit.")
+    say("Lattice Console. Type `help` for commands, `exit` to quit.")
     while True:
         say("hermes> ", end="", flush=True)
         line = stdin.readline()

@@ -38,7 +38,7 @@ export function groupExecutionMode(value: unknown): GroupExecutionMode {
 }
 
 /** Two surfaces answer `groups.capabilities`: the gateway's own (gateway/session_group_controls.py)
- *  and the standalone server (`hermes serve`, `hermes dashboard`; tui_gateway/methods_groups.py).
+ *  and the standalone server (`lattice serve`, `lattice dashboard`; tui_gateway/methods_groups.py).
  *  Standalone rooms support files; Discard is advertised only when forwarded to an owning gateway.
  *  A room offers a control only when its gateway lists the control's method: `undefined` until a
  *  read succeeds (none), `null` when a successful answer lists no methods (every control, as before). */
@@ -263,7 +263,7 @@ export function groupCreationEngine(mode: GroupExecutionMode | 'checking', selec
 
   if (!connectionId || mode === 'unavailable') {return { engine: 'unavailable', reason: 'owner_unavailable' }}
 
-  // A gateway too old to run group chats cannot own one: the person updates Hermes there.
+  // A gateway too old to run group chats cannot own one: the person updates Lattice there.
   if (mode === 'legacy') {return { engine: 'unavailable', reason: 'owner_update_required' }}
 
   if (selection.some(bot => !botOnConnection(bot, connectionId) && !peerReachable(bot))) {return { engine: 'unavailable', reason: 'route_unavailable' }}

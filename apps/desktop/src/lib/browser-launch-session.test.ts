@@ -108,8 +108,8 @@ it('fails closed with actionable launch instructions in a fresh tab and ignores 
   const fetchMock = vi.fn()
   vi.stubGlobal('fetch', fetchMock)
   expect(installBrowserDesktopBridge()).toBe(true)
-  await expect(window.hermesDesktop!.getConnection()).rejects.toThrow('Run hermes webapp')
-  await expect(window.hermesDesktop!.api({ path: '/api/fs/read-text' })).rejects.toThrow('Run hermes webapp')
+  await expect(window.hermesDesktop!.getConnection()).rejects.toThrow('Run lattice webapp')
+  await expect(window.hermesDesktop!.api({ path: '/api/fs/read-text' })).rejects.toThrow('Run lattice webapp')
   expect(fetchMock).not.toHaveBeenCalled()
   window.dispatchEvent(new Event('beforeunload'))
   Reflect.deleteProperty(window, 'hermesDesktop')
@@ -177,7 +177,7 @@ it.each(['window', 'session'] as const)('hands off a private %s through a one-us
   expect(child.pathname).toBe('/one/webapp/window')
   expect(child.search).toBe('')
   const handoff = new URLSearchParams(child.hash.slice(1))
-  expect(Channel.current.name).toBe(`hermes.webapp.window:${handoff.get('channel')}`)
+  expect(Channel.current.name).toBe(`lattice.webapp.window:${handoff.get('channel')}`)
   expect(Channel.current.postMessage).toHaveBeenCalledWith({ ticket })
   expect(Channel.current.close).toHaveBeenCalledOnce()
   expect(handoff.get('query')).toContain('profile=research')
@@ -214,7 +214,7 @@ it('asks a tab without a working credential to sign in, so reconnecting stops', 
     expect((error as Error).message).toBe(WEBAPP_LAUNCH_REQUIRED)
   }
 
-  // hermes webapp --sign-out replaced the credential this tab holds.
+  // lattice webapp --sign-out replaced the credential this tab holds.
   window.dispatchEvent(new Event('beforeunload'))
   Reflect.deleteProperty(window, 'hermesDesktop')
   sessionStorage.setItem(webappSessionKey(''), 'd'.repeat(43))

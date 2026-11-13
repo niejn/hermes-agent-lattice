@@ -425,7 +425,7 @@ export function durableGroupChatMembers(bots: RosterRow[]): GroupMember[] {
       name: bot.name,
       handle: botHandle(bot.name, bot) || bot.handle || bot.name,
       // The stored handle alone cannot say why a default is not @hermes, and
-      // botHandle re-derives 'hermes' for it: keep the claim, or a room whose
+      // botHandle re-derives 'lattice' for it: keep the claim, or a room whose
       // live row is gone tells two bots they are both @hermes. A live row
       // (groupChatMemberBots prefers it) recomputes this from the roster.
       ...(bot.hermesHandleTaken

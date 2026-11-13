@@ -180,7 +180,7 @@ def test_primary_client_and_credential_rebuild_send_expected_headers(
         agent.client.responses.create(model=MODEL, input="test")
         assert "originator" not in wire[-1].headers
         assert "chatgpt-account-id" not in wire[-1].headers
-        assert not wire[-1].headers["user-agent"].startswith("HermesAgent/")
+        assert not wire[-1].headers["user-agent"].startswith("LatticeAgent/")
     finally:
         for client in clients:
             client.close()
@@ -338,7 +338,7 @@ def test_required_identity_wins_over_configured_header_defaults(
         proxy.responses.create(model=MODEL, input="test")
         assert wire[-1].headers["originator"] == "codex_cli_rs"
         assert "custom-client" in wire[-1].headers.get_list("user-agent")
-        assert "HermesAgent/" not in wire[-1].headers["user-agent"]
+        assert "LatticeAgent/" not in wire[-1].headers["user-agent"]
         assert wire[-1].headers["x-test-header"] == "preserved"
         assert "chatgpt-account-id" not in wire[-1].headers
     finally:

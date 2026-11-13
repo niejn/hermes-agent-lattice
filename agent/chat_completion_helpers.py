@@ -499,7 +499,7 @@ def _prompt_cache_scope_for_agent(agent) -> str | None:
 
 
 def _merge_nous_portal_messages_extra_body(agent, anthropic_kwargs: dict, api_messages: list) -> dict:
-    """The Nous profile body on the Messages wire, which the profile hook never reaches; never
+    """The Langton profile body on the Messages wire, which the profile hook never reaches; never
     ``provider_preferences`` (OpenAI-wire routing the Portal 400s on)."""
     if getattr(agent, "provider", None) not in {"nous", "nous-portal", "nousresearch"}:
         return anthropic_kwargs
@@ -510,7 +510,7 @@ def _merge_nous_portal_messages_extra_body(agent, anthropic_kwargs: dict, api_me
             anthropic_kwargs.setdefault("extra_body", {}).update(nous_profile.build_extra_body(
                 session_id=getattr(agent, "session_id", None), data_use=data_use_requirement(api_messages)))
     except Exception as exc:
-        logger.debug("Nous Portal extra_body merge failed: %s", exc)
+        logger.debug("Langton Portal extra_body merge failed: %s", exc)
     return anthropic_kwargs
 
 
@@ -729,7 +729,7 @@ def _bedrock_reasoning_stale_floor(model_id: object) -> float | None:
 
 
 def _bedrock_converse_call(api_kwargs: dict, *, stream: bool, on_stream_denied=None):
-    """Pop the Hermes routing keys and call ``converse`` / ``converse_stream`` (boto3 directly) with the
+    """Pop the Lattice routing keys and call ``converse`` / ``converse_stream`` (boto3 directly) with the
     adapter's shared recovery: a cachePoint rejection (Nova: toolConfig.tools, #97281) or a replayed sealed
     reasoning rejection resends once without the offending blocks inside the same attempt; a streaming IAM
     denial hands off to ``on_stream_denied(client, kwargs, exc)``; a stale connection evicts the cached

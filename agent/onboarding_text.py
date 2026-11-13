@@ -18,7 +18,7 @@ from agent.onboarding_flow import Facts, next_beat
 from tools.set_theme_tool import ACCENT_SWATCHES
 
 CHAT_TITLE = "Getting started"
-GREETING = "Hi, I'm Hermes. Let's set things up for you. Then we'll get something cool done."
+GREETING = "Hi, I'm Lattice. Let's set things up for you. Then we'll get something cool done."
 
 # The scripted opening in each desktop UI language (apps/desktop/src/i18n/languages.ts), played before
 # the model speaks; the model writes the rest of the run in the user's language itself. Each greeting
@@ -26,14 +26,14 @@ GREETING = "Hi, I'm Hermes. Let's set things up for you. Then we'll get somethin
 # two lines joined: keep the two equal.
 _GREETINGS = {
     "en": GREETING,
-    "ar": "مرحبًا، أنا Hermes. لنجهّز كل شيء لك، ثم ننجز معًا شيئًا رائعًا.",
-    "de": "Hallo, ich bin Hermes. Richten wir alles für Sie ein. Danach machen wir etwas Cooles.",
-    "es": "Hola, soy Hermes. Vamos a dejarlo todo listo para ti. Luego haremos algo genial.",
-    "fr": "Bonjour, je suis Hermes. Configurons tout pour vous. Ensuite, nous ferons quelque chose de génial.",
-    "ja": "こんにちは、Hermes です。まずはあなたに合わせて設定しましょう。そのあと、何かすごいものを作りましょう。",
-    "ru": "Привет, я Hermes. Давайте всё настроим под вас. А потом сделаем что-нибудь классное.",
-    "zh": "你好，我是 Hermes。我们先帮你把一切设置好，然后一起做点很酷的事。",
-    "zh-hant": "你好，我是 Hermes。我們先幫你把一切設定好，然後一起做點很酷的事。",
+    "ar": "مرحبًا، أنا Lattice. لنجهّز كل شيء لك، ثم ننجز معًا شيئًا رائعًا.",
+    "de": "Hallo, ich bin Lattice. Richten wir alles für Sie ein. Danach machen wir etwas Cooles.",
+    "es": "Hola, soy Lattice. Vamos a dejarlo todo listo para ti. Luego haremos algo genial.",
+    "fr": "Bonjour, je suis Lattice. Configurons tout pour vous. Ensuite, nous ferons quelque chose de génial.",
+    "ja": "こんにちは、Lattice です。まずはあなたに合わせて設定しましょう。そのあと、何かすごいものを作りましょう。",
+    "ru": "Привет, я Lattice. Давайте всё настроим под вас. А потом сделаем что-нибудь классное.",
+    "zh": "你好，我是 Lattice。我们先帮你把一切设置好，然后一起做点很酷的事。",
+    "zh-hant": "你好，我是 Lattice。我們先幫你把一切設定好，然後一起做點很酷的事。",
 }
 
 _NAME_QUESTIONS = {
@@ -100,7 +100,7 @@ _NVIDIA = {
 
 
 def facts_block(facts: Facts) -> str:
-    whose = ("the computer running Hermes, which is not the one in front of the user"
+    whose = ("the computer running Lattice, which is not the one in front of the user"
              if facts.facts_source == "remote" else "this computer")
     lines = [f"What you know about {whose}: {facts.os} on {facts.arch or 'an unknown architecture'}, "
              f"a {facts.machine_kind}."]
@@ -231,7 +231,7 @@ _OS_LINES = {
 _ARM_WINDOWS = ("On Windows on Arm, read arm64 vs x64 from winget's install output, not the manifest, and say when "
                 "an app is x64 only.")
 _SPARK_LINE = "This machine is built for local models; say so once when it fits what they asked."
-_REMOTE_LINE = "Hermes runs on another computer than the user's: say which machine anything is installed on."
+_REMOTE_LINE = "Lattice runs on another computer than the user's: say which machine anything is installed on."
 
 
 def _task_prompt(option: str, label: str, resolve_skill: Callable[[str], str | None]) -> list[str]:
@@ -317,7 +317,7 @@ def _waiting_beat(record) -> str | None:
 
 _REMINDERS = {
     "after_name": lambda r, f: f"They go by {r['picks']['name']}. Greet them by name in a few words. {_next(r)}",
-    "after_theme": lambda r, f: (f"Accent {r['picks']['accent'] or 'Nous blue'} is on, already applied. Do not call "
+    "after_theme": lambda r, f: (f"Accent {r['picks']['accent'] or 'Langton blue'} is on, already applied. Do not call "
                                  f"set_theme for it again. React in three words or fewer. {_next(r)}"),
     "after_layout": _after_layout,
     "offer_first": lambda r, f: f"The connectors card is not shown yet. {_LOOK_AROUND}",

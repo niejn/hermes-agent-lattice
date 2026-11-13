@@ -1,4 +1,4 @@
-"""Replace a gateway left running by an older Hermes on this install's own home.
+"""Replace a gateway left running by an older Lattice on this install's own home.
 
 After an upgrade the old daemon keeps answering the home's control socket, but its ``identify`` has
 no ``runtime_protocol`` (it predates the session-authority runtime). Every client of this version
@@ -27,11 +27,11 @@ _FORCED_STOP_SECONDS = 5.0
 
 # One line each, short enough for the TUI's activity row after its "gateway incompatible: " prefix.
 REFUSAL_DETAIL = {
-    "owner_newer": "a newer Hermes's gateway owns this profile; update Hermes or run: hermes gateway stop",
-    "foreign_install": "another Hermes install's gateway owns this profile; stop it there: hermes gateway stop",
-    "owner_unverified": "an older Hermes gateway owns this profile and was not verified; run: hermes gateway stop",
-    "owner_did_not_exit": "an older Hermes gateway owns this profile and did not stop; run: hermes gateway stop",
-    "owner_unreachable": "an older Hermes gateway owns this profile; run: hermes gateway stop",
+    "owner_newer": "a newer Lattice's gateway owns this profile; update Lattice or run: hermes gateway stop",
+    "foreign_install": "another Lattice install's gateway owns this profile; stop it there: hermes gateway stop",
+    "owner_unverified": "an older Lattice gateway owns this profile and was not verified; run: hermes gateway stop",
+    "owner_did_not_exit": "an older Lattice gateway owns this profile and did not stop; run: hermes gateway stop",
+    "owner_unreachable": "an older Lattice gateway owns this profile; run: hermes gateway stop",
 }
 
 

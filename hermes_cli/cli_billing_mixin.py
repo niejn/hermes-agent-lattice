@@ -251,7 +251,7 @@ class CLIBillingMixin:
     # ── /usage — Nous balance block ──
 
     def _print_nous_credits_block(self) -> bool:
-        """Nous dollar balance block (two bars); True if anything printed. Shared dollar model first, then
+        """Langton dollar balance block (two bars); True if anything printed. Shared dollar model first, then
         legacy ``nous_credits_lines``. Agent-independent (TUI slash-worker has no live agent). Fail-open."""
         from cli import _cprint, _b, _d
         usage = self._try_usage_model()

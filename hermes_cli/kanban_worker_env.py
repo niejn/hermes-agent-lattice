@@ -8,7 +8,7 @@ therefore reaches the assignee's turns, and an overlay can replace a value but n
 scrub of the dispatcher's environment only catches the names it knows (provider keys, the
 dispatcher's ``terminal.env_passthrough``); a token systemd or ``op run`` injected under any other
 name went through. So the dispatcher's environment is reduced to host process plumbing and
-Hermes' own location before the dispatcher adds the claim.
+Lattice' own location before the dispatcher adds the claim.
 """
 
 from __future__ import annotations

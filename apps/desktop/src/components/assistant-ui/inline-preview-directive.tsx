@@ -36,7 +36,7 @@ import { localPreviewTarget } from '@/lib/local-preview'
  * content reads as part of the app. The page's own styles override all of
  * it, so a full page keeps its own design.
  *
- * WIDGETS TALK BACK OFF-SCREEN. `window.hermes.send(prompt)` (or declarative
+ * WIDGETS TALK BACK OFF-SCREEN. `window.lattice.send(prompt)` (or declarative
  * `data-hermes-send` on any clickable element) routes the prompt through the
  * composer's send path as a user turn typed `display_kind=hidden`: the agent
  * wakes and the durable row exists (context, resume, audit via the DB), but
@@ -86,18 +86,18 @@ export const MAX_INTENT_LENGTH = 500
 /** One intent per frame per second; clicks are human-speed. A faster intent
  *  is rejected with `retryAfterMs`, not dropped silently. */
 export const INTENT_THROTTLE_MS = 1000
-/** How long `hermes.send()` waits for the parent's ack before resolving
+/** How long `lattice.send()` waits for the parent's ack before resolving
  *  `timeout` (the parent acks synchronously; this only fires if it's gone). */
 const INTENT_ACK_TIMEOUT_MS = 5000
 
 export type IntentError = 'invalid' | 'too_long' | 'throttled' | 'undelivered'
 
-/** What `hermes.send()` resolves to inside the frame. `ok` means the prompt
+/** What `lattice.send()` resolves to inside the frame. `ok` means the prompt
  *  was handed to the owning composer's send path — not that the agent has
  *  answered. */
 export type IntentAck = { ok: true } | { error: IntentError; maxLength?: number; ok: false; retryAfterMs?: number }
 
-/** The script that gives the widget its ONE voice: `hermes.send(prompt)`.
+/** The script that gives the widget its ONE voice: `lattice.send(prompt)`.
  *  Posts the prompt up tagged with the mount token and a per-call id; the
  *  parent validates, throttles, routes it through the composer, and posts an
  *  ack back, so `send()` returns a Promise of an `IntentAck` — a widget can
@@ -123,7 +123,7 @@ export function intentScript(token: string): string {
     'parent.postMessage({type:' +
     JSON.stringify(INTENT_MESSAGE_TYPE) +
     ',token:t,id:id,prompt:p},"*")})}' +
-    'window.hermes={send:send,maxLength:' +
+    'window.lattice={send:send,maxLength:' +
     String(MAX_INTENT_LENGTH) +
     '};' +
     'addEventListener("click",function(e){var el=e.target&&e.target.closest?' +
@@ -336,7 +336,7 @@ export function InlinePreviewDirective({
   // nothing to frame. (Remote gateways used to bail here too — that predates
   // the mode-aware fs bridge; the frame now reads through readDesktopFileText,
   // which fetches over the authenticated /api/fs bridge in remote mode, so a
-  // URL connection — including a same-machine `hermes serve` — renders live.)
+  // URL connection — including a same-machine `lattice serve` — renders live.)
   if (!file || !HTML_FILE_RE.test(file)) {
     return file ? <PreviewAttachment target={file} /> : null
   }

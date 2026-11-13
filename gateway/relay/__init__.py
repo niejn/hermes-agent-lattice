@@ -1,4 +1,4 @@
-"""Relay/connector support package for the Hermes gateway.
+"""Relay/connector support package for the Lattice gateway.
 
 EXPERIMENTAL gateway side of the "Gateway Gateway" relay design: a generic
 ``RelayAdapter`` plus the wire-serializable ``CapabilityDescriptor`` the connector
@@ -86,7 +86,7 @@ def _launch_profile_scope():
     """The launch profile's runtime scope once the gateway multiplexes, ``nullcontext`` before.
 
     Self-provision runs at startup, before any turn binds a profile, and under multiplexing the
-    Nous Portal and inference routing overrides only resolve inside a profile scope. The scope is
+    Langton Portal and inference routing overrides only resolve inside a profile scope. The scope is
     built from the profile's files like a turn's (``gateway.run._profile_runtime_scope``), not via
     ``launch_profile_scope_if_multiplexed``, whose first entry freezes the launch env snapshot
     before startup has written ``GATEWAY_RELAY_*`` into ``os.environ``.
@@ -266,7 +266,7 @@ def relay_display_name() -> Optional[str]:
         # prefix every reply "**Hermes Agent:**" and shadow the connector's
         # linked-owner fallback, which actually disambiguates. Only a customized
         # name is forwarded.
-        if value == "Hermes Agent":
+        if value == "Lattice Agent":
             value = ""
     # Mirror the connector's ingest sanitization (trim + 64-char cap).
     return value[:64] or None
@@ -454,7 +454,7 @@ def _resolve_relay_identity_token() -> str:
           ``$DOMINO_API_PROXY/access-token``): a plain GET whose body IS the token,
           raw JWT or a JSON envelope with ``access_token``. Possession of the
           (typically loopback) endpoint is the credential.
-      2.  Nous Portal (default): ``resolve_nous_access_token()``.
+      2.  Langton Portal (default): ``resolve_nous_access_token()``.
 
     Raises on failure; callers decide whether that's fatal (enroll CLI) or a graceful
     boot no-op (self-provision).

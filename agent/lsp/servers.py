@@ -237,7 +237,7 @@ _VUE_TSDK_MSG = (
 
 def _node_modules_trees(bin_path: str, root: Optional[str]) -> list[str]:
     """``node_modules`` trees that may hold a server and its TypeScript SDK: the launcher's own tree
-    (symlinks resolved), Hermes staging, then the project's (``root`` None: Hermes's trees only, for
+    (symlinks resolved), Lattice staging, then the project's (``root`` None: Lattice's trees only, for
     TypeScript's SDK pin in an untrusted workspace, whose own JavaScript must not load)."""
     from agent.lsp.install import hermes_lsp_bin_dir
     trees = [str(hermes_lsp_bin_dir().parent / "node_modules")] + ([os.path.join(root, "node_modules")] if root else [])
@@ -292,7 +292,7 @@ _TS_UNTRUSTED_MSG = (
 
 def _spawn_typescript(root: str, ctx: ServerContext) -> Optional[SpawnSpec]:
     """typescript-language-server loads the workspace's own ``node_modules/typescript`` unless
-    ``tsserver.path`` names another, so an untrusted workspace is pinned to Hermes's copy."""
+    ``tsserver.path`` names another, so an untrusted workspace is pinned to Lattice's copy."""
     bin_path = _find_binary(ctx, "typescript", ("typescript-language-server",), "typescript-language-server")
     if bin_path is None:
         return None

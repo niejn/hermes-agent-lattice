@@ -596,7 +596,7 @@ def _install_ssrf_guard_on_client(client: Any, *, is_async: bool = False) -> Non
 # Identifying UA for Hermes-owned direct downloads: CDNs with basic bot detection
 # (upload.wikimedia.org, #89260) 403 the bare ``python-httpx/x`` default. Names the agent
 # rather than spoofing a browser (Wikimedia's User-Agent policy asks clients to identify).
-DEFAULT_USER_AGENT = "Mozilla/5.0 (compatible; HermesAgent/1.0)"
+DEFAULT_USER_AGENT = "Mozilla/5.0 (compatible; LatticeAgent/1.0)"
 
 
 def _with_default_user_agent(kwargs: dict) -> dict:

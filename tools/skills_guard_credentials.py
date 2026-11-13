@@ -1,7 +1,7 @@
 """Skill-only credential rules of the skills scanner (``tools.skills_guard``).
 
-A skill's scripts run in the execute_code or terminal child, which never receives a Hermes model-provider key
-(the child-env scrub; GHSA-rhgp-j443-p4rf keeps a skill from declaring one back). Loading the Hermes .env defeats
+A skill's scripts run in the execute_code or terminal child, which never receives a Lattice model-provider key
+(the child-env scrub; GHSA-rhgp-j443-p4rf keeps a skill from declaring one back). Loading the Lattice .env defeats
 that and hands the script every key of the profile, and reading a provider key means the skill depends on getting
 it some other way. Both are high on a skill. Plugins run in-process and read their own keys, so ``plugin_guard``
 scans without these rules. Leaf module: nothing here imports ``tools.skills_guard``."""
@@ -27,7 +27,7 @@ def _open_prefix(depth: int) -> str:  # text inside an open group, possibly ente
 SKILL_ONLY_PATTERNS = [(re.compile(
     rf'\b(?:load_dotenv|dotenv_values)\s*\({_open_prefix(4)}'
     r'(?:HERMES_HOME|get_hermes_home|[~/\\"\']\.hermes(?:[/\\"\']|$))'),
-    "hermes_env_dotenv", "high", "exfiltration", "loads the Hermes .env (every key of the profile) into the script")]
+    "hermes_env_dotenv", "high", "exfiltration", "loads the Lattice .env (every key of the profile) into the script")]
 _ENV_READ_IDS = frozenset({"python_getenv_secret", "python_environ_get_secret"})
 # The name a getenv / environ.get / environ[...] call reads: its first argument only, so a provider name in a
 # default argument or another literal on the line does not raise the read of the skill's own key.
@@ -62,7 +62,7 @@ def code_views(lines: list) -> tuple | None:
 
 
 def model_provider_key_names() -> frozenset:
-    """Env names that hold a Hermes model-provider key: every provider's ``api_key_env_vars`` plus the
+    """Env names that hold a Lattice model-provider key: every provider's ``api_key_env_vars`` plus the
     secret provider entries of ``OPTIONAL_ENV_VARS`` (``OPENROUTER_API_KEY`` is declared only there), kept
     only where the child-env scrub removes them. A name the scrub passes on purpose
     (``CLAUDE_CODE_OAUTH_TOKEN``, #55878) does reach the skill, so reading it stays medium."""

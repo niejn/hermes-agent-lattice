@@ -452,7 +452,7 @@ def streaming_enabled(stt_config: dict[str, Any]) -> bool:
 
 
 def _openai_credentials() -> Optional[tuple[str, str]]:
-    """Direct OpenAI credentials only: the managed Nous gateway proxies the REST audio API, not
+    """Direct OpenAI credentials only: the managed Langton gateway proxies the REST audio API, not
     the Realtime socket."""
     from tools.tool_backend_helpers import NOUS_MANAGED_PROVIDER, read_selection
     from tools.transcription_tools import _resolve_openai_audio_client_config

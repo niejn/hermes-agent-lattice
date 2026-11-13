@@ -1,6 +1,6 @@
 """Account linking to the shared Team Gateway bot, done from the instance itself.
 
-A relay-fronted deployment (Hermes Cloud with Team Gateway) reaches Telegram, Discord and Slack
+A relay-fronted deployment (Lattice Cloud with Team Gateway) reaches Telegram, Discord and Slack
 only through the connector's SHARED bot: the gateway turns every direct adapter off
 (``config_env._relay``), and the connector routes a chat account's messages to this instance once
 that account is linked (``/link <code>`` DMed to the shared bot). The Portal can mint those codes;
@@ -188,7 +188,7 @@ def request_link(platform: str) -> dict[str, Any]:
     if managed_by() == "portal":
         raise RelayLinkError(
             "managed_by_portal",
-            "Accounts for this agent are linked from Nous Portal: open the agent there and use Message platforms.",
+            "Accounts for this agent are linked from Langton Portal: open the agent there and use Message platforms.",
             409)
     payload = _post("/manage/link", {"platform": platform})
     code = str(payload.get("code") or "").strip()

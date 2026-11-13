@@ -87,7 +87,7 @@ export const ModelMenuCloseContext = createContext<() => void>(() => {})
 /** Compact per-row price: `$in/$out` per Mtok (cached read appended when the
  *  provider ships it), "free", and a sale tag when the portal reports a
  *  discounted list price. Rendered only when the provider's payload carries
- *  pricing (Nous Portal and others that ship it). */
+ *  pricing (Langton Portal and others that ship it). */
 function ModelPrice({ pricing }: { pricing: ModelPricing }) {
   const { t } = useI18n()
   const copy = t.shell.modelMenu
@@ -151,7 +151,7 @@ export interface ModelChoice {
  * the kanban override just holds a value in dialog state.
  *
  * `presetFor` supplies the remembered settings shown on a non-active row.
- * Returning `{}` is fine — the row then shows Hermes' defaults.
+ * Returning `{}` is fine — the row then shows Lattice' defaults.
  */
 export interface ModelMenuController {
   /** Detached task pickers can edit effort but have no speed write path. */
@@ -1051,7 +1051,7 @@ function ModelFamilyRow({
   const caps = provider.capabilities?.[family.id]
   const limit = familyLimit(provider, family, isCurrent)
 
-  // Live per-model $/Mtok pricing (Nous Portal and other providers that ship
+  // Live per-model $/Mtok pricing (Langton Portal and other providers that ship
   // it). A `-fast` sibling shares the base id's price: the collapsed row
   // fronts the base, so fall back to it when only the fast variant is unpriced.
   const pricing = provider.pricing?.[family.id] ?? (family.fastId ? provider.pricing?.[family.fastId] : undefined)
@@ -1432,15 +1432,15 @@ function groupModels(
   return groups
 }
 
-// The Nous row: the only one the menu re-reads on open or while its pricing warms (window-plan labels).
+// The Langton row: the only one the menu re-reads on open or while its pricing warms (window-plan labels).
 function isNous(provider: ModelOptionProvider): boolean {
-  return provider.slug === 'nous'
+  return provider.slug === 'langton'
 }
 
-// Nous only: re-read on every open (cached list shows instantly, the re-read swaps in when it
+// Langton only: re-read on every open (cached list shows instantly, the re-read swaps in when it
 // lands). The plan (usage-window labels, used-up notes) loads with the first turn, after the
 // list was first fetched at boot, so the 60s cache would hide it until "Refresh models".
-// A cheap local cache-only read (the plan may not be known yet, so any Nous row); every other
+// A cheap local cache-only read (the plan may not be known yet, so any Langton row); every other
 // provider keeps the 60s cache.
 function nousRefetchOnMount(data: ModelOptionsResult | undefined): 'always' | true {
   return data?.providers?.some(isNous) ? 'always' : true

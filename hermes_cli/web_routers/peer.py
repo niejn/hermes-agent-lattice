@@ -1,4 +1,4 @@
-"""Cloud peer access: ``/api/peer/...`` carries another Hermes agent's API calls to this agent's
+"""Cloud peer access: ``/api/peer/...`` carries another Lattice agent's API calls to this agent's
 gateway api_server on loopback, so ``hermes peer`` can reach a hosted agent without its key.
 
 The bearer is a short-lived pass minted for this one agent, verified before this route runs

@@ -1199,8 +1199,8 @@ export interface SessionTileWorkspaceScope {
 // Tiles are persisted per connection and profile: same-named profiles on two
 // backends own different sessions. Switching either scope swaps the visible
 // set, with runtime bindings dropped so tiles re-resume on their own gateway.
-const TILES_KEY = 'hermes.desktop.sessionTiles.v2'
-const LEGACY_TILES_KEY = 'hermes.desktop.sessionTiles.v1'
+const TILES_KEY = 'lattice.desktop.sessionTiles.v2'
+const LEGACY_TILES_KEY = 'lattice.desktop.sessionTiles.v1'
 const BOTS_TILE_BUCKET = '__bots_workspace__'
 
 /** Persisted placement — `dir` + strip slot (`before`) + dock `anchor` so a
@@ -1938,7 +1938,7 @@ export function storedSessionIdForRuntimeId(sessionId: string): null | string {
   return sessionId === $activeSessionId.get() && selected ? selected : null
 }
 
-const BOT_CHAT_SCOPE_KEY = 'hermes.desktop.botChatSessions.v1'
+const BOT_CHAT_SCOPE_KEY = 'lattice.desktop.botChatSessions.v1'
 
 /** Stored ids last opened as a bot's chat. A tile carries `workspaceMode`, but
  *  a bot chat normally lands in MAIN — `in-place` mints no tile when there is

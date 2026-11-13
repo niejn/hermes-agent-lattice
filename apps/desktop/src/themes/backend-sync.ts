@@ -1,5 +1,5 @@
 /**
- * Live skin sync from the Hermes backend.
+ * Live skin sync from the Lattice backend.
  *
  * The backend resolves the active skin (built-in or `$HERMES_HOME/skins/*.yaml`)
  * and announces it on `gateway.ready` / `skin.changed`, and answers `config.get
@@ -12,7 +12,7 @@
  *      `$pendingSkinApply`, which the ThemeProvider drains through `setTheme`.
  *
  * `gateway.ready` seeds the baseline WITHOUT applying, so a fresh connect never
- * stomps the user's persisted desktop theme; only a genuine name change (Hermes
+ * stomps the user's persisted desktop theme; only a genuine name change (Lattice
  * authoring/activating a skin from a prompt, or `/skin` elsewhere) repaints.
  */
 
@@ -46,7 +46,7 @@ export const localDisplaySkinProfile = localDisplaySkinName
 const cacheable = (name: string) => !BUILTIN_THEMES[name] && !RETIRED_SKINS.has(name)
 
 // Dropped entries are written back out, so a stale shadow (the reverted #130015
-// build cached the CLI `default` skin as a second "Classic Hermes") is gone from
+// build cached the CLI `default` skin as a second "Classic Lattice") is gone from
 // disk on the first launch, not only hidden until the next registry change.
 const readCached = (): Record<string, DesktopTheme> => {
   const stored = Object.entries(readJson<Record<string, unknown>>(BACKEND_THEMES_KEY) ?? {})
@@ -71,7 +71,7 @@ $backendThemes.listen(themes => writeJson(BACKEND_THEMES_KEY, themes))
  *  built-in. The palette policy keeps built-in palettes (a user `mono.yaml`
  *  must not shadow the desktop's hand-tuned mono), but the user's CSS is still
  *  the skin file's truth — keyed by the name the desktop resolves the skin
- *  under (`default` → `nous`). Merged into the active theme in context.tsx. */
+ *  under (`default` → `langton`). Merged into the active theme in context.tsx. */
 export const $backendCustomCSS = atom<Record<string, string>>({})
 
 /** One-shot skin name the ThemeProvider should switch to (it clears this). */
@@ -106,10 +106,10 @@ export function ingestBackendSkin(skin: HermesSkin | undefined | null, { apply }
   }
 
   // `default` (like every retired name) is "no opinion" on the PALETTE — the
-  // desktop keeps its own default (nous), so we never register a converted theme
+  // desktop keeps its own default (langton), so we never register a converted theme
   // under `default`. It is still a
   // valid apply TARGET though: a runtime switch back to `default` must repaint the
-  // desktop to its own default (setTheme normalizes `default` → nous). So we only
+  // desktop to its own default (setTheme normalizes `default` → langton). So we only
   // skip the registry step here and let it flow through the apply logic below.
   // Built-in names (mono/slate/…) already have a hand-tuned desktop palette — we
   // never shadow it, but the name is still a valid apply target.

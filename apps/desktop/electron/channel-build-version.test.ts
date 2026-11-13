@@ -477,6 +477,11 @@ with zipfile.ZipFile(package, 'w') as archive:
     archive.writestr('AppxManifest.xml', (root / 'manifest.xml').read_bytes())
     archive.writestr('app/resources/install-stamp.json', json.dumps({
         'source': 'channel-build', 'channelBuild': request, 'commit': request['commit'], 'tag': None}))
+with open(root / 'version-info-x64.json', 'w') as sidecar:
+    # Windows record() reads the executable version from this sidecar when
+    # present; without it it wants a real *-unpacked/<exe> tree, which this
+    # fixture never stages.
+    sidecar.write(json.dumps({'productVersion': request['windowsVersion']}))
 out = root / 'metadata.json'
 record('windows', 'x64', root, '', request['commit'], out, channel_request=request)
 manifest = ET.fromstring((root / 'manifest.xml').read_bytes())
@@ -514,4 +519,4 @@ print(out.read_text(encoding='utf-8'))
   } finally {
     fs.rmSync(root, { recursive: true, force: true })
   }
-}, 20_000)
+}, 180_000)

@@ -751,7 +751,7 @@ def _append_unconfigured_rows(
 
 
 def _anthropic_oauth_credentials_present() -> bool:
-    """True when the user explicitly authenticated Anthropic via OAuth (Hermes device flow or Claude Code
+    """True when the user explicitly authenticated Anthropic via OAuth (Lattice device flow or Claude Code
     login) — those leave no trace in active_provider / model.provider / API-key env vars."""
     try:
         from agent.anthropic_credentials import read_claude_code_credentials, read_hermes_oauth_credentials
@@ -880,7 +880,7 @@ def _attach_nous_plan_usage(row: dict, *, warm: bool):
         from hermes_cli.model_picker_usage import nous_picker_usage
         usage = nous_picker_usage(warm=warm, any_age=not warm)
     except Exception:
-        logging.getLogger(__name__).debug("Nous plan usage unavailable", exc_info=True)
+        logging.getLogger(__name__).debug("Langton plan usage unavailable", exc_info=True)
         return None
     if usage is not None:
         row["plan_usage"] = usage.to_payload()
@@ -896,7 +896,7 @@ def _attach_nous_plan_usage(row: dict, *, warm: bool):
 
 
 def _plan_usage_window(g) -> dict:
-    """One window-plan allowance in main's ``ProviderUsageWindow`` shape. The label is Hermes's row title
+    """One window-plan allowance in main's ``ProviderUsageWindow`` shape. The label is Lattice's row title
     (``Today``), like the other providers' English window labels."""
     from datetime import datetime
     from agent.usage_gauges import WindowGauge, gauge_title
@@ -910,9 +910,9 @@ def _plan_usage_window(g) -> dict:
 
 # health: allow CC -- usage-window plans: one branch attaches plan usage to the Nous row (built in _attach_nous_plan_usage); over target on main
 def _apply_pricing(rows: list[dict], *, force_fresh_nous_tier: bool = False, cached_only: bool = False) -> None:
-    """Set ``row["pricing"] = {model_id: {input, output, cache | None, free}}``; for Nous also
+    """Set ``row["pricing"] = {model_id: {input, output, cache | None, free}}``; for Langton also
     ``free_tier`` (account is free-tier) and ``unavailable_models`` (paid models a free user can't pick).
-    ``cached_only`` never hits the network: unknown Nous entitlement fails closed (``free_tier_pending``,
+    ``cached_only`` never hits the network: unknown Langton entitlement fails closed (``free_tier_pending``,
     all models locked) and missing pricing is marked ``pricing_pending``."""
     from hermes_cli.models_pricing import (
         _format_price_per_mtok,
@@ -953,7 +953,7 @@ def _apply_pricing(rows: list[dict], *, force_fresh_nous_tier: bool = False, cac
                 row["free_tier_pending"] = True
                 row["unavailable_models"] = list(models)
                 if not row.get("warning"):  # say why every model renders locked
-                    row["warning"] = ("Checking Nous plan entitlement… models unlock on the "
+                    row["warning"] = ("Checking Langton plan entitlement… models unlock on the "
                                       "next picker open or refresh.")
                 continue
         if not raw_pricing:

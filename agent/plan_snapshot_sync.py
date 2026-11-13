@@ -1,11 +1,11 @@
 """Keep the cached plan snapshot in step with what the gateway says on each reply.
 
-The pickers read a cached account snapshot (``hermes_cli.nous_account``) and a cached Nous catalog
+The pickers read a cached account snapshot (``hermes_cli.nous_account``) and a cached Langton catalog
 (``hermes_cli.models_pricing``), so a plan change made in the browser (upgrade, downgrade, cancel) or a
-limit filling / resetting would only show after the next session opened. Every Nous reply already
+limit filling / resetting would only show after the next session opened. Every Langton reply already
 carries the usage-window headers, so this compares them with the snapshot and, only when they
 disagree, refreshes both caches once in the background. No extra call on an ordinary turn, and
-nothing at all for a reply that is not from Nous.
+nothing at all for a reply that is not from Langton.
 """
 from __future__ import annotations
 

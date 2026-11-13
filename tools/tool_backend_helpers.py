@@ -16,7 +16,7 @@ _VALID_MODAL_MODES = {"auto", "direct", "managed"}
 
 
 def managed_nous_tools_enabled(*, force_fresh: bool = False) -> bool:
-    """Coarse gate: entitled to the Nous Tool Gateway (paid Portal access OR a live free
+    """Coarse gate: entitled to the Langton Tool Gateway (paid Portal access OR a live free
     pool). Fails closed on unknown/error — never blocks startup. Callers narrow per category
     via ``tool_gateway_entitled_for``; ``force_fresh`` is for flows needing a just-bought grant."""
     try:
@@ -29,9 +29,9 @@ def managed_nous_tools_enabled(*, force_fresh: bool = False) -> bool:
         return False
 
 
-def nous_tool_gateway_unavailable_message(capability: str = "the Nous Tool Gateway", *,
+def nous_tool_gateway_unavailable_message(capability: str = "the Langton Tool Gateway", *,
                                           force_fresh: bool = False) -> str:
-    """Return account-aware guidance for an unavailable Nous Tool Gateway path."""
+    """Return account-aware guidance for an unavailable Langton Tool Gateway path."""
     try:
         from hermes_cli.nous_account import (
             format_nous_portal_entitlement_message, get_nous_portal_account_info)
@@ -43,7 +43,7 @@ def nous_tool_gateway_unavailable_message(capability: str = "the Nous Tool Gatew
     except Exception:
         pass
     return (f"{capability} is unavailable. Run `hermes model` to refresh your "
-            "Nous Portal login and billing status.")
+            "Langton Portal login and billing status.")
 
 
 def normalize_browser_cloud_provider(value: object | None) -> str:
@@ -251,7 +251,7 @@ def read_web_capability_selection(capability: Optional[str] = None) -> str | Non
     """Stored selection that decides ONE web capability (``"search"`` / ``"extract"``):
     ``web.<capability>_backend`` when set (``"nous"`` = managed gateway, a vendor name =
     that vendor direct), else the shared :func:`read_selection`. Lets search and extract
-    each choose between the user's own key and the Nous Tool Gateway."""
+    each choose between the user's own key and the Langton Tool Gateway."""
     if capability:
         raw = _raw_section("web") or {}
         pin = str(raw.get(f"{capability}_backend") or "").strip().lower()

@@ -1,4 +1,4 @@
-"""Nous Portal provider profile."""
+"""Langton Portal provider profile."""
 
 from typing import Any
 
@@ -9,7 +9,7 @@ from providers.base import ProviderProfile
 
 
 class NousProfile(ProviderProfile):
-    """Nous Portal — product tags, reasoning with Nous-specific omission."""
+    """Langton Portal — product tags, reasoning with Nous-specific omission."""
 
     def resolve_aux_model(self, *, vision: bool = False) -> str:
         """Portal's tier-aware ``/api/nous/recommended-models`` pick (cached, offline-safe)."""
@@ -70,7 +70,7 @@ class NousProfile(ProviderProfile):
 
 nous = NousProfile(
     name="nous", aliases=("nous-portal", "nousresearch"), env_vars=("NOUS_API_KEY",),
-    display_name="Nous Research", description="Nous Research — Hermes model family",
+    display_name="Langton Photonics", description="Langton Photonics — Lattice model family",
     signup_url="https://nousresearch.com/", fallback_models=("hermes-3-405b", "hermes-3-70b"),
     base_url="https://inference-api.nousresearch.com/v1", auth_type="oauth_device_code",
 )

@@ -1,9 +1,9 @@
 """Public-name catalogs for shared metrics: the only non-enum names a package may carry.
 
-Every set here is something Nous itself publishes (slash-command registry, bundled and optional
+Every set here is something Langton itself publishes (slash-command registry, bundled and optional
 skills, optional-mcps/ and plugin-catalog/ entries, built-in auxiliary tasks, shipped locales).
 A name outside its set is reported as ``custom`` so user-defined identities never leave the machine.
-Loaders are cached: the catalogs only change with the installed Hermes version.
+Loaders are cached: the catalogs only change with the installed Lattice version.
 """
 
 from __future__ import annotations
@@ -82,7 +82,7 @@ def display_languages() -> frozenset[str]:
 
 @functools.cache
 def provider_names() -> frozenset[str]:
-    """Provider ids Hermes itself ships: built-in auth rows, overlays, alias tables and the
+    """Provider ids Lattice itself ships: built-in auth rows, overlays, alias tables and the
     in-tree ``plugins/model-providers`` profiles. Never the live registries (``PROVIDER_REGISTRY``,
     picker labels): ``$HERMES_HOME`` and pip provider plugins add their user-chosen names there."""
     import providers
@@ -121,7 +121,7 @@ def user_named_model_providers() -> frozenset[str]:
 
 @functools.cache
 def custom_provider_aliases() -> frozenset[str]:
-    """Provider ids Hermes routes through the generic ``custom`` provider (``ollama``, ``vllm``,
+    """Provider ids Lattice routes through the generic ``custom`` provider (``ollama``, ``vllm``,
     ``llamacpp``...): shipped names, but the server and its model ids are the user's own."""
     from hermes_cli import auth, models, providers
 
@@ -132,7 +132,7 @@ def custom_provider_aliases() -> frozenset[str]:
 # ---- v4 gateway ----
 @functools.cache
 def bundled_platform_names() -> frozenset[str]:
-    """Messaging platforms Hermes ships as ``plugins/platforms/<name>`` (the dir is the registered name)."""
+    """Messaging platforms Lattice ships as ``plugins/platforms/<name>`` (the dir is the registered name)."""
     from hermes_cli.plugins import get_bundled_plugins_dir
 
     root = get_bundled_plugins_dir() / "platforms"
@@ -303,7 +303,7 @@ def model_metric_name(raw: object, provider: str, *, max_length: int) -> str:
 
 @functools.cache
 def public_model_ids() -> frozenset[str]:
-    """Model ids Hermes ships in its static catalogs plus every id in the local models.dev cache
+    """Model ids Lattice ships in its static catalogs plus every id in the local models.dev cache
     (never a network call), with and without a ``vendor/`` prefix."""
     from agent.models_dev import fetch_models_dev
     from hermes_cli.models_catalog_static import _PROVIDER_MODELS

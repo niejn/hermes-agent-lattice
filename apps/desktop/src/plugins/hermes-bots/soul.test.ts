@@ -25,7 +25,7 @@ const { hostMock, serverInjects } = vi.hoisted(() => ({
 vi.mock('@hermes/plugin-sdk', () => ({ host: hostMock }))
 
 vi.mock('./data', () => ({
-  botHandle: (name: string) => (String(name).toLowerCase() === 'default' ? 'hermes' : name),
+  botHandle: (name: string) => (String(name).toLowerCase() === 'default' ? 'lattice' : name),
   // A live binding in the real module — useRoster flips it from the roster
   // response, so the mock has to be a getter too.
   get serverInjectsProtocol() {

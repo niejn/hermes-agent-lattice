@@ -62,8 +62,8 @@ const warm: ModelOptionsResult = {
   providers: [
     {
       models: ['example/model-a', 'example/model-free:free'],
-      name: 'Nous Portal',
-      slug: 'nous',
+      name: 'Langton Portal',
+      slug: 'langton',
       unavailable_models: [],
       usage_levels: { 'example/model-a': 'top_tier', 'example/model-free:free': 'free' }
     }
@@ -75,8 +75,8 @@ const pending: ModelOptionsResult = {
     {
       free_tier_pending: true,
       models: ['example/model-a', 'example/model-free:free'],
-      name: 'Nous Portal',
-      slug: 'nous',
+      name: 'Langton Portal',
+      slug: 'langton',
       unavailable_models: ['example/model-a', 'example/model-free:free']
     }
   ]

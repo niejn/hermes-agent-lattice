@@ -386,7 +386,7 @@ def _check_manifest_v2(report: DoctorReport, manifest: Any) -> None:
         report.warning(
             "declared python_dependencies not installed: " + ", ".join(missing)
             + " — install and enable the plugin with hermes plugins. "
-            "For an enabled plugin, run hermes pm repair, then restart Hermes.")
+            "For an enabled plugin, run hermes pm repair, then restart Lattice.")
 
     schema = getattr(manifest, "config_schema", {}) or {}
     if schema:
@@ -436,7 +436,7 @@ def _check_desktop_half_copy(report: DoctorReport, path: Path) -> None:
 
 
 def doctor_plugin(target: str | os.PathLike[str] | None = None) -> DoctorReport:
-    """Validate one plugin through Hermes' real scanner and registration path."""
+    """Validate one plugin through Lattice' real scanner and registration path."""
     try:
         path = resolve_plugin_path(target)
     except FileNotFoundError as exc:

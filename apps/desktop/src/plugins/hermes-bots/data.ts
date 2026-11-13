@@ -1235,31 +1235,31 @@ export function mergeMultiSourceRoster(
 /** The @handle users tag a bot with. Multi-source rosters precompute the
  *  handle (bare name, or name-device when the profile exists on several
  *  registered sources) — prefer it when present. The primary profile's
- *  callable alias is 'hermes' — the mention middleware resolves it back to
+ *  callable alias is 'lattice' — the mention middleware resolves it back to
  *  'default' — so the word 'default' never surfaces in the UI, unless a real
- *  `hermes` profile on the same source holds that handle (`claimDefaultHandles`). */
+ *  `lattice` profile on the same source holds that handle (`claimDefaultHandles`). */
 export function botHandle(name: string, bot?: Partial<RosterRow> | null): string {
-  if (bot?.handle && bot.handle !== name && !(bot.hermesHandleTaken && bot.handle === 'hermes')) {
+  if (bot?.handle && bot.handle !== name && !(bot.hermesHandleTaken && bot.handle === 'lattice')) {
     return bot.handle
   }
 
-  return (name || '').trim().toLowerCase() === 'default' && !bot?.hermesHandleTaken ? 'hermes' : name
+  return (name || '').trim().toLowerCase() === 'default' && !bot?.hermesHandleTaken ? 'lattice' : name
 }
 
-/** The row's own `handle` as a mention form, lowercased. A stale 'hermes'
- *  handle on a default row whose source has a real 'hermes' profile is that
+/** The row's own `handle` as a mention form, lowercased. A stale 'lattice'
+ *  handle on a default row whose source has a real 'lattice' profile is that
  *  profile's tag, not this row's (same rule as `botHandle`). */
 function claimableRowHandle(bot: Partial<RosterRow>): string {
-  return bot.handle && !(bot.hermesHandleTaken && bot.handle === 'hermes') ? String(bot.handle).toLowerCase() : ''
+  return bot.handle && !(bot.hermesHandleTaken && bot.handle === 'lattice') ? String(bot.handle).toLowerCase() : ''
 }
 
-/** Mark each default row whose source also lists a real `hermes` profile, so
+/** Mark each default row whose source also lists a real `lattice` profile, so
  *  that profile keeps @hermes and the roster never shows two (the backend's
  *  `tools/bot_mode_probe._handle` applies the same rule). Rows group by
  *  connection; rows without one are the active source. */
 export function claimDefaultHandles<T extends Partial<RosterRow>>(rows: T[]): T[] {
   const taken = new Set(
-    rows.filter(row => String(row?.name || '').trim() === 'hermes').map(row => String(row?.connectionId || ''))
+    rows.filter(row => String(row?.name || '').trim() === 'lattice').map(row => String(row?.connectionId || ''))
   )
 
   return rows.map(row =>
@@ -1270,10 +1270,10 @@ export function claimDefaultHandles<T extends Partial<RosterRow>>(rows: T[]): T[
 }
 
 /** Taggable @-forms derived from a bot's friendly names — the core profile
- *  display name (`hermes profile rename`) and the Bot Mode title. Free text
+ *  display name (`lattice profile rename`) and the Bot Mode title. Free text
  *  reduces to the mention charset two ways: slugified ("Research Buddy" →
  *  research-buddy, the form autocomplete inserts) and collapsed
- *  (researchbuddy). Reserved tokens are dropped so a bot renamed "Hermes"
+ *  (researchbuddy). Reserved tokens are dropped so a bot renamed "Lattice"
  *  can never hijack the primary profile's @hermes alias. */
 export function mentionNameForms(value: null | string | undefined): string[] {
   const name = String(value || '')
@@ -1288,7 +1288,7 @@ export function mentionNameForms(value: null | string | undefined): string[] {
   const collapsed = name.replace(/[^a-z0-9_-]+/g, '')
 
   return [...new Set([slug, collapsed])].filter(
-    form => /^[a-z0-9][a-z0-9_-]*$/.test(form) && !['all', 'everyone', 'user', 'default', 'hermes'].includes(form)
+    form => /^[a-z0-9][a-z0-9_-]*$/.test(form) && !['all', 'everyone', 'user', 'default', 'lattice'].includes(form)
   )
 }
 
@@ -1393,7 +1393,7 @@ export function newBotChat(bot: RosterRow) {
     host.notify?.({
       kind: 'error',
       message:
-        getPluginCtx()?.i18n?.t('bot.openAnotherChatUnsupported') ?? 'Update Hermes Desktop to open another bot chat.'
+        getPluginCtx()?.i18n?.t('bot.openAnotherChatUnsupported') ?? 'Update Lattice Desktop to open another bot chat.'
     })
 
     return
@@ -1405,7 +1405,7 @@ export function newBotChat(bot: RosterRow) {
     host.notify?.({
       kind: 'error',
       message:
-        getPluginCtx()?.i18n?.t('bot.openAnotherChatUnsupported') ?? 'Update Hermes Desktop to open another bot chat.'
+        getPluginCtx()?.i18n?.t('bot.openAnotherChatUnsupported') ?? 'Update Lattice Desktop to open another bot chat.'
     })
 
     return
@@ -1510,8 +1510,8 @@ export function resolveRosterMentions(
     let token = match[2].toLowerCase()
     const connection = (match[3] || '').toLowerCase()
 
-    if (token === 'hermes') {
-      token = byForm.has('hermes') ? 'hermes' : token
+    if (token === 'lattice') {
+      token = byForm.has('lattice') ? 'lattice' : token
     }
 
     const bot = connection

@@ -198,7 +198,7 @@ $connection.subscribe(connection => {
 // User-defined order for the named (non-default) profile squares in the rail.
 // Names absent from the list fall back to alphabetical, appended at the tail —
 // so a freshly created profile lands at the end until the user drags it.
-const PROFILE_ORDER_STORAGE_KEY = 'hermes.desktop.profileOrder'
+const PROFILE_ORDER_STORAGE_KEY = 'lattice.desktop.profileOrder'
 
 export const $profileOrder = atom<string[]>(storedStringArray(PROFILE_ORDER_STORAGE_KEY))
 
@@ -219,7 +219,7 @@ export function sortByProfileOrder<T extends { name: string }>(items: T[], order
 // Optional per-profile color override (long-press a rail square to pick). Absent
 // names fall back to the deterministic hue from profileColor(); a local-only
 // cosmetic preference, so single-profile users never touch it.
-const PROFILE_COLORS_STORAGE_KEY = 'hermes.desktop.profileColors'
+const PROFILE_COLORS_STORAGE_KEY = 'lattice.desktop.profileColors'
 
 export const $profileColors = atom<Record<string, string>>(storedStringRecord(PROFILE_COLORS_STORAGE_KEY))
 
@@ -500,7 +500,7 @@ export const $hydrationSyncProfile = atom<string | null>(null)
 
 // ── Hover-intent backend pre-warm ───────────────────────────────────────────
 // A cold switch to a profile whose gateway descriptor isn't cached pays the
-// `hermes gateway ensure` round-trip plus the socket connect before the sidebar
+// `lattice gateway ensure` round-trip plus the socket connect before the sidebar
 // can repopulate. The pointer entering a profile square in the rail signals the
 // switch a few hundred ms before the click lands, so we run the same dial +
 // connect chain then (openGatewayForProfile — without activating).
@@ -527,7 +527,7 @@ export function prewarmProfileBackend(name: string, connectionId: null | string 
   }
 
   // SSH sources are connect-on-demand (#89756): dialing one bootstraps the
-  // tunnel and spawns `hermes -p <profile> serve --isolated` on the remote
+  // tunnel and spawns `lattice -p <profile> serve --isolated` on the remote
   // box, so a hover sweep across the roster spawned one isolated backend per
   // bot and knocked the primary chat over. Only an explicit open may dial SSH.
   if (connection && registryConnectionKind(connection) === 'ssh') {
@@ -954,7 +954,7 @@ export const sidebarProfileForScope = (profileScope: string): string =>
 export const messagingTotalsKey = (messagingProfile: string, sourceId: string): string =>
   `${messagingProfile}:${sourceId}`
 
-const SHOW_ALL_PROFILES_STORAGE_KEY = 'hermes.desktop.showAllProfiles'
+const SHOW_ALL_PROFILES_STORAGE_KEY = 'lattice.desktop.showAllProfiles'
 
 // Opt-in unified view. When false, scope follows the live gateway profile, so
 // single-profile users (who never see the switcher) are completely unaffected.

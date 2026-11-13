@@ -57,7 +57,7 @@ def _declared_item_id(item: dict) -> Any:
 
 
 def _entry_models_discovered(entry: Any) -> bool:
-    """True when the entry's ``models`` mapping was auto-discovered by Hermes.
+    """True when the entry's ``models`` mapping was auto-discovered by Lattice.
 
     Current shape: entry-level ``models_discovered: true``. Older versions wrote an in-mapping
     ``__discovered_model_catalog__: true`` sentinel — accepted on read (the next save migrates it)."""
@@ -75,7 +75,7 @@ def _models_config_is_allowlist(value: Any, discovered: bool = False) -> bool:
     ``_save_custom_provider`` / the wizard, not a catalog narrow (treating it as one made GUI
     pickers show only the saved default for keyless Ollama while the CLI live-probed). List and
     string shapes remain allowlists for no-key endpoints; pin a dict catalog with
-    ``discover_models: false``. A catalog Hermes itself persisted (``discovered``) is never a pin."""
+    ``discover_models: false``. A catalog Lattice itself persisted (``discovered``) is never a pin."""
     if discovered:
         return False
     if isinstance(value, str):
@@ -98,8 +98,8 @@ def _bare_custom_provider_def(current_base_url: str) -> Optional[ProviderDef]:
 # --- Non-agentic model warning
 
 _HERMES_MODEL_WARNING = (
-    "Nous Research Hermes 3 & 4 models are NOT agentic and are not designed "
-    "for use with Hermes Agent. They lack the tool-calling capabilities "
+    "Langton Photonics Lattice 3 & 4 models are NOT agentic and are not designed "
+    "for use with Lattice Agent. They lack the tool-calling capabilities "
     "required for agent workflows. Consider using an agentic model instead "
     "(Claude, GPT, Gemini, DeepSeek, etc.).")
 
@@ -125,12 +125,12 @@ def format_model_for_display(model_name: str) -> str:
 
 
 def is_nous_hermes_non_agentic(model_name: str) -> bool:
-    """True if *model_name* is a real Nous Hermes 3/4 chat model (single owner; cli.py uses it too)."""
+    """True if *model_name* is a real Langton Lattice 3/4 chat model (single owner; cli.py uses it too)."""
     return bool(model_name and _NOUS_HERMES_NON_AGENTIC_RE.search(model_name))
 
 
 def _check_hermes_model_warning(model_name: str) -> str:
-    """Warning string if *model_name* is a Nous Hermes 3/4 chat model, else ""."""
+    """Warning string if *model_name* is a Langton Lattice 3/4 chat model, else ""."""
     return _HERMES_MODEL_WARNING if is_nous_hermes_non_agentic(model_name) else ""
 
 
@@ -1329,7 +1329,7 @@ def _convert_vendor_colon_slug(st: _Switch) -> None:
     a variant tag (:free, :extended, :fast) that must be preserved.
 
     On an aggregator every ``left:right`` is a slug. Elsewhere the colon is converted only when
-    ``left`` names a provider Hermes knows, so ``/model alibaba:qwen3.6-plus`` routes like
+    ``left`` names a provider Lattice knows, so ``/model alibaba:qwen3.6-plus`` routes like
     ``alibaba/qwen3.6-plus`` (#9748) while Ollama-style tags (``qwen3.5:4b``) stay intact."""
     raw_input = st.raw_input
     colon_pos = raw_input.find(":")
@@ -1732,7 +1732,7 @@ _PROVIDER_API_MODE_OVERRIDES: dict[str, Any] = {
 
 def model_derived_api_mode(provider: str, model: str, api_key: str = "") -> Optional[str]:
     """api_mode re-derived from the FINAL model for providers that serve several wire formats behind one
-    endpoint (OpenCode Zen/Go and custom providers extending a family slug, Nous, and any provider profile
+    endpoint (OpenCode Zen/Go and custom providers extending a family slug, Langton, and any provider profile
     declaring ``api_mode_for_model``); None when the provider's wire is fixed by its endpoint. A persisted
     api_mode from an earlier model of such a provider is never authoritative — resume paths must call this
     instead of honoring the row (#96066)."""

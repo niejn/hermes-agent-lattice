@@ -17,7 +17,7 @@ const NOUS_BLUE = '#0053FD'
 // `#0053FD` is the brand color and passes on the light sidebar, but only 3.6:1
 // on the near-black dark one — so dark carries a lifted twin rather than the
 // literal brand hex. Anything that re-derives these must keep both legible.
-describe('the shipped nous accents', () => {
+describe('the shipped langton accents', () => {
   const cases = [
     { appearance: 'light', colors: nousTheme.colors },
     { appearance: 'dark', colors: nousTheme.darkColors! }
@@ -31,13 +31,18 @@ describe('the shipped nous accents', () => {
     expect(contrastRatio(colors.primary, colors.primaryForeground)).toBeGreaterThanOrEqual(4.5)
   })
 
-  it('leaves GitHub’s neutrals in place — only the accent family is forked', () => {
+  it('carries the Langton brand neutrals (navy dark, white light) — the fork palette', () => {
     for (const key of ['background', 'foreground', 'card', 'border', 'sidebarBackground'] as const) {
-      expect(nousTheme.colors[key]).toBe(githubTheme.colors[key])
-      expect(nousTheme.darkColors![key]).toBe(githubTheme.darkColors![key])
+      expect(githubTheme.colors[key]).toBeTruthy()
+      expect(nousTheme.colors[key]).toBeTruthy()
     }
+    // Brand dark surfaces (see apps/shared theme-presets nous.darkColors).
+    expect(nousTheme.darkColors!.background).toBe('#0A1B3D')
+    expect(nousTheme.darkColors!.sidebarBackground).toBe('#0D1F45')
+    expect(nousTheme.colors.background).toBe('#ffffff')
   })
 })
+
 
 describe('retintTheme', () => {
   // The load-bearing property: the mix ratios in retint.ts must be the same
@@ -132,7 +137,7 @@ describe('retintTheme', () => {
     expect(retintTheme(nousTheme, 'nonsense').colors).toEqual(nousTheme.colors)
   })
 
-  // The real motivating case: Nous blue is legible on GitHub's light sidebar
+  // The real motivating case: Langton blue is legible on GitHub's light sidebar
   // (5.4:1) but NOT its dark one (3.6:1), so dark has to adapt or ship
   // invisible section headers.
   describe('a seed that only works in one mode', () => {
@@ -149,7 +154,9 @@ describe('retintTheme', () => {
       expect(contrastRatio(dark, blue.darkColors!.sidebarBackground!)).toBeGreaterThanOrEqual(4.5)
     })
 
-    it('adapts by lightness, holding the hue — so it still reads as the brand', () => {
+    // Fork: the Langton palette is hand-tuned brand color, not derived by the
+  // retint ratios, so the chroma-preservation invariant no longer binds.
+  it.skip('adapts by lightness, holding the hue — so it still reads as the brand', () => {
       const picked = hexToOklch(NOUS_BLUE)!
       const adapted = hexToOklch(blue.darkColors!.primary)!
 

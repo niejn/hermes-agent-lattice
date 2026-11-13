@@ -17,11 +17,11 @@ A fresh temp home has no skills, so the prompt is about half the size of a real 
 
 | Route, model | Child | Before | After |
 |---|---|---|---|
-| Nous, gpt-5.6-luna | B, different context | 7,622 / 0 | 7,627 / 7,574 |
+| Langton, gpt-5.6-luna | B, different context | 7,622 / 0 | 7,627 / 7,574 |
 | | C, same context as A | 7,618 / 7,591 | 7,623 / 7,574 |
 | Codex subscription, gpt-5.6-luna | B, different context | 7,631 / 0 | 7,631 / 7,424 |
 | | C, same context as A | 7,627 / 0 | 7,627 / 7,424 |
-| Nous, claude-fable-5.2 | B, different context | 11,904 / 6,354 | 11,909 / 11,761 |
+| Langton, claude-fable-5.2 | B, different context | 11,904 / 6,354 | 11,909 / 11,761 |
 | | C, same context as A | 11,900 / 11,795 | 11,905 / 11,761 |
 
 Three or four runs per cell on gpt-5.6-luna, two on Claude; every run within 20 tokens of the row

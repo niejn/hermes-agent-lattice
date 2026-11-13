@@ -1,6 +1,6 @@
 import { hermesApi, profileScoped } from './client'
 
-// Web access: turn on the Webapp the gateway on THIS machine serves, for other devices, behind Nous
+// Web access: turn on the Webapp the gateway on THIS machine serves, for other devices, behind Langton
 // sign-in. The backend owns every fact here; the pane renders /status and asks for changes.
 
 export type WebAccessMode = 'lan' | 'public'
@@ -41,7 +41,7 @@ export interface WebAccessChange extends WebAccessStatus {
   restart_started: boolean
 }
 
-/** Start builds the Webapp bundle first, as `hermes webapp` does; that build waits up to 30 minutes
+/** Start builds the Webapp bundle first, as `lattice webapp` does; that build waits up to 30 minutes
  *  for another build of it. */
 const START_REQUEST_TIMEOUT_MS = 35 * 60_000
 

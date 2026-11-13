@@ -47,7 +47,7 @@ def _layer_hex(palette: dict[str, Any], key: str, default: str) -> str:
 
 def _render_active_theme_bootstrap_css() -> str:
     """Critical-CSS ``<style>`` shim for the active *user* theme, so the first paint uses the
-    target palette instead of flashing the bundle's default Hermes Teal until
+    target palette instead of flashing the bundle's default Lattice Teal until
     ``ThemeProvider.applyTheme()`` runs. Built-in themes return "" (the bundle owns them).
 
     Variable names MUST match what the bundle consumes (``layerVars()`` /
@@ -115,13 +115,13 @@ def _bundle_unavailable(request: Request, message: str, status_code: int) -> Res
     html = (
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
-        "<title>Hermes is unavailable</title><style>"
+        "<title>Lattice is unavailable</title><style>"
         "body{font-family:system-ui,sans-serif;max-width:36rem;margin:15vh auto;padding:0 1rem;"
         "line-height:1.5;color:#1c1c1c;background:#fafafa}"
         "@media (prefers-color-scheme:dark){body{color:#e8e8e8;background:#141414}}"
-        "</style></head><body><h1>Hermes is unavailable</h1>"
+        "</style></head><body><h1>Lattice is unavailable</h1>"
         f"<p>{escape(message)}</p>"
-        "<p>Ask whoever runs this Hermes host to run that command, then reload this page.</p>"
+        "<p>Ask whoever runs this Lattice host to run that command, then reload this page.</p>"
         "</body></html>"
     )
     return HTMLResponse(html, status_code=status_code, headers=page_headers(request, html, _NO_STORE))
@@ -329,9 +329,9 @@ def mount_spa(application: FastAPI):
 
 # Built-in themes — label + description only; colors live in web/src/themes/presets.ts.
 _BUILTIN_DASHBOARD_THEMES = [
-    {"name": "default",       "label": "Hermes Teal",         "description": "Classic dark teal — the canonical Hermes look"},
-    {"name": "default-large", "label": "Hermes Teal (Large)", "description": "Hermes Teal with bigger fonts and roomier spacing"},
-    {"name": "nous-blue",     "label": "Nous Blue",           "description": "Light mode — vivid Nous-blue accents on cream canvas"},
+    {"name": "default",       "label": "Lattice Teal",         "description": "Classic dark teal — the canonical Lattice look"},
+    {"name": "default-large", "label": "Lattice Teal (Large)", "description": "Lattice Teal with bigger fonts and roomier spacing"},
+    {"name": "nous-blue",     "label": "Langton Blue",           "description": "Light mode — vivid Nous-blue accents on cream canvas"},
     {"name": "midnight",      "label": "Midnight",            "description": "Deep blue-violet with cool accents"},
     {"name": "ember",     "label": "Ember",          "description": "Warm crimson and bronze — forge vibes"},
     {"name": "mono",      "label": "Mono",           "description": "Clean grayscale — minimal and focused"},

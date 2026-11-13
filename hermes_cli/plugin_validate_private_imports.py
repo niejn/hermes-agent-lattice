@@ -1,4 +1,4 @@
-"""Admission lint: name a plugin's imports of private Hermes core modules (a warning, never a refusal).
+"""Admission lint: name a plugin's imports of private Lattice core modules (a warning, never a refusal).
 
 Catalog rule 9 ("public surfaces only") is enforced for runtime rebinds by
 ``plugin_validate_core_override``; an import of a core internal (``tools.tirith_security``,
@@ -92,7 +92,7 @@ def _is_own_module_path(module: str, local: set[str]) -> bool:
 
 
 def _private_target(module: str, name: str, core: frozenset, local: set[str]) -> str:
-    """The dotted target to report, or "" when the import is public, local or not Hermes's."""
+    """The dotted target to report, or "" when the import is public, local or not Lattice's."""
     target = f"{module}.{name}" if name else module
     own = _is_own_module_path(module, local) or bool(name) and _is_own_module_path(target, local)
     hermes = module.split(".")[0] in core and module not in local and not own
@@ -103,7 +103,7 @@ def _private_target(module: str, name: str, core: frozenset, local: set[str]) ->
 
 
 def _parsed_files(plugin_dir: Path) -> list[tuple[Path, ast.AST]]:
-    """``(rel, tree)`` for every plugin module that can load inside Hermes. Hidden dirs (``.github/``
+    """``(rel, tree)`` for every plugin module that can load inside Lattice. Hidden dirs (``.github/``
     CI helpers) never do; tests and vendored envs are skipped by ``_python_files``."""
     parsed = []
     for path, rel in _python_files(plugin_dir):
@@ -117,7 +117,7 @@ def _parsed_files(plugin_dir: Path) -> list[tuple[Path, ast.AST]]:
 
 
 def private_import_findings(plugin_dir: Path) -> list[str]:
-    """``["<rel>:<line> <module>[.<name>]", ...]`` for every import of a private Hermes core module:
+    """``["<rel>:<line> <module>[.<name>]", ...]`` for every import of a private Lattice core module:
     the first site of each distinct module first (so a truncated list still shows the breadth),
     then the rest, each group in file/line order."""
     files = _parsed_files(Path(plugin_dir))
@@ -199,7 +199,7 @@ def _warn_sites(report, label: str, hits: list[str]) -> None:
 
 
 def check_private_imports(report, plugin_dir: Path) -> None:
-    """Warn (never fail) when the plugin imports private Hermes core modules or calls private
+    """Warn (never fail) when the plugin imports private Lattice core modules or calls private
     methods on the core objects it is handed."""
     if hits := private_import_findings(plugin_dir):
         _warn_sites(report, "private core imports", hits)

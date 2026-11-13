@@ -3,7 +3,7 @@
 The user picks a **model family** (e.g. "Pixverse v6"); the plugin routes to its text-to-video endpoint without
 ``image_url`` and to its image-to-video endpoint otherwise. Active-family precedence:
 tool ``model=`` → ``FAL_VIDEO_MODEL`` env → ``video_gen.fal.model`` → ``video_gen.model`` (family id or an endpoint
-path containing one) → ``DEFAULT_MODEL``. Auth via ``FAL_KEY`` or the managed Nous gateway; output is an HTTPS URL.
+path containing one) → ``DEFAULT_MODEL``. Auth via ``FAL_KEY`` or the managed Langton gateway; output is an HTTPS URL.
 """
 
 from __future__ import annotations
@@ -245,7 +245,7 @@ def _resolve_managed_fal_video_gateway():
     if selected == NOUS_MANAGED_PROVIDER:
         gateway = resolve_managed_tool_gateway("fal-queue")
         if gateway is None:
-            raise ValueError(selection_error("video_gen", NOUS_MANAGED_PROVIDER, "the Nous Tool Gateway is not available (not entitled or unreachable)"))
+            raise ValueError(selection_error("video_gen", NOUS_MANAGED_PROVIDER, "the Langton Tool Gateway is not available (not entitled or unreachable)"))
         return gateway
     if selected is not None:
         if not fal_key_is_configured():
@@ -327,7 +327,7 @@ def _upscale_video(video_url: str, source_request_id: Optional[str] = None) -> O
 
 
 _NO_BACKEND_MSG = ("No FAL backend available. Either set FAL_KEY (run `hermes tools` → Video Generation → FAL to configure) "
-                   "or sign in to Nous (`hermes setup`) for managed gateway access.")
+                   "or sign in to Langton (`hermes setup`) for managed gateway access.")
 _MODALITY_MISSING_MSG = {
     "image": "FAL family {fid} has no image-to-video endpoint. Pick a family with image-to-video support via `hermes tools` → Video Generation.",
     "text": "FAL family {fid} has no text-to-video endpoint. Pass an image_url to use its image-to-video endpoint, or pick a different family.",

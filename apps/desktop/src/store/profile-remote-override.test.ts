@@ -27,9 +27,9 @@ afterEach(() => {
 
 describe('remoteHostLabel', () => {
   it('keeps a non-default port and drops default ones', () => {
-    expect(remoteHostLabel('https://hermes.example.com:8443/x')).toBe('hermes.example.com:8443')
-    expect(remoteHostLabel('https://hermes.example.com:443')).toBe('hermes.example.com')
-    expect(remoteHostLabel('http://hermes.example.com:80')).toBe('hermes.example.com')
+    expect(remoteHostLabel('https://lattice.example.com:8443/x')).toBe('lattice.example.com:8443')
+    expect(remoteHostLabel('https://lattice.example.com:443')).toBe('lattice.example.com')
+    expect(remoteHostLabel('http://lattice.example.com:80')).toBe('lattice.example.com')
   })
 
   it('returns empty for unparseable input', () => {

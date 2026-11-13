@@ -27,8 +27,8 @@ def _python_repair_hint() -> str:
         return recommended_update_command_for_method(method)
     if method in ("docker", "apt"):
         command = recommended_update_command_for_method(method)
-        return f"Run `{command}`" + (", then recreate the Hermes container" if method == "docker" else "")
-    return "Run `hermes pm repair`, then restart Hermes"
+        return f"Run `{command}`" + (", then recreate the Lattice container" if method == "docker" else "")
+    return "Run `hermes pm repair`, then restart Lattice"
 
 
 def _system_package_install_cmd(pkg: str) -> str:
@@ -151,7 +151,7 @@ def _report_database_journal_modes(hermes_home: Path | None = None, version_info
             check_warn(f"{name} is in WAL mode ({size}) despite database.journal_mode=delete",
                        "(the setting never applied: an existing WAL database is never live-downgraded"
                        + ("; also exposed to the WAL-reset bug" if vulnerable else "")
-                       + ". Stop every Hermes process for this profile, then run "
+                       + ". Stop every Lattice process for this profile, then run "
                        f"`hermes sessions set-journal-mode delete{'' if name == 'state.db' else f' --db {path}'}`)")
             _report_database_holders(name, path)
         elif error is not None:
@@ -166,7 +166,7 @@ def _report_database_journal_modes(hermes_home: Path | None = None, version_info
             if vulnerable:
                 exposed.append(name)
             check_warn(f"{name} is in WAL mode on a cross-VM filesystem (virtiofs/9p, {size})",
-                       "(WAL can silently corrupt across the VM boundary; stop every Hermes process and run "
+                       "(WAL can silently corrupt across the VM boundary; stop every Lattice process and run "
                        f"`hermes sessions set-journal-mode delete{'' if name == 'state.db' else f' --db {path}'}`, then "
                        "set `database.journal_mode: delete` — or move the database onto a native/named volume)")
         elif mode == "wal" and vulnerable:
@@ -313,17 +313,17 @@ def check_macos_tcc_grants() -> None:
     check_ok("macOS TCC signing identity is stable", _TCC_STABLE_DETAIL["certificate" in dr.lower()])
     check_info("If macOS still re-prompts for permissions (toggle shows ON): the stored grant is stale — run "
                "`tccutil reset ScreenCapture com.nousresearch.hermes` (repeat per affected service), toggle it ON in "
-               "System Settings, then fully quit & relaunch Hermes once.")
+               "System Settings, then fully quit & relaunch Lattice once.")
 
 
 def _desktop_app_bundle() -> Path | None:
-    """Locate the locally-built desktop bundle (``apps/desktop/release/mac-<arch>/Hermes.app``), newest first.
+    """Locate the locally-built desktop bundle (``apps/desktop/release/mac-<arch>/Lattice.app``), newest first.
 
-    The only layout whose ad-hoc re-signed bundle can invalidate TCC grants. ``/Applications/Hermes.app`` is
+    The only layout whose ad-hoc re-signed bundle can invalidate TCC grants. ``/Applications/Lattice.app`` is
     deliberately not probed: it is the separately-signed, certificate-anchored Hermes-Setup launcher.
     """
     release_dir = Path(__file__).resolve().parents[1] / "apps" / "desktop" / "release"
-    candidates = [p for p in release_dir.glob("mac*/Hermes.app") if p.is_dir()]
+    candidates = [p for p in release_dir.glob("mac*/Lattice.app") if p.is_dir()]
     return max(candidates, key=lambda p: p.stat().st_mtime) if candidates else None
 
 
@@ -373,12 +373,12 @@ def check_macos_full_disk_access() -> None:
     try:
         os.listdir(Path.home() / "Library" / "Application Support" / "com.apple.TCC")
     except PermissionError:
-        check_info("One switch silences all macOS folder prompts: grant your terminal app Full Disk Access and Hermes "
+        check_info("One switch silences all macOS folder prompts: grant your terminal app Full Disk Access and Lattice "
                    "will never trip per-folder dialogs (Desktop/Downloads/Documents/...) again. Open: System Settings → "
                    "Privacy & Security → Full Disk Access — or run:\n"
                    "      open \"x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles\"\n"
-                   "    then enable your terminal (and Hermes.app if you use Desktop), and restart them once. "
-                   "With Hermes' stable signing identities the grant survives every update.")
+                   "    then enable your terminal (and Lattice.app if you use Desktop), and restart them once. "
+                   "With Lattice' stable signing identities the grant survives every update.")
     except OSError:
         pass  # missing dir / other error: indeterminate, stay silent
     else:
@@ -556,7 +556,7 @@ def _check_web_dashboard_import(should_fix: bool, f: Finding) -> None:
         _fail_and_issue(
             "Dashboard web surface",
             "(import probe timed out)",
-            "Repair the dashboard dependencies: `hermes pm repair`, then restart Hermes",
+            "Repair the dashboard dependencies: `hermes pm repair`, then restart Lattice",
             f.issues,
         )
         return
@@ -573,7 +573,7 @@ def _check_web_dashboard_import(should_fix: bool, f: Finding) -> None:
     _fail_and_issue(
         "Dashboard web surface",
         detail,
-        "Repair the dashboard dependencies: `hermes pm repair`, then restart Hermes",
+        "Repair the dashboard dependencies: `hermes pm repair`, then restart Lattice",
         f.issues,
     )
 
@@ -614,8 +614,8 @@ def _check_command_installation(should_fix: bool, f: Finding) -> None:
     pm_launcher = selected != base_venv(PROJECT_ROOT) or resolve_store_python(PROJECT_ROOT) is not None
     venv_bin = PROJECT_ROOT / "hermes" if pm_launcher else selected / "bin" / "hermes"
     if not venv_bin.is_file():
-        check_warn("Hermes entry point not found", f"({venv_bin})")
-        return f.manual_issues.append("Repair or reinstall the Hermes launcher through the installation owner")
+        check_warn("Lattice entry point not found", f"({venv_bin})")
+        return f.manual_issues.append("Repair or reinstall the Lattice launcher through the installation owner")
     check_ok(f"Hermes entry point exists ({venv_bin})")
     # Expected command link directory (mirrors install.sh logic).
     prefix = os.environ.get("PREFIX", "")
@@ -645,7 +645,7 @@ def _check_command_installation(should_fix: bool, f: Finding) -> None:
         from hermes_cli._launchers import stage_launcher
 
         if stage_launcher("hermes", PROJECT_ROOT, link_dir) is None:
-            check_fail("Could not publish Hermes launcher")
+            check_fail("Could not publish Lattice launcher")
             return f.manual_issues.append("Repair the PM store interpreter through the installation owner, then rerun 'hermes doctor --fix'")
         check_ok(f"{verb} PM launcher: {display}/hermes")
     else:

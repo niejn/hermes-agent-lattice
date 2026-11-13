@@ -694,6 +694,20 @@ model:
   # key_env: MY_PROVIDER_API_KEY  # env var holding the key (alternative to api_key)
 ```
 
+**Preseeded defaults (Lattice builds):** Lattice Desktop Harness ships a built-in `providers.lattice-internal` entry pointing at the company LiteLLM relay, so employees only paste a key:
+
+```yaml
+# Defaults layer (already present in Lattice builds — no need to copy):
+providers:
+  lattice-internal:
+    name: Lattice Internal (LiteLLM)
+    base_url: https://ai.langtonphotonics.com/v1
+    key_env: HERMES_CUSTOM_LATTICE_INTERNAL_API_KEY
+```
+
+The key slot follows the standard custom-endpoint convention (`custom_endpoint_key_env`): paste your personal virtual key once via `hermes model`, Desktop **Settings → Providers → Custom Endpoints**, or `providers.<id>.key_env`-style `.env` entries — the value lands in `~/.hermes/.env`, never in `config.yaml`. The model catalog is auto-discovered from `{base_url}/models`, so `models` stays empty until first use.
+
+
 :::warning Legacy env vars
 `LLM_MODEL` in `.env` is **removed** — `config.yaml` is the single source of truth for model and endpoint configuration. `OPENAI_BASE_URL` is still honored, but **only** for the `openai-api` provider (it overrides the OpenAI endpoint for direct API-key access). For other providers and custom endpoints, use `hermes model` or set `model.base_url` in `config.yaml` directly. If you have stale entries in your `.env`, they are automatically cleared on the next `hermes setup` or config migration.
 :::

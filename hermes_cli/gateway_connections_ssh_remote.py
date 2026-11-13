@@ -1,6 +1,6 @@
 """Remote ``hermes serve`` lifecycle over an SSH ControlMaster (Linux/macOS remotes).
 
-Server-side port of ``apps/desktop/electron/remote-lifecycle.ts``: locate the remote Hermes, gate
+Server-side port of ``apps/desktop/electron/remote-lifecycle.ts``: locate the remote Lattice, gate
 the platform, refuse while a remote install update is in progress, reuse a provably-owned
 ``serve --isolated`` through its lockfile + an authenticated ownership proof, otherwise spawn a
 fresh detached one under the update-marker mutex and scrape its READY port, and reap a stale
@@ -131,7 +131,7 @@ def expand_remote_path(path: str) -> str:
 def assert_safe_remote_home(home: str) -> str:
     value = str(home or "").strip()
     if not re.fullmatch(r"(/|~/)[A-Za-z0-9._/+-]+", value) or ".." in value:
-        raise _err("unknown", "Unsafe remote Hermes home.")
+        raise _err("unknown", "Unsafe remote Lattice home.")
     return value.rstrip("/")
 
 
@@ -161,7 +161,7 @@ def probe_remote_hermes_home(ssh: SshConnection) -> str:
     try:
         out = ssh.exec('echo "${HERMES_HOME:-$HOME/.hermes}"').strip().split("\n")[-1]
     except SshReachError as exc:
-        raise _err("transient-transport-error", "Could not resolve the remote Hermes home.") from exc
+        raise _err("transient-transport-error", "Could not resolve the remote Lattice home.") from exc
     return out or "~/.hermes"
 
 
@@ -176,7 +176,7 @@ def assert_remote_install_update_clear(ssh: SshConnection, hermes_home: str, her
         lines = ssh.exec(f"python3 - {marker}{hermes}", stdin_data=REMOTE_MARKER_GATE_PY).strip().splitlines()
     except SshReachError as exc:
         raise _err("update-in-progress",
-                   "Could not prove that the remote Hermes install is clear for SSH startup.") from exc
+                   "Could not prove that the remote Lattice install is clear for SSH startup.") from exc
     observation = lines[-1] if lines else ""
     if observation == "CLEAR":
         return
@@ -184,9 +184,9 @@ def assert_remote_install_update_clear(ssh: SshConnection, hermes_home: str, her
     if live:
         message = f"Remote Hermes update process {live.group(1)} is still running; SSH startup is paused."
     elif observation == "HELD":
-        message = "A process the remote Hermes update started still holds the install; SSH startup is paused."
+        message = "A process the remote Lattice update started still holds the install; SSH startup is paused."
     else:
-        message = "The remote Hermes update marker is unreadable, malformed, or locked; refusing SSH startup."
+        message = "The remote Lattice update marker is unreadable, malformed, or locked; refusing SSH startup."
     raise _err("update-in-progress", message)
 
 
@@ -220,8 +220,8 @@ def locate_hermes(ssh: SshConnection, remote_hermes_path: str) -> str:
         if candidate and _is_executable(ssh, candidate):
             return candidate
     raise _err("hermes-not-found",
-               "Hermes is not installed on the remote host (no `hermes` executable found). Install it there, "
-               "or set the Hermes path explicitly on the connection.")
+               "Lattice is not installed on the remote host (no `hermes` executable found). Install it there, "
+               "or set the Lattice path explicitly on the connection.")
 
 
 def probe_hermes_version(ssh: SshConnection, hermes_path: str) -> str:
@@ -405,7 +405,7 @@ except OSError:
   # pid already gone — a dead process is FOREIGN, not a transport error
   print("FOREIGN");sys.exit(0)
  # ps joins argv with spaces and no quoting (macOS has no /proc), so a quote or space in the
- # Hermes path breaks shlex: cut the known entry path out before splitting the rest.
+ # Lattice path breaks shlex: cut the known entry path out before splitting the rest.
  head,rest=None,line
  for e in sorted(expected_entries,key=len,reverse=True):
   at=0 if line.startswith(e+" ") else line.find(" "+e+" ")+1
@@ -635,8 +635,8 @@ class Spawned:
 def spawn_remote_serve(ssh: SshConnection, *, hermes_path: str, profile: str, token: str, ownership_id: str,
                        hermes_home: str, assert_install_clear: Callable[[], None]) -> Spawned:
     if not remote_supports_ssh_ownership(ssh, hermes_path):
-        raise _err("update-required", "The remote Hermes install does not support --ssh-session-token-file and "
-                                      "--ssh-owner-nonce. Update Hermes on the remote host.")
+        raise _err("update-required", "The remote Lattice install does not support --ssh-session-token-file and "
+                                      "--ssh-owner-nonce. Update Lattice on the remote host.")
     nonce = secrets.token_hex(8)
     plan = SpawnPlan(
         hermes_path=hermes_path, profile=profile, spawn_nonce=nonce, ownership_id=ownership_id,
@@ -660,7 +660,7 @@ def spawn_remote_serve(ssh: SshConnection, *, hermes_path: str, profile: str, to
         return Spawned(existing=True)
     if not lines or not lines[-1].isdigit() or int(lines[-1]) <= 0:
         _remove_remote(ssh, plan.token_file_path)
-        raise _err("spawn-failed", "Failed to launch the remote Hermes serve (no pid returned).")
+        raise _err("spawn-failed", "Failed to launch the remote Lattice serve (no pid returned).")
     return Spawned(False, int(lines[-1]), nonce, plan.log_path, plan.token_file_path)
 
 
@@ -690,7 +690,7 @@ def scrape_ready_port(ssh: SshConnection, log_path: str, *, timeout_s: float = D
             tail = ""
         if is_alive is not None and not is_alive():
             raise remote_profile_missing_error(tail) or _err(
-                "spawn-failed", "Remote Hermes serve exited before announcing its port.")
+                "spawn-failed", "Remote Lattice serve exited before announcing its port.")
         match = READY_RE.search(tail)
         if match:
             return int(match.group(1))
@@ -823,7 +823,7 @@ def _try_reuse(deps: ConnectDeps, remote: _Remote, lock: dict) -> Connected | No
         return None
     if not remote_pid_alive(ssh, lock["pid"]):
         ssh.cancel_forward(local_port, lock["port"])
-        raise _err("spawn-failed", "The reused remote Hermes serve exited while it was being verified.")
+        raise _err("spawn-failed", "The reused remote Lattice serve exited while it was being verified.")
     return Connected(base_url, deps.reuse_token, local_port, lock["port"], lock["pid"], True,
                      remote.hermes_version, remote.hermes_path, remote.hermes_home, lock["spawnNonce"],
                      remote.platform)

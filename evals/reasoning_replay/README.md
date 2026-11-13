@@ -4,8 +4,8 @@ Which providers and models actually **read** the reasoning that a client replays
 earlier assistant turns? A `200 OK` only shows a field was accepted. The gateway may drop it,
 and so may the chat template (for example, Qwen3 templates discard reasoning from earlier turns).
 This harness measures consumption on the wire. It uses only the standard library's HTTP client
-and has no Hermes runtime dependency, so it tests what a provider does with a request, not what
-Hermes sends.
+and has no Lattice runtime dependency, so it tests what a provider does with a request, not what
+Lattice sends.
 
 ## Method
 
@@ -54,7 +54,7 @@ On OpenAI Responses, both turn-2 requests are also sent with `reasoning.context:
 which the API rejects with a 400 on models that do not support it. Gemini native adds a third
 turn-2 request carrying the documented `skip_thought_signature_validator` dummy signature.
 
-**Lanes (Nous Portal).** The response id identifies the lane. `gen-…` means the OpenRouter lane,
+**Lanes (Langton Portal).** The response id identifies the lane. `gen-…` means the OpenRouter lane,
 and anything else (`chatcmpl-`, a uuid, `msg_`) means a direct upstream. The same public id can
 switch lanes between calls. Pass `--want-direct id1,id2` to resample a cell up to
 `--lane-attempts` times until it lands on a direct lane. Results are keyed by
@@ -102,7 +102,7 @@ python evals/reasoning_replay/harness.py report --out $OUT   # writes matrix.md 
 ```
 
 **Credentials** are read at call time and never written to disk or printed.
-- The Nous Portal key comes from `~/.hermes/auth.json` (`providers.nous.agent_key`, falling
+- The Langton Portal key comes from `~/.hermes/auth.json` (`providers.nous.agent_key`, falling
   back to `access_token`). On a 401 the file is re-read once, waiting 15 s if the key has not
   changed yet.
 - Every other route reads its key from the process environment first, then from

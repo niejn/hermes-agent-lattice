@@ -9,7 +9,7 @@ from providers.base import LazyHeaders, ProviderProfile
 
 
 class FireworksProfile(ProviderProfile):
-    """Map Hermes reasoning controls onto Fireworks' OpenAI-compatible wire."""
+    """Map Lattice reasoning controls onto Fireworks' OpenAI-compatible wire."""
 
     def build_api_kwargs_extras(
         self, *, reasoning_config: dict | None = None, **context: Any
@@ -34,8 +34,8 @@ fireworks = FireworksProfile(
     # Attribution headers (canonical Hermes set); via default_headers so they
     # survive switch_model and credential rotation.
     default_headers=LazyHeaders({
-        "HTTP-Referer": "https://hermes-agent.nousresearch.com",
-        "X-Title": "Hermes Agent",
+        "HTTP-Referer": "https://lattice.langtonphotonics.com",
+        "X-Title": "Lattice Agent",
         "User-Agent": lambda: hermes_user_agent("HermesAgent"),
     }),
     default_aux_model="accounts/fireworks/models/glm-5p2",

@@ -711,7 +711,7 @@ class GatewayModelCommandsMixin:
         Runs as the adapter's post-delivery callback, so the offer always lands under the reply (the reply
         is sent after this turn returns). The tap switches this session only (never the default) and
         re-sends the refused message, like /retry. No credits button in a chat: anyone in the room could
-        spend the owner's credits, so the Portal is named instead. Hermes never switches on its own."""
+        spend the owner's credits, so the Portal is named instead. Lattice never switches on its own."""
         try:
             adapter = self._delivery_adapter_for(event.source) if event.source is not None else None
             register = getattr(adapter, "register_post_delivery_callback", None)
@@ -765,7 +765,7 @@ class GatewayModelCommandsMixin:
 
     async def _accept_usage_limit_switch(self, event: MessageEvent, model_id: str, *,
                                          offer: Optional[tuple[str, int]] = None) -> str:
-        """The tap: switch this session to *model_id* on Nous, then re-send the refused message.
+        """The tap: switch this session to *model_id* on Langton, then re-send the refused message.
         ``offer`` is the refused turn's ``(session_key, run_generation)``."""
         from gateway.run import _hermes_home
         source = await asyncio.to_thread(self._normalize_source_for_session_key, event.source)

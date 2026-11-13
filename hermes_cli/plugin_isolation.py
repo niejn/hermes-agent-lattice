@@ -1,12 +1,12 @@
 """Where third-party Python plugin code is allowed to run (``plugins.isolation``).
 
-``in_process`` (default) imports every plugin into the Hermes process, as always. ``host`` keeps
+``in_process`` (default) imports every plugin into the Lattice process, as always. ``host`` keeps
 third-party plugin code OUT of it: general plugins load in one plugin-host process per profile
-(:mod:`hermes_cli.plugin_host`) and talk to Hermes only through ``ctx``; every other path that would
+(:mod:`hermes_cli.plugin_host`) and talk to Lattice only through ``ctx``; every other path that would
 import a user-supplied module in-process (category providers, model-provider profiles, dashboard
-plugin APIs) refuses with a stated reason. Bundled plugins ship with Hermes and stay in-process.
+plugin APIs) refuses with a stated reason. Bundled plugins ship with Lattice and stay in-process.
 
-That second half is the property a pooled deployment needs: one Hermes process serving many
+That second half is the property a pooled deployment needs: one Lattice process serving many
 profiles must never share an interpreter with a profile's plugin code. The same boundary gives a
 single-user install crash isolation (a plugin that segfaults or hangs takes down its host, not the
 gateway), which is why it is a plain config value and not a cloud-only switch.
@@ -38,7 +38,7 @@ _ISOLATION_MODES = frozenset({ISOLATION_IN_PROCESS, ISOLATION_HOST})
 # launch-scope dashboard auth registry. A plugin calling one of these runs only in-process.
 HOST_UNSUPPORTED_CTX_METHODS: dict[str, str] = {
     "register_login_backend": "browser-vault fills hold a server-local context manager",
-    "register_browser_page_backend": "browser-vault fill scripts carry credentials that stay in the Hermes process",
+    "register_browser_page_backend": "browser-vault fill scripts carry credentials that stay in the Lattice process",
     "register_platform": "platform adapters run on the gateway's event loop with native SDK clients",
     "register_platform_handler": "the handler factory receives the platform's native SDK client",
     "register_telegram_handler": "the handler factory receives the native Telegram Application",
@@ -126,7 +126,7 @@ def in_process_import_refusal(what: str, *, source: str = "user",
                               config: Optional[Mapping[str, Any]] = None) -> Optional[str]:
     """Reason an in-process import of third-party code must not happen, or ``None`` when allowed.
 
-    Every loader that imports a user-supplied module into the Hermes process asks this first;
+    Every loader that imports a user-supplied module into the Lattice process asks this first;
     bundled code always passes.
     """
     if source == "bundled" or isolation_mode(config) != ISOLATION_HOST:

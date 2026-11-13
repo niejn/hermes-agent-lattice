@@ -1,6 +1,6 @@
 """``hermes dashboard register`` — register a self-hosted dashboard OAuth client.
 
-Automates the Nous Portal ``/local-dashboards`` flow: resolve a fresh Nous access token, POST
+Automates the Langton Portal ``/local-dashboards`` flow: resolve a fresh Langton access token, POST
 ``{portal}/api/oauth/self-hosted-client`` (the ``agent:`` prefix is applied server-side),
 write ``HERMES_DASHBOARD_OAUTH_CLIENT_ID`` (+ portal/public URL when warranted) into ``.env``
 idempotently, then print the gate-engagement hint.
@@ -82,7 +82,7 @@ def _register_self_hosted_client(
         except Exception:
             detail = ""
         if exc.code == 401:
-            message = ("Nous Portal rejected the access token (401). "
+            message = ("Langton Portal rejected the access token (401). "
                        "Try `hermes auth add nous` to re-authenticate.")
         elif exc.code == 403:
             message = detail or "Your account is not permitted to register a self-hosted dashboard."
@@ -107,7 +107,7 @@ def _print_post_register_hint(
     if public_url:
         print("    HERMES_DASHBOARD_PUBLIC_URL=" + str(public_url))
     print(
-        "\n  Heads up — Nous login only *engages* on a non-loopback bind. A plain\n"
+        "\n  Heads up — Langton login only *engages* on a non-loopback bind. A plain\n"
         "  `hermes dashboard` (localhost) leaves the gate off and serves locally\n"
         "  without auth, which is fine for your own machine.\n")
     if custom_redirect_uri:
@@ -116,12 +116,12 @@ def _print_post_register_hint(
         except Exception:
             host = "your-host"
         print(
-            "  To require Nous login on your registered host, run the dashboard\n"
+            "  To require Langton login on your registered host, run the dashboard\n"
             f"  bound publicly (it must be reachable at https://{host}) and log in\n"
             "  at its /login page.")
     else:
         print(
-            "  To require Nous login (e.g. exposing on your LAN or a public host):\n"
+            "  To require Langton login (e.g. exposing on your LAN or a public host):\n"
             "    hermes dashboard --host 0.0.0.0\n"
             "  …then log in at the dashboard's /login page.")
     print(
@@ -161,7 +161,7 @@ def _public_url_from_redirect(redirect_uri: Optional[str]) -> str:
 
 
 def cmd_dashboard_register(args) -> None:
-    """Register a self-hosted dashboard OAuth client with Nous Portal."""
+    """Register a self-hosted dashboard OAuth client with Langton Portal."""
     from hermes_cli.auth import AuthError, resolve_nous_access_token
     from hermes_cli.config import is_managed, save_env_value
     # Managed installs get the client id stamped in by the orchestrator (save_env_value refuses).
@@ -174,7 +174,7 @@ def cmd_dashboard_register(args) -> None:
         access_token = resolve_nous_access_token()
     except Exception as exc:
         if isinstance(exc, AuthError) and getattr(exc, "relogin_required", False):
-            print("✗ You're not logged into Nous Portal.\n"
+            print("✗ You're not logged into Langton Portal.\n"
                   "  Run `hermes setup` (or `hermes auth add nous`) first, then retry.")
         else:
             print(f"✗ Could not resolve a Nous Portal access token: {exc}")

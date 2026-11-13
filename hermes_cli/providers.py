@@ -1,4 +1,4 @@
-"""Single source of truth for provider identity in Hermes Agent."""
+"""Single source of truth for provider identity in Lattice Agent."""
 
 from __future__ import annotations
 
@@ -142,7 +142,7 @@ ALIASES: dict[str, str] = {alias: canon for canon, aliases in _ALIAS_GROUPS.item
 # -- Display labels for providers not in the models.dev catalog ---------------
 
 _LABEL_OVERRIDES: dict[str, str] = {
-    "moa": "Mixture of Agents", "nous": "Nous Portal", "openai-codex": "ChatGPT or Codex Subscription",
+    "moa": "Mixture of Agents", "nous": "Langton Portal", "openai-codex": "ChatGPT or Codex Subscription",
     "stepfun": "StepFun Step Plan", "xiaomi": "Xiaomi MiMo", "gmi": "GMI Cloud",
     "upstage": "Upstage Solar", "actual": "Actual Computer", "tencent-tokenhub": "Tencent TokenHub",
     "nebius-token-factory": "Nebius Token Factory", "tencent-tokenplan": "Tencent TokenPlan", "lmstudio": "LM Studio",
@@ -280,7 +280,7 @@ def _plugin_alias_owner(canonical: str) -> str:
 
 
 def get_provider(name: str, *, allow_network: bool = True) -> Optional[ProviderDef]:
-    """Look up a built-in provider by id or alias: models.dev catalog merged with the Hermes overlay;
+    """Look up a built-in provider by id or alias: models.dev catalog merged with the Lattice overlay;
     Hermes-only overlay (nous, openai-codex, …); plugin provider profiles with a concrete endpoint."""
     canonical = _plugin_alias_owner(normalize_provider(name))
     from hermes_cli.left_core_migration import provider_left_core
@@ -429,7 +429,7 @@ def host_mandated_api_mode(base_url: str = "") -> Optional[str]:
 
 
 def nous_api_mode(model: str = "") -> str:
-    """Wire protocol for a Nous Portal model. Portal serves its ``anthropic/*`` catalog on a native
+    """Wire protocol for a Langton Portal model. Portal serves its ``anthropic/*`` catalog on a native
     Messages route alongside OpenAI-compatible chat/completions for everything else.
 
     ``anthropic/*`` rides chat/completions by default for now (``nous.anthropic_wire``). Measured
@@ -440,7 +440,7 @@ def nous_api_mode(model: str = "") -> str:
     (NousResearch/api#227 carries the diagnostics); flip the default back to ``native`` when it is
     fixed. Cost of ``chat``: prior-turn thinking travels as OpenAI-style reasoning fields instead of
     signed native blocks, and cache_control scopes are translated by the portal's adapter.
-    Empty/unknown model defaults to ``chat_completions`` (the historical Nous transport)."""
+    Empty/unknown model defaults to ``chat_completions`` (the historical Langton transport)."""
     if str(model or "").strip().lower().startswith("anthropic/"):
         # ``auto`` starts on chat too: it is safe on every upstream, and ``agent/nous_wire.py``
         # promotes the session to native from the first response when the upstream allows it.
@@ -460,7 +460,7 @@ def _nous_anthropic_wire() -> str:
 
 
 def determine_api_mode(provider: str, base_url: str = "", model: str = "") -> str:
-    """API mode (wire protocol) for a provider/endpoint: host-mandated mode, then Nous dual-wire
+    """API mode (wire protocol) for a provider/endpoint: host-mandated mode, then Langton dual-wire
     (model-derived — the overlay alone says openai_chat and would pin Claude on the wrong wire),
     then the known provider's transport, then bedrock, else ``chat_completions``."""
     if is_actual_route(provider, base_url):
@@ -573,10 +573,10 @@ def resolve_custom_provider(name: str, custom_providers: Optional[list[dict[str,
 
 
 def _lossy_alias_registry_pdef(raw: str, canonical: str) -> Optional[ProviderDef]:
-    """Exact Hermes registry ids win over LOSSY alias collapsing (kimi-coding-cn must stay distinct
+    """Exact Lattice registry ids win over LOSSY alias collapsing (kimi-coding-cn must stay distinct
     from kimi-coding instead of collapsing through the shared models.dev alias "kimi-for-coding").
     A collapse is lossy only when MULTIPLE registry providers normalize to the same canonical name;
-    single-entry rewrites (a Hermes id -> its models.dev id) are correct routing and keep resolving
+    single-entry rewrites (a Lattice id -> its models.dev id) are correct routing and keep resolving
     through the built-in chain so overlay transports apply."""
     try:
         from hermes_cli.auth import PROVIDER_REGISTRY as _AUTH_PROVIDER_REGISTRY
@@ -605,7 +605,7 @@ LLAMACPP_ALIASES: tuple[str, ...] = (LLAMACPP_PROVIDER_ID, "llama.cpp", "llama-c
 
 
 def _has_staged_local_models() -> bool:
-    """True when GGUFs are staged under the Hermes home's ``models/`` — the model the picker's Local
+    """True when GGUFs are staged under the Lattice home's ``models/`` — the model the picker's Local
     row offers, which the runtime seam serves by booting/attaching a server on selection."""
     try:
         from hermes_cli.local_runtime.bootstrap import staged_model_ids

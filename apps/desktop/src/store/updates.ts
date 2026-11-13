@@ -212,7 +212,7 @@ export function reportBackendContract(contract: number | undefined, protocol?: s
     }
 
     notify({
-      // Hermes Cloud updates its agents itself: name the skew, offer no update.
+      // Lattice Cloud updates its agents itself: name the skew, offer no update.
       action: cloudOwnsUpdates('backend')
         ? undefined
         : {
@@ -239,7 +239,7 @@ export function reportBackendContract(contract: number | undefined, protocol?: s
     }
 
     notify({
-      // A Webapp served by Hermes Cloud: Cloud replaced the image under this tab, and a reload loads it.
+      // A Webapp served by Lattice Cloud: Cloud replaced the image under this tab, and a reload loads it.
       action: cloudOwnsUpdates('client')
         ? { label: translateNow('commandCenter.reloadWindow'), onClick: () => window.location.reload() }
         : {
@@ -770,15 +770,15 @@ export async function applyUpdates(opts: DesktopUpdateApplyOptions = {}): Promis
     const result = await bridge.apply(opts)
 
     // CLI install with no staged updater: not an error — the user just runs
-    // `hermes update` themselves. Land on a dedicated manual state so the
+    // `lattice update` themselves. Land on a dedicated manual state so the
     // overlay shows the command + copy button instead of a dead retry loop.
     if (result?.manual) {
       $updateApply.set({
         ...IDLE,
         applying: false,
         stage: 'manual',
-        message: result.message ?? result.command ?? 'hermes update',
-        command: result.command ?? 'hermes update'
+        message: result.message ?? result.command ?? 'lattice update',
+        command: result.command ?? 'lattice update'
       })
 
       return result
@@ -1052,7 +1052,7 @@ async function runBackendUpdate(): Promise<DesktopUpdateApplyResult> {
       // An empty update_command is the backend saying "there is no command to
       // run here" (managed container, commit build) — render the message-only
       // view. Only a field absent from an older backend falls back.
-      const command = ((started as { update_command?: string | null }).update_command ?? 'hermes update') || null
+      const command = ((started as { update_command?: string | null }).update_command ?? 'lattice update') || null
       $backendUpdateApply.set({ ...IDLE, applying: false, stage: 'manual', message, command })
 
       return { ok: false, error: 'manual', manual: true, message, command: command ?? undefined }
@@ -1247,7 +1247,7 @@ export function applyEverythingUpdate(): Promise<void> {
   return updateEverythingInFlight
 }
 
-/** The everything-flow's backend leg: a remote backend, unless Hermes Cloud updates it itself. */
+/** The everything-flow's backend leg: a remote backend, unless Lattice Cloud updates it itself. */
 function backendLegApplies(): boolean {
   return isRemoteMode() && !cloudOwnsUpdates('backend')
 }
@@ -1383,7 +1383,7 @@ function connectionKey(conn: HermesConnection | null): string {
 }
 
 export const BACKGROUND_UPDATE_CHECK_MS = 24 * 60 * 60 * 1000
-const FOCUS_RECHECK_KEY = 'hermes.updates.last-passive-check'
+const FOCUS_RECHECK_KEY = 'lattice.updates.last-passive-check'
 
 function passiveCheckDue(now: number): boolean {
   const last = Number(storedString(FOCUS_RECHECK_KEY) ?? 0)

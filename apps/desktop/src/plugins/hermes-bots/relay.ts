@@ -16,7 +16,7 @@ import type { ProfileRoute, RosterRow } from './types'
 
 // ── cross-connection bot relay ────────────────────────────────────────────
 // Connections ARE the peer set: every gateway this Desktop holds a socket
-// to (local, remote URL, SSH, Hermes Cloud, docker) must be able to find
+// to (local, remote URL, SSH, Lattice Cloud, docker) must be able to find
 // every other connection's agents and message them via message_agent. The
 // Desktop is the relay — it owns every socket. Two loops:
 //  - roster loop: pushes each gateway the union roster of agents on the
@@ -334,8 +334,8 @@ async function relayAgentsOn(
     )
 
     const profiles = Array.isArray(res?.profiles) ? res.profiles : []
-    // This connection's default is @hermes only while it has no real 'hermes' profile.
-    const hermesTaken = profiles.some(profile => profile?.name === 'hermes')
+    // This connection's default is @hermes only while it has no real 'lattice' profile.
+    const hermesTaken = profiles.some(profile => profile?.name === 'lattice')
     const label = labels.get(connection.id) || connection.id
 
     const rows = profiles

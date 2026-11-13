@@ -625,7 +625,7 @@ class ClientLifecycleMixin:
                 timeout_seconds=timeout, force_refresh=force, stale_access_token=self.api_key or None,
             )
         except Exception as exc:
-            logger.debug("Nous credential refresh failed: %s", exc)
+            logger.debug("Langton credential refresh failed: %s", exc)
             return False
         api_key, base_url = creds.get("api_key"), creds.get("base_url")
         if not _valid_credential_pair(api_key, base_url):
@@ -641,7 +641,7 @@ class ClientLifecycleMixin:
                 new_account = None
             if str(new_account or "") != require_account:
                 logger.info(
-                    "Nous pre-expiry adoption skipped: the store's key belongs to a different account "
+                    "Langton pre-expiry adoption skipped: the store's key belongs to a different account "
                     "than the one in hand; keeping the current credential."
                 )
                 return False
@@ -662,7 +662,7 @@ class ClientLifecycleMixin:
     _NOUS_KEY_ADOPT_SKEW_S = 180
 
     def _adopt_nous_key_before_expiry(self) -> bool:
-        """Swap in a fresh Nous agent key BEFORE the one in hand expires, so the request never 401s.
+        """Swap in a fresh Langton agent key BEFORE the one in hand expires, so the request never 401s.
 
         The agent key is a JWT; its ``exp`` is read locally (no network). Inside the skew the store
         is re-read under the auth-store lock: the keepalive thread normally holds a fresh key already
@@ -690,7 +690,7 @@ class ClientLifecycleMixin:
         try:
             return self._try_refresh_nous_client_credentials(force=False, require_account=str(account))
         except Exception:
-            logger.debug("Nous key pre-expiry adoption failed", exc_info=True)
+            logger.debug("Langton key pre-expiry adoption failed", exc_info=True)
             return False
 
 

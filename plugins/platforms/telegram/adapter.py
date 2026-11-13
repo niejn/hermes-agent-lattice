@@ -922,7 +922,7 @@ class TelegramAdapter(TelegramContactMixin, TelegramHeldInboundMixin, TelegramRe
 
     @staticmethod
     def _dm_topic_fallback(metadata: Optional[dict[str, Any]]) -> bool:
-        """True for Hermes private-chat topic lanes (``telegram_dm_topic_reply_fallback``)."""
+        """True for Lattice private-chat topic lanes (``telegram_dm_topic_reply_fallback``)."""
         return bool(metadata and metadata.get("telegram_dm_topic_reply_fallback"))
 
     @classmethod
@@ -953,13 +953,13 @@ class TelegramAdapter(TelegramContactMixin, TelegramHeldInboundMixin, TelegramRe
         """Telegram send kwargs for forum and direct-message topic routing.
 
         Forum topics use ``message_thread_id``; native Bot API DM topics opt in via explicit ``direct_messages_topic_id``
-        metadata; Hermes private-chat topic lanes are marked ``telegram_dm_topic_reply_fallback``. Anchor-less synthetic sends
-        prefer the Hermes topic's ``message_thread_id`` (the native DM-topic id renders in a different chat lane).
+        metadata; Lattice private-chat topic lanes are marked ``telegram_dm_topic_reply_fallback``. Anchor-less synthetic sends
+        prefer the Lattice topic's ``message_thread_id`` (the native DM-topic id renders in a different chat lane).
         ``reply_to_mode="off"`` suppresses the anchor but keeps ``message_thread_id``.
 
         Live replies send the private topic thread id together with a reply anchor. Synthetic/resumed sends
         without an anchor (loop wakeups, background-process notifications, queued follow-ups after a gateway
-        restart) prefer the Hermes topic's ``message_thread_id`` so they stay in the active topic lane (#87051).
+        restart) prefer the Lattice topic's ``message_thread_id`` so they stay in the active topic lane (#87051).
         ``direct_messages_topic_id`` is a first route only when no topic thread resolves; it is never a retry for a
         rejected private-chat thread id, since Bot API honours it only in a channel's DM supergroup (#151852).
         """
@@ -2305,7 +2305,7 @@ class TelegramAdapter(TelegramContactMixin, TelegramHeldInboundMixin, TelegramRe
             "The previous gateway session is still held open on Telegram's servers, "
             "or another process is using the same bot token. Retrying in the background; "
             "it reconnects automatically once the competing getUpdates session expires. "
-            "If it never recovers, check for another Hermes or OpenClaw instance using this token.")
+            "If it never recovers, check for another Lattice or OpenClaw instance using this token.")
         logger.error("[%s] %s Original error: %s", self.name, message, _redact_telegram_error_text(error, self._ptb_proxy_url))
         # Snapshot whether WE transition to fatal: a concurrent retry task suspended past the entry
         # guard reaches this branch too. Only the first transition notifies.
@@ -6739,7 +6739,7 @@ def _apply_yaml_config(yaml_cfg: dict, telegram_cfg: dict) -> dict | None:
 
 
 def register(ctx) -> None:
-    """Plugin entry point — called by the Hermes plugin system."""
+    """Plugin entry point — called by the Lattice plugin system."""
     from .adapter_hint import PLATFORM_HINT, PLATFORM_HINT_TOOL_NOTES
     from .dashboard_card import DASHBOARD_CARD
     from .standalone import standalone_send

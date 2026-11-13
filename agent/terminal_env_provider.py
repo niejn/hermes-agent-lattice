@@ -54,7 +54,7 @@ class TerminalEnvironmentProvider(ProviderBase):
       hosted scope refuses any backend without it (built-ins included). See below.
 
     ``default_cwd`` home resolution and ``exec_prefix`` need the environment object itself, so they
-    work for in-process plugins only; under ``plugins.isolation: host`` the environment reaches Hermes
+    work for in-process plugins only; under ``plugins.isolation: host`` the environment reaches Lattice
     as an opaque placeholder and Bot Desktop placement refuses a ``supports_streams`` backend.
 
     **Hosted scopes** (``tools/environments/sandbox_scope.py``). With a hosted

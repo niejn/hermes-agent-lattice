@@ -248,8 +248,8 @@ export function createBrowserConnectionBridge({
             connectionId: LOCAL_CONNECTION_ID,
             connectionKind: 'local' as const,
             connectionLabel,
-            // A real 'hermes' profile keeps @hermes; the default answers to @default then.
-            handle: profile === 'default' && !profiles.includes('hermes') ? 'hermes' : profile,
+            // A real 'lattice' profile keeps @hermes; the default answers to @default then.
+            handle: profile === 'default' && !profiles.includes('lattice') ? 'lattice' : profile,
             profile,
             targetProfile: profile,
             // Installed here, so listed, but served elsewhere or nowhere.

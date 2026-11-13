@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { AutomationBlueprint, CronJob } from '@/hermes'
 
-const hermes = vi.hoisted(() => ({
+const lattice = vi.hoisted(() => ({
   getAutomationBlueprints: vi.fn(),
   getCronJobs: vi.fn(),
   instantiateAutomationBlueprint: vi.fn()
@@ -13,10 +13,10 @@ const hermes = vi.hoisted(() => ({
 
 vi.mock('@/hermes', async importOriginal => ({
   ...(await importOriginal<Record<string, unknown>>()),
-  getAutomationBlueprints: hermes.getAutomationBlueprints,
+  getAutomationBlueprints: lattice.getAutomationBlueprints,
   getCronDeliveryTargets: vi.fn(async () => ({ targets: [] })),
-  getCronJobs: hermes.getCronJobs,
-  instantiateAutomationBlueprint: hermes.instantiateAutomationBlueprint
+  getCronJobs: lattice.getCronJobs,
+  instantiateAutomationBlueprint: lattice.instantiateAutomationBlueprint
 }))
 
 // The view writes jobs into a named profile; pin the scope instead of booting the gateway store.
@@ -72,9 +72,9 @@ function renderView() {
 }
 
 beforeEach(() => {
-  hermes.getCronJobs.mockResolvedValue([])
-  hermes.getAutomationBlueprints.mockResolvedValue({ blueprints: [builtinBlueprint, pluginBlueprint] })
-  hermes.instantiateAutomationBlueprint.mockResolvedValue({
+  lattice.getCronJobs.mockResolvedValue([])
+  lattice.getAutomationBlueprints.mockResolvedValue({ blueprints: [builtinBlueprint, pluginBlueprint] })
+  lattice.instantiateAutomationBlueprint.mockResolvedValue({
     id: 'job-1',
     name: 'Team standup digest',
     prompt: 'Summarize yesterday',
@@ -98,7 +98,7 @@ describe('plugin-registered automation blueprints', () => {
     const builtinRow = screen.getByText('Morning briefing').closest('button') as HTMLElement
     expect(within(builtinRow.parentElement as HTMLElement).queryByText('teamtools')).toBeNull()
     // The catalog is per profile (plugins load per profile): fetched for the job's target profile.
-    expect(hermes.getAutomationBlueprints).toHaveBeenCalledWith('work')
+    expect(lattice.getAutomationBlueprints).toHaveBeenCalledWith('work')
 
     fireEvent.click(row)
     // The dialog's "Start from" select names the plugin next to the title.
@@ -107,7 +107,7 @@ describe('plugin-registered automation blueprints', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Schedule it' }))
 
     await waitFor(() =>
-      expect(hermes.instantiateAutomationBlueprint).toHaveBeenCalledWith(
+      expect(lattice.instantiateAutomationBlueprint).toHaveBeenCalledWith(
         { blueprint: 'teamtools:standup', values: { time: '09:15' } },
         'work'
       )

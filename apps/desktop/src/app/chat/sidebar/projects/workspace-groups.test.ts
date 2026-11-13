@@ -204,7 +204,7 @@ describe('mergeRepoWorktreeGroups (visual enhancer)', () => {
   it('surfaces a user-named "New worktree" under .worktrees/ as its own lane', () => {
     const discovered: HermesGitWorktree[] = [
       {
-        branch: 'hermes/test-gui-stuff',
+        branch: 'lattice/test-gui-stuff',
         detached: false,
         isMain: false,
         locked: false,
@@ -214,7 +214,7 @@ describe('mergeRepoWorktreeGroups (visual enhancer)', () => {
 
     const merged = mergeRepoWorktreeGroups({ id: '/repo', path: '/repo', groups: [] }, discovered)
 
-    expect(merged.map(g => g.label)).toContain('hermes/test-gui-stuff')
+    expect(merged.map(g => g.label)).toContain('lattice/test-gui-stuff')
   })
 
   it('relabels a dir-named linked worktree lane to its live checked-out branch', () => {

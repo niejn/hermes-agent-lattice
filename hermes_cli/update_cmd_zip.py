@@ -321,7 +321,7 @@ def _is_zip_preserved_entry_status_line(line: str, shipped: Optional[Collection[
 
 
 def _is_zip_staging_artifact_status_line(line: str, staged: Collection[str] = ()) -> bool:
-    """True when a porcelain status line is Hermes' own: a root breadcrumb, or the staging copy of an
+    """True when a porcelain status line is Lattice' own: a root breadcrumb, or the staging copy of an
     entry this run staged. Any other ``*.hermes-update-staging``/``-old`` may be a user's file (a manual
     ``cp -r tools tools.hermes-update-old``) that staging would delete, so it blocks."""
     top = _status_top_level(line[3:] if len(line) >= 3 else line)
@@ -412,7 +412,7 @@ def _require_staging_space(extracted: str, entries: list[str], project_root: str
 
 def _link_or_copy_artifact(source: str, destination: str) -> None:
     """Hardlink where the filesystem allows (apps/desktop/release is hundreds of MB, and a link stays
-    valid after the swap unlinks the old tree; on Windows a link also succeeds on a locked Hermes.exe
+    valid after the swap unlinks the old tree; on Windows a link also succeeds on a locked Lattice.exe
     where copy2 raises); byte copy otherwise."""
     try:
         os.link(source, destination)
@@ -607,7 +607,7 @@ def _download_and_swap_zip(branch: str, zip_url: str, target_sha: str | None = N
         print(f"✗ ZIP update failed: {e}")
         # Two-phase replace commits all or rolls all back, so no mixed tree here — don't push a needless reinstall.
         print("  Your existing install was left in place.")
-        print("  Re-run `hermes update` to retry; if the agent won't start, reinstall from https://hermes-agent.nousresearch.com")
+        print("  Re-run `hermes update` to retry; if the agent won't start, reinstall from https://docs.langtonphotonics.com")
         _record_stop(_zip_stop_class(e, downloaded=downloaded))
         _m().sys.exit(1)
     finally:

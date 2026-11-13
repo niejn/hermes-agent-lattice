@@ -1,6 +1,6 @@
 """MCP catalog — curated, Nous-approved MCP servers shipped with the repo.
 
-Entries are added only by merging a PR into hermes-agent; presence in ``optional-mcps/`` = Nous
+Entries are added only by merging a PR into hermes-agent; presence in ``optional-mcps/`` = Langton
 approval (no community tier, no other trust signals). Manifests pin transport details.
 """
 
@@ -354,7 +354,7 @@ def list_catalog() -> list[CatalogEntry]:
     """Return all valid catalog entries, sorted by name.
 
     Invalid manifests are skipped silently (CI catches them); future ``manifest_version`` ones are
-    skipped too but surfaced via :func:`catalog_diagnostics` so UIs can say "update Hermes".
+    skipped too but surfaced via :func:`catalog_diagnostics` so UIs can say "update Lattice".
     """
     root = _catalog_root()
     if not root.exists():
@@ -376,7 +376,7 @@ def list_catalog() -> list[CatalogEntry]:
 
 def catalog_diagnostics() -> list[tuple]:
     """``(entry_name, kind, message)`` tuples from the most recent :func:`list_catalog` call;
-    ``kind`` is ``future_manifest`` (newer than this Hermes) or ``invalid`` (malformed)."""
+    ``kind`` is ``future_manifest`` (newer than this Lattice) or ``invalid`` (malformed)."""
     return list(_CATALOG_DIAGNOSTICS)
 
 

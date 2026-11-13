@@ -492,7 +492,7 @@ class GatewayStatusCommandsMixin:
         return "\n".join(lines)
 
     async def _handle_topup_command(self, event: MessageEvent) -> str:
-        """Handle /topup -- show the Nous balance and hand off to the portal. Does NOT charge, confirm,
+        """Handle /topup -- show the Langton balance and hand off to the portal. Does NOT charge, confirm,
         or track payment (that happens in the browser; the next /topup shows the new balance)."""
         from agent.account_usage import build_credits_view
         view = await _quiet(lambda: asyncio.to_thread(build_credits_view, markdown=True))

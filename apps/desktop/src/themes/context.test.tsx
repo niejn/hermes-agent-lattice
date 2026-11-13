@@ -8,7 +8,7 @@ import { everforestTheme, midnightTheme } from './presets'
 import type { DesktopTheme } from './types'
 import { installUserTheme } from './user-themes'
 
-// The live-authoring loop: Hermes writes/edits one skin file and every surface
+// The live-authoring loop: Lattice writes/edits one skin file and every surface
 // repaints. An in-place edit keeps the NAME — only the palette moves.
 const bloomberg = (foreground: string) => ({
   name: 'bloomberg',
@@ -359,7 +359,7 @@ describe('ThemeProvider theme typography (#41766)', () => {
     cleanup()
   })
 
-  // The merged typography is DEFAULT ← nous ← theme, so a user theme that sets
+  // The merged typography is DEFAULT ← langton ← theme, so a user theme that sets
   // only the new knobs still inherits the font stacks.
   const bigTypeTheme: DesktopTheme = {
     ...midnightTheme,

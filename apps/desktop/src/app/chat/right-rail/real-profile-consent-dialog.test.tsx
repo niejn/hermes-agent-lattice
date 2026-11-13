@@ -26,7 +26,7 @@ vi.mock('@/hermes', () => ({
 
 const promptCopy = {
   title: 'Stay signed in to your sites',
-  body: 'Let Hermes browse with a snapshot of your default browser profile.',
+  body: 'Let Lattice browse with a snapshot of your default browser profile.',
   bulletSnapshot: 'Cookies and logins are copied into a managed snapshot.',
   bulletLiveProfile: 'Your live browser profile is never opened directly.',
   bulletLocal: 'Nothing leaves this computer.',
@@ -105,7 +105,7 @@ describe('shouldOfferRealProfilePrompt', () => {
 
 describe('RealProfileConsentDialog', () => {
   beforeEach(() => {
-    mocks.loadedConfig = { browser: { allow_private_urls: false }, model: { provider: 'nous' } }
+    mocks.loadedConfig = { browser: { allow_private_urls: false }, model: { provider: 'langton' } }
     mocks.save.mockResolvedValue({ ok: true })
     $realProfilePromptDismissed.set(false)
     $realProfilePromptMuted.set(false)
@@ -133,7 +133,7 @@ describe('RealProfileConsentDialog', () => {
     expect(mocks.save).toHaveBeenCalledWith({ browser: { use_real_profile: true } }, undefined)
     expect(mocks.cache).toHaveBeenCalledWith({
       browser: { allow_private_urls: false, use_real_profile: true },
-      model: { provider: 'nous' }
+      model: { provider: 'langton' }
     })
     expect(mocks.notify).toHaveBeenCalled()
   })

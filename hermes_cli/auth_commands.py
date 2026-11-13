@@ -336,12 +336,12 @@ def _add_nous_oauth_credential(args, provider: str) -> PooledCredential:
         try:
             found = f"Found existing Nous OAuth credentials at {auth_mod._nous_shared_store_path()}"
         except RuntimeError:
-            found = "Found existing shared Nous OAuth credentials"
+            found = "Found existing shared Langton OAuth credentials"
         print()
         print(found)
         do_import = _ask("Import these credentials? [Y/n]: ")
         if do_import is None or do_import.lower() in {"", "y", "yes"}:
-            print("Rehydrating Nous session from shared credentials...")
+            print("Rehydrating Langton session from shared credentials...")
             rehydrated = auth_mod._try_import_shared_nous_state(timeout_seconds=timeout)
             if rehydrated is not None:
                 return _persist(rehydrated, "Imported")
@@ -771,9 +771,9 @@ def _print_azure_entra_status() -> None:
         print(f"  Scope: {scope}")
         if not has_azure_identity_installed():
             print("  Status: ⚠ azure-identity not installed")
-            print("  From the Hermes environment, run: "
+            print("  From the Lattice environment, run: "
                   f"{install_hint('azure-identity')}")
-            print("  Then restart Hermes.")
+            print("  Then restart Lattice.")
         else:
             info = describe_active_credential(config=EntraIdentityConfig(scope=scope), timeout_seconds=10.0)
             env_sources = info.get("env_sources") or []
@@ -906,7 +906,7 @@ def _interactive_strategy() -> None:
 
 
 def auth_upgrade_command(args) -> None:
-    """``hermes auth upgrade``: sign the free tier into a Nous account, keeping its connectors."""
+    """``hermes auth upgrade``: sign the free tier into a Langton account, keeping its connectors."""
     from hermes_cli.anon_auth import upgrade_guest
     code = upgrade_guest(args)
     if code:

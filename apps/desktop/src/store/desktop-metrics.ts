@@ -21,7 +21,7 @@
  * stranger to `other`). Never a session id, path, message, bot name or setting
  * value.
  *
- * Local state (localStorage `hermes.desktop.metrics.v1:<hash of connection|profile>`,
+ * Local state (localStorage `lattice.desktop.metrics.v1:<hash of connection|profile>`,
  * written only while on): the UTC day, areas already reported today, per-day
  * caps, today's aggregated action counts and per-mode activity, finished days
  * awaiting the backend's ack, and the onboarding latch (steps sent / still open).
@@ -315,7 +315,7 @@ export type DesktopMode = 'bots' | 'sessions'
 
 // ── limits ────────────────────────────────────────────────────────────────────
 
-const STATE_KEY = 'hermes.desktop.metrics.v1'
+const STATE_KEY = 'lattice.desktop.metrics.v1'
 /** Friction per (kind, detail) per day; slow frames per bucket per day. */
 const FRICTION_DAILY_CAP = 20
 const SLOW_FRAME_DAILY_CAP = 5
@@ -578,7 +578,7 @@ export function completeFlow(flow: DesktopFlowId): void {
 
 /** The primary gateway socket dropped after a healthy boot. Classified a few
  *  seconds later: a backend process exit around it makes it `backend_exit`, a
- *  gateway switch starting in the window (Restart Hermes recycles the backend
+ *  gateway switch starting in the window (Restart Lattice recycles the backend
  *  before the switch flag rises) cancels it. */
 export function noteBackendDrop(reason: 'timeout' | null, now = Date.now()): void {
   if (pendingDrop || $desktopMetricsGate.get() !== 'on') {
@@ -739,7 +739,7 @@ export function noteMessageSent(mode: DesktopMode = $workspaceMode.get()): void 
   }
 }
 
-/** Configured bots (Bot Mode roster = Hermes profiles) — a count, never names. */
+/** Configured bots (Bot Mode roster = Lattice profiles) — a count, never names. */
 export function setDesktopBotCount(count: number): void {
   botCount = Math.max(0, Math.floor(finite(count)))
   withState(current => {

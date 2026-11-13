@@ -349,7 +349,7 @@ def resolve_proxy_url(
     process env another profile's ``TELEGRAM_PROXY``/``DISCORD_PROXY``/etc. may hold; the YAML
     value is the same profile's, so a secondary keeps its configured route without any env
     bridge (#108440). The generic ``HTTPS_PROXY``/``HTTP_PROXY``/``ALL_PROXY`` fallback stays a raw
-    process-env read — those are OS/system-level network settings, not a per-profile Hermes concept."""
+    process-env read — those are OS/system-level network settings, not a per-profile Lattice concept."""
     from gateway.platforms._shared import get_scoped_secret as _get_scoped_proxy_var
     value = (_get_scoped_proxy_var(platform_env_var, "") or "").strip() if platform_env_var else ""
     if not value:
@@ -647,7 +647,7 @@ async def _cache_media_from_url(url: str, ext: str, retries: int, *, media_type:
     import httpx
     if not is_safe_url(url):
         raise ValueError(f"Blocked unsafe URL (SSRF protection): {safe_url_for_log(url)}")
-    headers = {"User-Agent": "Mozilla/5.0 (compatible; HermesAgent/1.0)", "Accept": accept}
+    headers = {"User-Agent": "Mozilla/5.0 (compatible; LatticeAgent/1.0)", "Accept": accept}
     async with create_ssrf_safe_async_client(
         timeout=30.0, follow_redirects=True, event_hooks={"response": [ssrf_redirect_guard]},
     ) as client:
@@ -809,7 +809,7 @@ def _profile_dirs() -> list[Path]:
 
 
 def _credential_home_roots() -> list[Path]:
-    """Every Hermes home whose credential stores the denylist must cover: the ACTIVE home
+    """Every Lattice home whose credential stores the denylist must cover: the ACTIVE home
     (the per-turn HERMES_HOME override under ``gateway.multiplex_profiles``), the shared root
     and every ``<root>/profiles/*``. Enumerated at check time like ``_profile_cache_roots`` on
     the allow side — a denylist frozen at import covers only the launch profile, so a
@@ -971,7 +971,7 @@ def _docker_persistent_active() -> bool:
 
 
 def _cache_dir_container_mounts() -> list[tuple[Path, Path]]:
-    """(host, container) pairs for the auto-mounted Hermes cache dirs (``/root/.hermes/...`` in
+    """(host, container) pairs for the auto-mounted Lattice cache dirs (``/root/.hermes/...`` in
     MEDIA tags); longer prefixes than the ``/root`` home mount, so longest-prefix match wins."""
     if not _docker_env_active():
         return []
@@ -1055,7 +1055,7 @@ def validate_media_delivery_path(path: str, session_key: str = "") -> Optional[s
     """Safe absolute file path for native media delivery, else None. Default: any existing
     regular file outside the credential / system denylist (symmetric with inbound). Strict
     (``HERMES_MEDIA_DELIVERY_STRICT=1``, public bots where prompt injection must not exfiltrate
-    host secrets): MUST be under a Hermes cache, an operator root (``HERMES_MEDIA_ALLOW_DIRS``),
+    host secrets): MUST be under a Lattice cache, an operator root (``HERMES_MEDIA_ALLOW_DIRS``),
     or freshly produced within the recency window. Symlinks are resolved before any check."""
     from tools.hosted_tool_policy import host_feature_enabled
     if not host_feature_enabled("media_delivery") or not (candidate := _normalize_media_tag_path(path)):

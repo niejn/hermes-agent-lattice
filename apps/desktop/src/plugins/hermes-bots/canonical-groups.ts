@@ -173,7 +173,7 @@ export interface CanonicalPeerSeat {
   source: GroupMember
 }
 
-/** A Bot's own connection name as a handle suffix (`hermes` on "Mac Mini" joins as `hermes-mac-mini`). */
+/** A Bot's own connection name as a handle suffix (`lattice` on "Mac Mini" joins as `hermes-mac-mini`). */
 const slug = (value: unknown) => String(value ?? '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '')
 
 /** A short, stable digest (FNV-1a) of a connection id: the last resort for telling two apart. */
@@ -201,9 +201,9 @@ function connectionSuffix(member: GroupMember, rivals: GroupMember[]) {
   return mine[rung < 0 ? 2 : rung]
 }
 
-/** A Bot's own name: its title, else its name (a default profile reads "Hermes"). */
+/** A Bot's own name: its title, else its name (a default profile reads "Lattice"). */
 const botLabel = (member: GroupMember) => String(member.title || member.display_name || '').trim() ||
-  (member.name.trim().toLowerCase() === 'default' ? 'Hermes' : member.name)
+  (member.name.trim().toLowerCase() === 'default' ? 'Lattice' : member.name)
 
 /** A peer's name in the room: its own, then the connection it runs on, so two computers' default
  *  Bots never read alike. */
@@ -223,7 +223,7 @@ function rosterEntry(member: GroupMember, members: GroupMember[], pin: Canonical
   if (!pin) {
     const profile = member.route?.targetProfile ?? member.targetProfile ?? member.name
     // Saved on the gateway and read from any computer: "This device" would be wrong elsewhere.
-    const display = member.display_name || (mixed && profile === 'default' && base !== 'hermes' ? botLabel(member) : undefined)
+    const display = member.display_name || (mixed && profile === 'default' && base !== 'lattice' ? botLabel(member) : undefined)
 
     return { member_id: profile, profile, handle: base, target: { kind: 'local', profile },
       ...(display ? { display_name: display } : {}) }
@@ -395,7 +395,7 @@ interface CreateErrorLabels {
 
 /** A failed create in the reader's words: a roster problem found here, or the gateway's refusal
  *  followed by its reason. Any coded answer is the gateway refusing: the session gateway names the
- *  member in `data.detail` (4001); `hermes serve`, which Desktop's own backend and SSH, URL and
+ *  member in `data.detail` (4001); `lattice serve`, which Desktop's own backend and SSH, URL and
  *  Cloud connections reach, puts the reason in the message (4110, or 4123/5111 for a missing worker
  *  or a failure). Rejections arrive as Errors or, across the IPC bridge, as plain objects. */
 /** What a person can do next after a create that didn't finish, when a retry settles it. */

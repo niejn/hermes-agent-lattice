@@ -303,7 +303,7 @@ async function openSignInUrl(url: string) {
 }
 
 /**
- * Drive one sign-in attempt end to end: resolve what identity this Hermes is
+ * Drive one sign-in attempt end to end: resolve what identity this Lattice is
  * on, start the device-code sign-in, open its page, then long-poll until it
  * resolves. Safe to call again from a "Try again" button — it clears any
  * previous timers first.
@@ -321,7 +321,7 @@ export async function beginFreeTierSignIn(requestGateway: FreeTierRequester) {
 
   const minting = !status?.has_guest
 
-  // No free-tier identity AND a real Nous account already connected: there is
+  // No free-tier identity AND a real Langton account already connected: there is
   // nothing to transfer. Say so instead of minting a guest the user does not
   // need. A failed provider read is not proof either way — fall through and let
   // the start call be the authority.
@@ -333,9 +333,9 @@ export async function beginFreeTierSignIn(requestGateway: FreeTierRequester) {
         return
       }
 
-      const nous = providers.find(provider => provider.id === NOUS_PROVIDER_ID)
+      const langton = providers.find(provider => provider.id === NOUS_PROVIDER_ID)
 
-      if (nous?.status.logged_in && nous.status.free_tier !== true) {
+      if (langton?.status.logged_in && langton.status.free_tier !== true) {
         set({ status: 'already_signed_in' })
 
         return

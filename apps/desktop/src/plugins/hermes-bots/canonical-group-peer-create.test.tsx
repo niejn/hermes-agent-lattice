@@ -118,8 +118,8 @@ it('seats a Bot from another connection: the room on this gateway, the invitatio
     ['local', 'groups.create'], ['mini', 'groups.peer.invite'], ['local', 'groups.peer.register']])
   // Two default Bots: the one from Mac Mini joins under a handle and name that say where it runs.
   expect(create.members).toEqual([
-    { member_id: 'default', profile: 'default', handle: 'hermes', target: { kind: 'local', profile: 'default' } },
-    { member_id: 'hermes-mac-mini', profile: 'default', handle: 'hermes-mac-mini', display_name: 'Hermes · Mac Mini',
+    { member_id: 'default', profile: 'default', handle: 'lattice', target: { kind: 'local', profile: 'default' } },
+    { member_id: 'hermes-mac-mini', profile: 'default', handle: 'hermes-mac-mini', display_name: 'Lattice · Mac Mini',
       target: { kind: 'peer', peer_id: 'install:3f2a0000000000000000000000000000', installation_id: 'install:3f2a0000000000000000000000000000', profile: 'default',
         capability_digest: MINI.room_link.catalog.catalog_digest } }])
   expect(calls.find(call => call[1] === 'groups.peer.invite')![2]).toEqual({
@@ -145,9 +145,9 @@ it.each([
   gateways(local, peer)
   await createWithMini(await openDialog())
   // The opened group chat's row says why; one notice names who is missing, so a failed seat is never silent.
-  expect(notify.mock.calls).toEqual([[{ kind: 'warning', message: words.createdNotJoined.replace('{names}', 'Hermes · Mac Mini') }]])
+  expect(notify.mock.calls).toEqual([[{ kind: 'warning', message: words.createdNotJoined.replace('{names}', 'Lattice · Mac Mini') }]])
   const [binding] = Object.values($canonicalGroupBindings.get())
-  expect(peerJoinText($peerJoinErrors.get()[peerJoinKey(binding, 'hermes-mac-mini')], 'Hermes · Mac Mini', words)).toBe(why.replace('{name}', 'Hermes · Mac Mini'))
+  expect(peerJoinText($peerJoinErrors.get()[peerJoinKey(binding, 'hermes-mac-mini')], 'Lattice · Mac Mini', words)).toBe(why.replace('{name}', 'Lattice · Mac Mini'))
   expect(request.mock.calls.some(call => call[1] === 'groups.peer.register')).toBe(registers)
   expect(Object.values($canonicalGroupBindings.get())).toHaveLength(1)
   expect(request.mock.calls.filter(call => call[1] === 'groups.create')).toHaveLength(1)
@@ -156,9 +156,9 @@ it.each([
 })
 
 it.each([
-  ['uses classic groups', { driver: false, persistent_process: false }, 'Hermes on This device is too old to run group chats. Update Hermes there, then retry.'],
+  ['uses classic groups', { driver: false, persistent_process: false }, 'Lattice on This device is too old to run group chats. Update Lattice there, then retry.'],
   ['ends with Desktop', { ...HOME, persistent_process: false },
-    'Hermes on This device can’t seat bots from other computers yet. Update Hermes there and run its gateway (hermes gateway run), then retry.']
+    'Lattice on This device can’t seat bots from other computers yet. Update Lattice there and run its gateway (lattice gateway run), then retry.']
 ])('never makes a Desktop-driven group chat when the owner %s: it says what to change and offers Retry', async (_case, capabilities, words) => {
   gateways(home(method => method === 'groups.capabilities' ? capabilities : undefined))
   const { baseElement } = render(<CreateGroupChatDialog onClose={vi.fn()} open roster={roster} />)
@@ -218,16 +218,16 @@ it.each([['owner', false], ['lender', false], ['seatable', false], ['owner', tru
 
 const route = { connectionId: 'local', profile: 'default' }
 const pin = () => ({ installationId: 'install:3f2a0000000000000000000000000000', catalogDigest: 'c'.repeat(64), profile: 'default' })
-const peer = (connectionId: string, connectionLabel: string) => ({ name: 'default', handle: 'hermes', connectionId, connectionLabel, remoteSource: true })
+const peer = (connectionId: string, connectionLabel: string) => ({ name: 'default', handle: 'lattice', connectionId, connectionLabel, remoteSource: true })
 
 it('refuses a roster whose Bots would share a handle or id even after naming their computer', () => {
-  const here = { name: 'default', handle: 'hermes', connectionId: 'local' }
+  const here = { name: 'default', handle: 'lattice', connectionId: 'local' }
   const mac = peer('mini', 'Mac Mini')
   expect(canonicalGroupRoster(route, [here, mac])).toEqual({ problem: 'otherConnection' })
   expect(canonicalGroupRoster(route, [here, { name: 'hermes-mac-mini', connectionId: 'local' }, mac], pin))
     .toEqual({ problem: 'duplicateMember' })
   const seated = canonicalGroupRoster(route, [{ name: 'alpha', connectionId: 'local' }, { ...mac, title: 'Reviewer' }], pin)
-  expect('roster' in seated && seated.roster[1]).toMatchObject({ member_id: 'hermes', handle: 'hermes', display_name: 'Reviewer · Mac Mini' })
+  expect('roster' in seated && seated.roster[1]).toMatchObject({ member_id: 'lattice', handle: 'lattice', display_name: 'Reviewer · Mac Mini' })
 })
 
 it('gives Bots from distinct connections distinct handles, whatever script their connections are named in', () => {
@@ -408,7 +408,7 @@ it.each(['owner', 'lender'])('keeps the draft and a working Retry after a failed
   if (failing === 'owner') {
     offline = true
     await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Create group (2)' })) })
-  } else {expect(screen.getByText('Could not check Mac Mini. Make sure Hermes is running there, then retry.')).toBeTruthy()}
+  } else {expect(screen.getByText('Could not check Mac Mini. Make sure Lattice is running there, then retry.')).toBeTruthy()}
 
   expect((screen.getByRole('button', { name: 'Create group (2)' }) as HTMLButtonElement).disabled).toBe(true)
   expect(dialog.baseElement.querySelector('[data-group-engine="desktop"]')).toBeNull()
@@ -442,9 +442,9 @@ it('describes one membership storage for every selection', async () => {
 
 
 it.each([
-  ['mixed', 'default-this-device', undefined, 'Hermes'],
+  ['mixed', 'default-this-device', undefined, 'Lattice'],
   ['mixed', 'default-this-device', 'Custom name', 'Custom name'],
-  ['mixed', 'hermes', undefined, undefined],
+  ['mixed', 'lattice', undefined, undefined],
   ['local', 'default-this-device', undefined, undefined]
 ])('labels a default bot in a %s group without changing its handle (%s, %s)', (kind, handle, display, expected) => {
   const here = { name: 'default', handle, connectionId: 'local', connectionLabel: 'This device', display_name: display }

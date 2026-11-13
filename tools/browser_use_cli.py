@@ -1,5 +1,5 @@
 """``browser_exec``: drive a real browser through the Browser Use CLI engine (browser-harness,
-https://browser-use.com), Hermes' only core browser tool.
+https://browser-use.com), Lattice' only core browser tool.
 
 The harness speaks CDP to whatever ``tools.browser_session`` resolved for the call: an operator
 ``BU_CDP_*`` endpoint, a ``/browser connect`` override, a cloud provider's session, or a local browser
@@ -226,7 +226,7 @@ def _read_browser_cfg() -> dict:
 
 
 def _use_gateway(browser_cfg: dict) -> bool:
-    """True when the browser section selects the Nous Tool Gateway — by the current ``hermes tools``
+    """True when the browser section selects the Langton Tool Gateway — by the current ``hermes tools``
     picker row (``cloud_provider: nous``) or the pre-picker ``use_gateway: true`` flag. Reading only
     the legacy flag missed every picker-configured gateway, and the direct-API branch it fell into
     holds no credentials in managed mode (#108310)."""
@@ -241,7 +241,7 @@ def _use_gateway(browser_cfg: dict) -> bool:
 
 def is_legacy_browser_use_cloud_config(browser_cfg: dict) -> bool:
     """True for pre-CLI direct-API Browser Use cloud configs: no cloud_provider (or ``browser-use``), not the
-    Nous gateway, and BROWSER_USE_API_KEY set; the CLI then reaches Browser Use cloud natively."""
+    Langton gateway, and BROWSER_USE_API_KEY set; the CLI then reaches Browser Use cloud natively."""
     if not isinstance(browser_cfg, dict):
         return False
     provider = str(browser_cfg.get("cloud_provider") or "").strip().lower()
@@ -251,14 +251,14 @@ def is_legacy_browser_use_cloud_config(browser_cfg: dict) -> bool:
 
 
 def _browser_use_api_key_set() -> bool:
-    """BROWSER_USE_API_KEY for the served profile: the only credential Hermes autospawns BU cloud with.
+    """BROWSER_USE_API_KEY for the served profile: the only credential Lattice autospawns BU cloud with.
     Profile-scoped so a multiplexed secondary never inherits the default's cloud mode."""
     from agent.secret_scope import get_secret
     return bool(get_secret("BROWSER_USE_API_KEY", ""))
 
 
 def _harness_site_dir() -> Optional[str]:
-    """The site dir Hermes's interpreter imports ``browser_harness`` from, or None."""
+    """The site dir Lattice's interpreter imports ``browser_harness`` from, or None."""
     spec = importlib.util.find_spec("browser_harness")
     if spec is None or not spec.origin:
         return None
@@ -266,7 +266,7 @@ def _harness_site_dir() -> Optional[str]:
 
 
 def _find_cli() -> Optional[list[str]]:
-    """The Browser Use CLI's engine (browser-harness) is a core dependency of Hermes's own venv,
+    """The Browser Use CLI's engine (browser-harness) is a core dependency of Lattice's own venv,
     so every install, the Desktop bundle included, runs it on the current interpreter."""
     if _harness_site_dir() is None:
         return None
@@ -404,7 +404,7 @@ def _resolve_backend_cdp(env: dict, task_id: Optional[str], session_name: str = 
     Precedence: (1) ``BU_CDP_WS``/``BU_CDP_URL`` already in env (operator override); (2) ``BROWSER_CDP_URL``
     env / ``browser.cdp_url`` (``/browser connect``); (3) a cloud provider via ``browser_session.get_session_info``
     (per-key cache, expiry, reaper, atexit; a provider failure falls back to a local browser);
-    (4) the local engine — ``browser.engine: lightpanda`` or Hermes' packaged Chromium via the launcher
+    (4) the local engine — ``browser.engine: lightpanda`` or Lattice' packaged Chromium via the launcher
     (never the harness's own discovery of the user's installed Chrome); (5) BU direct-API configs WITH
     ``BROWSER_USE_API_KEY`` → None (checked before (3)): the CLI reaches BU cloud natively (BU_AUTOSPAWN); a
     keyless ``browser-use`` provider (managed-gateway autodetect, or a selection missing its key) takes (3).
@@ -651,7 +651,7 @@ def _published_daemon_pid(env: dict) -> Optional[int]:
 def _own_harness_daemon_until_owned(env: dict) -> Optional[bool]:
     """Periodic check while browser_exec runs: own the daemon as soon as it publishes its pid, then
     stop (False). It also stops once the daemon can never be ours (Windows, a managed worker, a daemon
-    another Hermes started), instead of re-checking every tick for the whole call."""
+    another Lattice started), instead of re-checking every tick for the whole call."""
     return None if _own_harness_daemon(env) is None else False
 
 
@@ -684,12 +684,12 @@ def _own_harness_daemon(env: dict) -> Optional[bool]:
     The harness publishes its daemon pid in its runtime dir (``harness_pid_file``: JSON
     ``{"pid", "started"}`` or a bare pid). The daemon is accepted only while it is this user's live
     ``browser_harness.daemon`` leading its own session and its spawn tag names this process, so a
-    stale or planted pid file, or a daemon another Hermes started, never reaches the supervisor.
+    stale or planted pid file, or a daemon another Lattice started, never reaches the supervisor.
     Runs after every browser_exec (and while a long one runs, until the daemon is owned): a pid
     already owned for this daemon costs one file read.
 
     Returns True once the daemon is owned, False when it can never be (Windows, a managed worker, a
-    daemon another Hermes started), None when there is nothing to own yet."""
+    daemon another Lattice started), None when there is nothing to own yet."""
     if os.name != "posix":
         return False  # Windows: the harness daemon is outside this process's job; nothing to register.
     from agent.runtime_session_store import is_worker_process
@@ -801,7 +801,7 @@ def browser_exec(code: str, session: str = "", timeout_s: int = _DEFAULT_TIMEOUT
 
     cmd = _find_cli()
     if not cmd:
-        return tool_error("browser-harness is missing from Hermes's Python environment. "
+        return tool_error("browser-harness is missing from Lattice's Python environment. "
                           "Run `hermes update` to re-sync it.")
 
     env = _base_subprocess_env()

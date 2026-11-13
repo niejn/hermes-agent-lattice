@@ -4,9 +4,9 @@ import type { GatewayHostTranslations } from './types_gateway_host'
 export const frGatewayHost: GatewayHostTranslations = {
   unavailableTitle: 'Paramètres du gateway indisponibles',
   unavailableDesc: "Le pont IPC du desktop n'expose pas les paramètres du gateway.",
-  webappHostTitle: 'Hôte Hermes',
+  webappHostTitle: 'Hôte Lattice',
   webappHostDesc:
-    'La Webapp s’exécute toujours sur l’hôte Hermes qui la sert. Les connexions enregistrées ci-dessous sont la liste de cette machine, partagée avec l’app Hermes Desktop ; les autres passerelles sont atteintes via cet hôte.',
+    'La Webapp s’exécute toujours sur l’hôte Lattice qui la sert. Les connexions enregistrées ci-dessous sont la liste de cette machine, partagée avec l’app Lattice Desktop ; les autres passerelles sont atteintes via cet hôte.',
   webappOauthPaste: {
     title: 'Terminer la connexion',
     description: 'Si l’onglet de connexion s’est arrêté sur une adresse qui ne charge pas (ce navigateur n’est pas sur la machine de la passerelle), collez cette adresse ici.',
@@ -16,7 +16,7 @@ export const frGatewayHost: GatewayHostTranslations = {
   },
   webAccess: {
     title: 'Accès web',
-    intro: "Ouvrez Hermes sur cet ordinateur depuis votre téléphone ou un autre ordinateur, avec votre compte Nous. Toute personne connectée peut exécuter des commandes sur cet ordinateur.",
+    intro: "Ouvrez Lattice sur cet ordinateur depuis votre téléphone ou un autre ordinateur, avec votre compte Langton. Toute personne connectée peut exécuter des commandes sur cet ordinateur.",
     failed: "Impossible de modifier l'accès web",
     running: 'En cours',
     stopped: 'Arrêté',
@@ -24,8 +24,8 @@ export const frGatewayHost: GatewayHostTranslations = {
     stopping: 'Arrêt en cours',
     restartNeeded: 'Redémarrage requis',
     unavailable: 'Indisponible',
-    notRunningDetail: 'Démarrez-le pour ouvrir Hermes depuis un autre appareil.',
-    needsNous: "Connectez-vous d'abord à votre compte Nous dans Fournisseurs.",
+    notRunningDetail: 'Démarrez-le pour ouvrir Lattice depuis un autre appareil.',
+    needsNous: "Connectez-vous d'abord à votre compte Langton dans Fournisseurs.",
     runningLan: 'Ouvrez cette adresse sur un appareil du même réseau.',
     runningPublic: 'Servi via votre URL.',
     runningLocal: "Seul cet ordinateur peut ouvrir l'application web. Arrêtez-la, puis relancez-la pour l'ouvrir depuis d'autres appareils.",
@@ -40,7 +40,7 @@ export const frGatewayHost: GatewayHostTranslations = {
     startStages: {
       preparing: "Préparation de l'application web. Sa compilation peut prendre quelques minutes.",
       building: "Compilation de l'application web. Cela peut prendre quelques minutes.",
-      registering: 'Configuration de la connexion Nous pour cette adresse.',
+      registering: 'Configuration de la connexion Langton pour cette adresse.',
       restarting: "Redémarrage de la passerelle pour servir l'application web."
     },
     startElapsed: time => `Temps écoulé : ${time}`,

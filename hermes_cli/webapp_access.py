@@ -2,7 +2,7 @@
 
 The gateway serves the Webapp (``gateway.webapp_listener``) from the ``webapp:`` block of its home's
 ``config.yaml``, read when it starts, so this writes that home's config and the caller restarts the
-gateway. Sign-in is the user's Nous account (a self-hosted portal client registered with the right
+gateway. Sign-in is the user's Langton account (a self-hosted portal client registered with the right
 callback); a gated bind without it would keep the Webapp off. Two shapes:
 
 - ``lan``: ``webapp.host: 0.0.0.0``, opened at ``http://<this machine's LAN address>:<port>``; the
@@ -11,7 +11,7 @@ callback); a gated bind without it would keep the Webapp off. Two shapes:
   ``webapp.public_url`` engages the gate on the loopback bind and fixes the callback.
 
 Of the config it writes only the ``webapp:`` block; ``dashboard.public_url`` belongs to the standalone
-dashboard, which may sit behind its own tunnel or proxy. Nous sign-in uses a portal client of Web
+dashboard, which may sit behind its own tunnel or proxy. Langton sign-in uses a portal client of Web
 Access's own, never the dashboard's ``HERMES_DASHBOARD_OAUTH_CLIENT_ID``, so registering the Webapp's
 callback cannot change the redirect URI the dashboard's sign-in needs. Its id is kept in a user-only
 file under the gateway home, which the gateway reads when it serves the Webapp; ``.env`` is untouched.
@@ -73,7 +73,7 @@ def gateway_home() -> Path:
 
 
 def nous_signed_in() -> bool:
-    """Whether this home holds a Nous account to register sign-in under (a free-tier guest has none).
+    """Whether this home holds a Langton account to register sign-in under (a free-tier guest has none).
     Refresh-free: it reads the auth store and never spends a refresh token."""
     from hermes_cli.auth_nous import get_nous_auth_status_local
 
@@ -103,7 +103,7 @@ def sign_in_client(home) -> Optional[tuple[str, str]]:
 
 
 def registered_lan_origin(home: Path, port: int) -> Optional[str]:
-    """``http://<LAN address>:<port>`` when Web Access last registered Nous sign-in for *home*'s
+    """``http://<LAN address>:<port>`` when Web Access last registered Langton sign-in for *home*'s
     Webapp on the LAN at that address and *port*, and the address is still this machine's; else None.
     Sign-in returns only to the callback the Portal has, so ``hermes webapp`` opens this address."""
     try:
@@ -160,7 +160,7 @@ def plan(mode: str, public_url: Optional[str] = None) -> tuple[str, Optional[int
     claim of a standalone profile that has none (:func:`_port_to_serve`), so Start runs it, in the
     config write scope, before any slow or lasting step. A refusal before that claim writes nothing."""
     if not nous_signed_in():
-        raise WebappAccessError("Sign in to your Nous account under Providers first.")
+        raise WebappAccessError("Sign in to your Langton account under Providers first.")
     if mode == "lan":
         address = lan_address()
         if address is None:
@@ -175,7 +175,7 @@ def plan(mode: str, public_url: Optional[str] = None) -> tuple[str, Optional[int
     else:
         raise WebappAccessError(f"Unknown access mode {mode!r}.")
     if not nous_signed_in():
-        raise WebappAccessError("Sign in to your Nous account under Providers first.")
+        raise WebappAccessError("Sign in to your Langton account under Providers first.")
     return host, port, pinned, f"{url}/auth/callback"
 
 
@@ -194,7 +194,7 @@ def _port_to_serve(home: Path, host: str) -> tuple[int, Optional[int]]:
     A ``webapp.port`` in *home*'s config is the user's, and so is the default profile's gateway, which
     serves the documented address (9120 unless set): both keep it, and Start writes no port. A standalone
     profile's gateway with no ``webapp.port`` would find the default port taken by the default gateway's
-    Webapp, so it gets the first port above it that no other Hermes home on this machine claims and
+    Webapp, so it gets the first port above it that no other Lattice home on this machine claims and
     nothing listens on now, and Start writes it to that profile's ``webapp.port``: the profile keeps that
     address across restarts, and the gateway, the launcher and the sign-in callback all use it.
 
@@ -213,7 +213,7 @@ def _port_to_serve(home: Path, host: str) -> tuple[int, Optional[int]]:
     _create_user_only(lock)
     try:
         with _file_lock(lock, _PORT_CLAIM_HOLDER, _PORT_CLAIM_TIMEOUT_SECONDS,
-                        "Timed out waiting for another Hermes profile to choose its Webapp port"):
+                        "Timed out waiting for another Lattice profile to choose its Webapp port"):
             claimed = _claimed_ports(home)
             for port in range(DEFAULT_PORT + 1, DEFAULT_PORT + 1 + _PORT_SEARCH):
                 if port not in claimed and _port_free(host, port):
@@ -262,7 +262,7 @@ def _own_port(home: Path) -> Optional[object]:
 
 
 def _claimed_ports(home: Path) -> set[int]:
-    """The Webapp ports the other Hermes homes beside *home* claim: the default profile's (9120 unless
+    """The Webapp ports the other Lattice homes beside *home* claim: the default profile's (9120 unless
     set) and every other profile's own ``webapp.port``, whether or not its gateway runs now. Only that
     setting is read from their configs."""
     from gateway.webapp_listener import DEFAULT_PORT
@@ -308,7 +308,7 @@ def build_bundle() -> None:
 
 
 def register(callback_url: str) -> None:
-    """Register Nous sign-in for *callback_url* on Web Access's own portal client, unless it already
+    """Register Langton sign-in for *callback_url* on Web Access's own portal client, unless it already
     carries that callback on this Portal, so the callback follows a changed LAN address or URL.
     Writes no config: it waits on the portal, so callers do it before taking the config lock."""
     _register_nous_sign_in(callback_url)

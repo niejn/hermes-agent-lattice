@@ -25,7 +25,7 @@ const ACCENT = {
   category: 'desktop',
   description: 'OKLCH accent colour picker',
   name: 'accent-picker',
-  repo: 'https://github.com/NousResearch/hermes-official-plugins',
+  repo: 'https://github.com/LangtonPhotonics/hermes-official-plugins',
   sha: 'a'.repeat(40),
   subdir: 'accent-picker',
   tier: 'official'

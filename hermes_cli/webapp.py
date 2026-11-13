@@ -1,6 +1,6 @@
 """Build and launch plumbing for the browser-hosted Desktop workspace.
 
-The browser surface shares Hermes' hardened dashboard server. This module owns
+The browser surface shares Lattice' hardened dashboard server. This module owns
 only the separate renderer artifact and the one-way handoff into that server;
 it never creates a second HTTP/WebSocket stack. The renderer is compiled by the
 shared product builders (``apps/desktop/scripts/build-webapp.mjs``), whose
@@ -32,7 +32,7 @@ class WebappBuildError(RuntimeError):
 
 
 def packaged_webapp_dist() -> Path | None:
-    """The bundle :data:`DIST_ENV` names, or None when Hermes builds its own."""
+    """The bundle :data:`DIST_ENV` names, or None when Lattice builds its own."""
     value = os.environ.get(DIST_ENV)
     return Path(value).expanduser() if value else None
 
@@ -78,7 +78,7 @@ def _exclusive_build_lock(path: Path):
     try:
         try:
             if not lock_fd(handle.fileno(), wait=False):
-                print("→ Another Hermes Webapp build is running; waiting for it...")
+                print("→ Another Lattice Webapp build is running; waiting for it...")
                 if not lock_fd(handle.fileno(), wait=True, timeout=_LOCK_WAIT_SECONDS):
                     raise WebappBuildError(f"Timed out waiting for another Webapp build ({path})")
         except OSError as exc:

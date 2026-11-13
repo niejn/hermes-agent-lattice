@@ -560,7 +560,7 @@ def restore_managed_env(env: dict) -> dict:
 
 # --- Shell discovery ---
 def _find_bash() -> str:
-    """Resolve the shell Hermes runs commands with. Owned by pm (the store
+    """Resolve the shell Lattice runs commands with. Owned by pm (the store
     is the authority on bundled bash); this is a thin wrapper over
     pm.shell() for callers that need a bash binary."""
     import pm.shell
@@ -569,7 +569,7 @@ def _find_bash() -> str:
     if bash:
         return bash
     raise RuntimeError(
-        "No shell found. Hermes needs bash (Git for Windows on Windows). "
+        "No shell found. Lattice needs bash (Git for Windows on Windows). "
         "Run `hermes pm install` or reinstall the bundle."
     )
 
@@ -609,7 +609,7 @@ def _prepend_missing_path_entries(existing_path: str, dirs: list[str]) -> str:
 
 
 def _user_tools_first(existing_path: str) -> str:
-    """*existing_path* with the user's tools before Hermes's (``pm.user_facing``) and, on
+    """*existing_path* with the user's tools before Lattice's (``pm.user_facing``) and, on
     Windows, Git Bash's dirs first. They go first even when already listed: they are store
     dirs that now sit behind the user's entries, and a non-login ``bash -c`` needs its
     coreutils ahead of System32's lookalikes."""
@@ -704,8 +704,8 @@ def _managed_runtime_path_entries() -> list[str]:
     """Return existing Hermes-managed runtime dirs for the terminal subshell PATH.
 
     The terminal tool spawns a subshell whose PATH is the agent process's PATH
-    plus ``_SANE_PATH``. Neither carries the runtimes Hermes installs for
-    itself, so on a machine where Hermes provisioned its own toolchain a
+    plus ``_SANE_PATH``. Neither carries the runtimes Lattice installs for
+    itself, so on a machine where Lattice provisioned its own toolchain a
     command the agent runs resolves a system copy instead — or nothing at all:
 
     - the pm store's node/npm entries — installed to satisfy the desktop
@@ -767,7 +767,7 @@ def _apply_windows_msys_bash_env_defaults(env: dict) -> None:
 
     Git Bash rewrites arguments that look like Unix paths (``/FO``, ``/TN``, ``/Create``) into
     ``C:/.../git/FO``-style paths, which breaks native Windows commands such as ``tasklist``, ``schtasks``,
-    and ``wmic``. Hermes runs terminal commands through bash on Windows, so set the standard MSYS opt-out by
+    and ``wmic``. Lattice runs terminal commands through bash on Windows, so set the standard MSYS opt-out by
     default. Refs #56700.
     MSYS2-proper and Cygwin bash (which ``_find_bash`` can still return via the final ``shutil.which``
     fallback) ignore it and honor ``MSYS2_ARG_CONV_EXCL`` instead, so set both. ``*`` disables all argv
@@ -1083,7 +1083,7 @@ class LocalEnvironment(BaseEnvironment):
     def get_temp_dir(self) -> str:
         """Shell-safe writable temp dir. Precedence: ``TERMINAL_TEMP_DIR``, TMPDIR/TMP/TEMP
         (Termux has no system temp dir), ``HERMES_HOME/cache/terminal`` (real storage: a
-        tmpfs system temp dir fills under Hermes load; pruned by ``cleanup_terminal_temp_cache``),
+        tmpfs system temp dir fills under Lattice load; pruned by ``cleanup_terminal_temp_cache``),
         ``tempfile.gettempdir()``; backend env before process env so terminal.env
         overrides work. Windows: ``%TEMP%`` often has spaces that break unquoted bash,
         so always the HERMES_HOME cache dir with forward slashes (bash- and Python-valid)."""
@@ -1198,7 +1198,7 @@ class LocalEnvironment(BaseEnvironment):
 
     def _spawn_long_lived(self, argv: list[str], child_env: dict | None) -> subprocess.Popen:
         """A long-lived process on this host: the same run environment as a command, owned so it and
-        its group die with Hermes however Hermes dies (``spawn_owned``), stdin/stdout as byte pipes.
+        its group die with Lattice however Lattice dies (``spawn_owned``), stdin/stdout as byte pipes.
         ``_stop_long_lived`` kills the group and releases it."""
         from hermes_cli.process_identity import spawn_owned
         proc = spawn_owned(  # windows-footgun: ok — argv list, no shell; group kill gated on _IS_WINDOWS

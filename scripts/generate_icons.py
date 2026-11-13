@@ -121,23 +121,24 @@ _CANARY_TAG_RE = re.compile(
 )
 
 # The nous dark background (#0d1117) — fixed dark tile/background everywhere.
-DARK_HEX = "#0d1117"
+DARK_HEX = "#021132"
 DARK_RGB = (13, 17, 23)
 BORDER_FRACTION = 0.0407747197
 # The brand ring is switched off everywhere (tiles and the macOS 26 layers):
 # flat plate + girl read better beside macOS 26's own icons. The ring code
 # stays so it can be turned back on in one place.
 BORDER_ENABLED = False
-# Without a ring the girl's lowest nodes are dragged past the tile edge (in
-# 1024ths of the tile) so the outline crops her instead of leaving a gap.
-EDGE_OVERSHOOT = 48 / 1024
+# Without a ring the reference portrait's lowest nodes were dragged past the
+# tile edge (48/1024) so the outline cropped her hair instead of leaving a gap.
+# The Lattice lattice mark is geometric and centered: no bleed registration.
+EDGE_OVERSHOOT = 0 / 1024
 
 # Portrait boxes fitted to the reference at equal visible tile width, with
 # uniform scaling about the tile center followed by an up-left translation.
 # Keep their y coordinate: bottom anchoring would undo the registration.
 GIRL_BOXES = {
-    "squircle-light.svg": (72.149433, 104.703674, 872.767801, 872.767801),
-    "squircle-dark.svg": (72.149433, 104.703674, 872.767801, 872.767801),
+    "squircle-light.svg": (72.149433, 104.703674, 872.767801, 850.0),
+    "squircle-dark.svg": (72.149433, 104.703674, 872.767801, 850.0),
     # Mac: the girl scaled 1.06x about the plate center; the plate stays on the
     # 824 grid, but a white tile with a ring reads small beside full-color peers.
     "squircle-mac-light.svg": (140.19, 164.44, 744.68, 744.68),
@@ -496,7 +497,11 @@ def compose_svg(art: IconArt, girl: str, bg: str, *, badge: bool = True) -> str:
         tile.set("stroke-width", str(thickness))
         join_bottom = bottom - thickness + 10
     else:
-        join_bottom = bottom + geometry["width"] * EDGE_OVERSHOOT
+        # Fork: the mark is geometric and centered, not a portrait bleeding to
+        # the tile edge. Join at the registered box's own bottom; EDGE_OVERSHOOT
+        # (0) is the extra bleed below it should a future mark want it back.
+        _, box_y, _, box_h = GIRL_BOXES[bg]
+        join_bottom = min(bottom, box_y + box_h + geometry["width"] * EDGE_OVERSHOOT)
     inner = "".join(ET.tostring(child, encoding="unicode") for child in background)
     clip = ET.tostring(silhouette, encoding="unicode")
     portrait = portrait_layer(art, girl, bg, join_bottom)
@@ -634,7 +639,8 @@ def icon_art_svg(art: IconArt, girl: str) -> str:
     """Art layer: the girl registered as on the canvas-filling squircle, joined
     to the border band; the commit badge rides along for commit builds."""
     bg = "icon.icon"  # the plate is the canvas; the system supplies the grid
-    join_bottom = ICON_CANVAS - ICON_CANVAS * BORDER_FRACTION + 10 if BORDER_ENABLED else ICON_CANVAS * (1 + EDGE_OVERSHOOT)
+    _, box_y, _, box_h = GIRL_BOXES[bg]
+    join_bottom = ICON_CANVAS - ICON_CANVAS * BORDER_FRACTION + 10 if BORDER_ENABLED else min(ICON_CANVAS, box_y + box_h + ICON_CANVAS * EDGE_OVERSHOOT)
     portrait = portrait_layer(art, girl, bg, join_bottom)
     badge = f"  {commit_layer(art.commit, bg)}\n" if art.commit else ""
     return (

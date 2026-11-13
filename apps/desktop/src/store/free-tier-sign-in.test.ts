@@ -121,7 +121,7 @@ describe('free-tier sign-in long-polls', () => {
     await vi.advanceTimersByTimeAsync(10)
 
     expect(pollOAuthSession).toHaveBeenCalledTimes(1)
-    expect(pollOAuthSession).toHaveBeenCalledWith('nous', 'session-poll', 25)
+    expect(pollOAuthSession).toHaveBeenCalledWith('langton', 'session-poll', 25)
 
     await vi.advanceTimersByTimeAsync(2000)
     expect(pollOAuthSession).toHaveBeenCalledTimes(2)

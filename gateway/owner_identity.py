@@ -1,6 +1,6 @@
 """The Webapp is the machine owner: one identity for every signed-in surface of this host.
 
-Hermes is single-user. Native Desktop, the TUI and the CLI reach the gateway as the owner's own OS
+Lattice is single-user. Native Desktop, the TUI and the CLI reach the gateway as the owner's own OS
 user (``uid:<n>`` / ``sid:<sid>``, minted only for a same-user peer by the control channel). A Webapp
 tab, a standalone dashboard's forwarded login or a phone signed in through the dashboard login is
 that same person: sign-in only decides whether a browser may open the Webapp at all, it never names a

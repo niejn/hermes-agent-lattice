@@ -68,7 +68,7 @@ describe('previewKind classifies a roster preview', () => {
   })
 
   it('surfaces the primary profile as @hermes, never @default (#89484)', () => {
-    expect(fromBot("Message from agent 'default': deploy is green")).toBe('hermes')
+    expect(fromBot("Message from agent 'default': deploy is green")).toBe('lattice')
     expect(fromBot("Message from agent 'ops': deploy is green")).toBe('ops')
   })
 
