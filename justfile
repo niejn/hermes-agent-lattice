@@ -127,6 +127,12 @@ desktop:
 desktop-build:
     pnpm --dir apps/desktop run build
 
+# Build a download page from a pinned native release receipt (see apps/desktop/docs/enterprise-downloads.md)
+[group('dev')]
+[positional-arguments]
+desktop-downloads *args:
+    scripts/hermes-python scripts/build_desktop_downloads.py "$@"
+
 # Start the TUI in watch mode
 [group('dev')]
 tui:

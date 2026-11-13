@@ -1,5 +1,9 @@
 # Hermes Desktop ☤
 
+Enterprise work is tracked in the [Langton architecture and delivery plan](docs/langton-enterprise-solution.md).
+The first component is the [qualified release download page generator](docs/enterprise-downloads.md).
+Enterprise SSO, offline authorization, model push and managed capability delivery are not yet implemented.
+
 <p align="center">
   <a href="https://github.com/NousResearch/hermes-agent/releases"><img src="https://img.shields.io/badge/Download-macOS%20%C2%B7%20Windows%20%C2%B7%20Linux-FFD700?style=for-the-badge" alt="Download"></a>
   <a href="https://hermes-agent.nousresearch.com/docs/"><img src="https://img.shields.io/badge/Docs-hermes--agent.nousresearch.com-FFD700?style=for-the-badge" alt="Documentation"></a>

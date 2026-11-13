@@ -1,0 +1,24 @@
+:root { color-scheme: dark; font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif; background: #080D1A; color: #E6EDF7; font-size: 14px; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 1040px; margin: auto; padding: 40px 24px; }
+nav, footer { color: #A3B1C6; font-size: 12px; }
+header { margin: 40px 0 32px; padding-left: 24px; border-left: 3px solid #FCAE18; }
+.brand { color: #A3B1C6; }
+h1 { margin: 8px 0 16px; font-size: clamp(28px, 4vw, 36px); }
+h2 { margin-top: 0; font-size: 20px; }
+p { line-height: 1.75; }
+.release { color: #A3B1C6; font-variant-numeric: tabular-nums; }
+.packages { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 24px; }
+.package { min-width: 0; padding: 24px; background: #0F172A; border: 1px solid #ffffff1f; border-radius: 12px; }
+h2 span { color: #A3B1C6; font-size: 14px; }
+.filename { overflow-wrap: anywhere; }
+.download { display: inline-block; margin: 8px 0 24px; padding: 12px 24px; background: #163C84; color: #E6EDF7; border-radius: 8px; text-decoration: none; font-weight: 600; }
+.download:hover { background: #204b9c; }
+:focus-visible { outline: 2px solid #3B82F6; outline-offset: 4px; }
+details { color: #A3B1C6; }
+summary { cursor: pointer; color: #3B82F6; padding: 8px 0; }
+code { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.hash { display: block; font-size: 12px; }
+.help { margin: 32px 0; padding: 24px; border: 1px solid #ffffff1f; border-radius: 12px; }
+footer { padding-top: 24px; border-top: 1px solid #ffffff1f; }
